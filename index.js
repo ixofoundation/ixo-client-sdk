@@ -16,7 +16,7 @@ const
 
 const ixoCrypto = {
     generateMnemonic: entropy =>
-        customEntropy
+        entropy
             ? bip39.entropyToMnemonic(entropy)
             : bip39.generateMnemonic(),
 
