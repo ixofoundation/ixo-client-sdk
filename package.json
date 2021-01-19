@@ -1,0 +1,17 @@
+{
+  "name": "@ixo/client-sdk",
+  "version": "0.1.0",
+  "description": "One ixo client to rule them all",
+  "main": "index.js",
+  "license": "ISC",
+  "dependencies": {
+    "bech32": "^1.1.4",
+    "bip32": "^2.0.6",
+    "bip39": "^3.0.3",
+    "bitcoinjs-lib": "^5.2.0",
+    "bs58": "^4.0.1",
+    "debug": "^4.3.1",
+    "secp256k1": "^4.0.2",
+    "sovrin-did": "^1.4.0"
+  }
+}
