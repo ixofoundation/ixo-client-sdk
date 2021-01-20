@@ -6,20 +6,28 @@ the Blocksync, the blockchain and cell nodes.
 
 The SDK has 4 main parts:
 
-- **ixo-Crypto tools**: Generates mnemonic seeds, decentralised identitifiers, cryptographic
-  key pairs and provides message signing methods.
+- **ixo-Crypto tools**: Generates mnemonic seeds, decentralised
+  identitifiers, cryptographic key pairs and provides message
+  signing methods.
 
-- **ixo-Blockchain client**: Composes, signs (with secp256k1)and broadcasts messages to ixo-protocol blockchains. Gets data directly from ixo-blockchain RPC endpoints.
+- **ixo-Blockchain client**: Composes, signs (with secp256k1)and
+  broadcasts messages to ixo-protocol blockchains. Gets data
+  directly from ixo-blockchain RPC endpoints.
 
-- **ixo-BlockSync client**: Gets data from the ixo-BlockSync index database, with standard queries.
+- **ixo-BlockSync client**: Gets data from the ixo-BlockSync index
+  database, with standard queries.
 
-- **ixo-CellNode client**: Composes messages, signs (with ED25519), writes to an ixo-CellNode private REST endpoint for did-authentication, and reads from the private endpoint with did-authentication access control.
+- **ixo-CellNode client**: Composes messages, signs (with
+  ED25519), writes to an ixo-CellNode private REST endpoint for
+  did-authentication, and reads from the private endpoint with
+  did-authentication access control.
 
 - *(ixo-Identity client: Coming soon)*
 
-**Note**: This documentation is work in progress. 
-The functionality of the SDK listed below is already available. 
-Don't hesitate to try them out or even to check out the source (it really is simple).
+**Note**: This documentation is work in progress.  
+The functionality of the SDK listed below is already available.  
+Don't hesitate to try them out or even to check out the source (it
+really is simple).  
 Feedback is welcome -- please don't hesitate to send issues & PRs.
 
 
@@ -60,7 +68,8 @@ Feedback is welcome -- please don't hesitate to send issues & PRs.
 - `deriveAddress(mnemonic)`
 
   Returns a BEP32 account address, using the given mnemonic as the
-  seed. This is the account address on any ixo or Cosmos blockchain.
+  seed. This is the account address on any ixo or Cosmos
+  blockchain.
 
 
 - `deriveECKeyPair(mnemonic)`
@@ -71,31 +80,33 @@ Feedback is welcome -- please don't hesitate to send issues & PRs.
 
 - `signEC(message, privateKey)`
 
-  Signs a given message with the client's SECP256k1 private key, to
- prepare this for broadcast to any Cosmos SDK-based blockchain. 
- Returns the signature value.
+  Signs a given message with the client's SECP256k1 private key,
+  to prepare this for broadcast to any Cosmos SDK-based
+  blockchain. Returns the signature value.
 
 
 - `deriveDidDoc(mnemonic)`
 
-  Returns the DID document object for a given DID, generated using the given
-  mnemonic as the seed. See [the Sovrin DID package on NPM](https://npmjs.com/package/sovrin-did) for the return
-  schema. 
-  See [the Sovrin protocol docs on the DID Method](https://github.com/sovrin-foundation/protocol/blob/master/did.md).
+  Returns the DID document object for a given DID, generated using
+  the given mnemonic as the seed. See [the Sovrin DID package on
+  NPM](https://npmjs.com/package/sovrin-did) for the return
+  schema. See [the Sovrin protocol docs on the DID
+  Method](https://github.com/sovrin-foundation/protocol/blob/master/did.md).
 
 
 - `deriveAgentAddress(verifyKey)`
 
-  Returns a Cosmos-SDK account address using the given verify key (from
-  a DID) as the seed. This is the address for the ixo agent.
+  Returns a Cosmos-SDK account address using the given verify key
+  (from a DID) as the seed. This is the address for the ixo agent.
 
 
 ## The ixo-blockchain client
 
 - `raw(url, opts)`
 
-  Make a direct API call to the blockchain. 
-  Check out the Cosmos REST API docs here: https://cosmos.network/rpc/v0.37.9
+  Make a direct API call to the blockchain.  
+  Check out the Cosmos REST API docs here:
+  https://cosmos.network/rpc/v0.37.9
 
   Examples:
 
@@ -109,7 +120,8 @@ Feedback is welcome -- please don't hesitate to send issues & PRs.
 
 - `makeStdMsg(input)`
 
-  Formats any unsigned message into the format required for validation by Tendermint, using the given input.
+  Formats any unsigned message into the format required for
+  validation by Tendermint, using the given input.
 
 - `broadcast(signedTx)`
 
@@ -120,8 +132,9 @@ Feedback is welcome -- please don't hesitate to send issues & PRs.
 
 - `raw(url, opts)`
 
-  Makes direct Rest API calls to the blocksync to query and get indexed blockchain data. 
-  Check out the Blocksync API for available endpoints.
+  Makes direct Rest API calls to the blocksync to query and get
+  indexed blockchain data. Check out the Blocksync API for
+  available endpoints.
 
   Examples:
 
@@ -146,7 +159,8 @@ Feedback is welcome -- please don't hesitate to send issues & PRs.
 
 - `listProjects(senderDid)`
 
-  Lists all available projects which have been created using the given DID.
+  Lists all available projects which have been created using the
+  given DID.
 
 - `getProject(did)`
 
@@ -158,8 +172,9 @@ Feedback is welcome -- please don't hesitate to send issues & PRs.
 
 - `raw(url, opts)`
 
-  Make direct Rest API calls to a given CellNode URI endpoint.
-  Requires DID-Authentication and performs stateless validation of messages.
+  Make direct Rest API calls to a given CellNode URI endpoint.  
+  Requires DID-Authentication and performs stateless validation of
+  messages.  
   See the cell node API docs for available endpoints.
 
 - `entity.create(data, signature)`
