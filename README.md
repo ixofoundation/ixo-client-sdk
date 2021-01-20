@@ -151,7 +151,7 @@ Feedback is welcome -- please don't hesitate to send issues & PRs.
 
 - `registerUser(didDoc)`
 
-  // Check - is this really a DID registration function?
+  Register a user with the given DID.
 
 - `getDidDoc(did)`
 
