@@ -165,7 +165,139 @@ Feedback is welcome -- please don't hesitate to send issues & PRs.
 - `getProject(did)`
 
   Get details of a specific project by its Entity DID.
-  // Returns -- give example
+
+  Example return value:
+
+      {
+        statusCode: 200,
+        headers: { ... },
+        body: {
+          data: {
+            claimStats: { currentSuccessful: 0, currentRejected: 0 },
+            agentStats: {
+              evaluators: 0,
+              evaluatorsPending: 0,
+              serviceProviders: 0,
+              serviceProvidersPending: 0,
+              investors: 0,
+              investorsPending: 0
+            },
+            socialMedia: {
+              facebookLink: '',
+              instagramLink: '',
+              twitterLink: '',
+              webLink: ''
+            },
+            ixo: { totalStaked: 0, totalUsed: 0 },
+            sdgs: [ 10 ],
+            '@type': 'Project',
+            name: 'WEDO GLOBAL WEBSITE',
+            description: 'WEDO GLOBAL specializes in designing and ...',
+            image: 'https://pds_pandora.ixo.world/public/7bkzqb0ofz6kk5f4r9f',
+            imageDescription: 'WEDO GLOBAL, a social enterprise ...',
+            brand: 'WEDO GLOBAL',
+            logo: 'https://pds_pandora.ixo.world/public/tqsgfvi2zikk5f5ide',
+            location: 'HK',
+            '@context': 'https://schema.ixo.foundation/entity:2383r9riuew',
+            entitySchemaVersion: '1.0.0',
+            relayerNode: 'did:sov:Rmb6Rd1CU6k74FM2xzy6Do',
+            startDate: 'Invalid date',
+            endDate: 'Invalid date',
+            status: 'Live',
+            stage: 'Delivery',
+            version: { versionNumber: '1', effectiveDate: '2021-01-05T00:00:00.000Z' },
+            terms: { '@type': 'OnceOffFee', paymentTemplateId: '1' },
+            privacy: { pageView: 'Public', entityView: 'Visible', credentials: [] },
+            creator: {
+              id: 'did:sov:Pxyq1FuSJ3QK4FqJ8WzsNb',
+              displayName: 'Tom Chan',
+              logo: 'https://pds_pandora.ixo.world/public/l73zj2bn9kokk5f88bx',
+              location: 'HK',
+              email: '123@gmail.com',
+              website: 'https://socialenterprise.org.hk',
+              mission: 'service',
+              credentialId: 'did:sov:LRGVKuk1Lmi16SUBWyXPAC'
+            },
+            owner: {
+              id: 'did:sov:BnVm8NhqSoZfmseZoHNTNi',
+              displayName: 'Eva Wong',
+              logo: 'https://pds_pandora.ixo.world/public/yxb018gxlhqkk5f8q9y',
+              location: 'HK',
+              email: '123@gmail.com',
+              website: 'https://www.wedoglobal.com/zh-TW',
+              mission: '提倡多元文化教育'
+            },
+            ddoTags: [
+              { category: 'Project Type', tags: [ 'Index' ] },
+              { category: 'SDG', tags: [ 'SDG10 – Reduced Inequalities' ] },
+              { category: 'Stage', tags: [ 'Delivery' ] },
+              { category: 'Sector', tags: [ 'IDCC' ] }
+            ],
+            displayCredentials: {
+              '@context': 'https://www.w3.org/2018/credentials/v1',
+              items: []
+            },
+            page: { cid: 'wj0whzpzqdrkk5f9ujb', version: '1.0.0' },
+            entityClaims: {
+              '@context': 'https://schema.ixo.world/claims:3r08webu2eou',
+              items: [
+                {
+                  '@id': 'did:ixo:LjBRtnchDzEKyAU2v7LiDv',
+                  visibility: 'Public',
+                  title: 'ToC',
+                  description: 'Theory of Change Description',
+                  targetMin: 1,
+                  targetMax: 100,
+                  startDate: '2021-01-20T00:00:00.000Z',
+                  endDate: '2021-02-19T00:00:00.000Z',
+                  goal: 'test 20201223',
+                  agents: [],
+                  claimEvaluation: [],
+                  claimApproval: [],
+                  claimEnrichment: []
+                },
+              ]
+            },
+            linkedEntities: [],
+            fees: {
+              '@context': 'https://schema.ixo.world/fees/ipfs3r08webu2eou',
+              items: []
+            },
+            stake: {
+              '@context': 'https://schema.ixo.world/staking/ipfs3r08webu2eou',
+              items: []
+            },
+            nodes: {
+              '@context': 'https://schema.ixo.world/nodes/ipfs3r08webu2eou',
+              items: [
+                {
+                  '@type': 'CellNode',
+                  id: '1',
+                  serviceEndpoint: 'https://pds_pandora.ixo.world'
+                }
+              ]
+            },
+            funding: {
+              '@context': 'https://schema.ixo.world/funding/ipfs3r08webu2eou',
+              items: []
+            },
+            keys: { '@context': 'https://www.w3.org/ns/did/v1', items: [] },
+            service: [],
+            data: [],
+            createdOn: '2021-01-20T12:48:35.000Z',
+            createdBy: 'did:sov:Pxyq1FuSJ3QK4FqJ8WzsNb',
+            nodeDid: 'did:ixo:Sdjhti1ywgWgQJqtgYrGzJ',
+            claims: [],
+            agents: []
+          },
+          _id: '600826ab6f0909001aad49ac',
+          txHash: '96a55adb2d58ab9c2ece81298dd6cc1831797e5f392739ed2424cb9378849e55',
+          senderDid: 'did:sov:Pxyq1FuSJ3QK4FqJ8WzsNb',
+          projectDid: 'did:ixo:LqmfEB75Dnqzz7AiYfRFXA',
+          pubKey: 'BpD7FhAKnt6NfDaidEg8kWzuqRAgbrVAo6QZB4NZgyVr',
+          __v: 0
+        }
+      }
 
 
 ## The ixo-CellNode client
