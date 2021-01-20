@@ -65,7 +65,7 @@ const ixoCrypto = {
         sovrin.fromSeed(
             crypto.createHash('sha256').update(mnemonic).digest().slice(0, 32)),
 
-    deriveClaimAddress: verifyKey => {
+    deriveAgentAddress: verifyKey => {
         const hashedVerifyKey =
             crypto.createHash('sha256')
                 .update(base58.decode(verifyKey))
@@ -201,7 +201,7 @@ const makeCellNodeClient = cnUrl => {
         rawRpc: cnRpc,
         rawRpcPublic: cnRpcPublic,
 
-        project: {
+        entity: {
             create: (data, signature) =>
                 cnRpc('createProject', 'create_project', signature, data),
 
