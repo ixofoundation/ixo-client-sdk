@@ -1,7 +1,7 @@
 # ixo-client SDK
 
-A complete package of client software for developeing client interfaces which 
-connect to the ixo application stack and build on the Internet of Impact.
+A complete package of client software for developing client applications which 
+connect to the ixo software stack and build on the Internet of Impact.
 
 The ixo-Client SDK has 5 core components:
 
