@@ -1,10 +1,9 @@
 # ixo-client SDK
 
-Everything you need to easily interact with the ixo ecosystem;
-from identity generation to interactions with components such as
-the Blocksync, the blockchain and cell nodes.
+A complete package of client software for developeing client interfaces which 
+connect to the ixo application stack and build on the Internet of Impact.
 
-The SDK has 4 main parts:
+The ixo-Client SDK has 5 core components:
 
 - **ixo-Crypto tools**: Generates mnemonic seeds, decentralised
   identitifiers, cryptographic key pairs and provides message
@@ -25,11 +24,9 @@ The SDK has 4 main parts:
 - *(ixo-Identity client: Coming soon)*
 
 **Note**: This documentation is work in progress.  
-The functionality of the SDK listed below is already available.  
-Don't hesitate to try them out or even to check out the source (it
+The functionality of the SDK listed below is already available.  Don't hesitate to try them out or even to check out the source (it
 really is simple).  
-Feedback is welcome -- please don't hesitate to send issues & PRs.
-
+Your feedback is welcome -- please don't hesitate to send issues & submit PRs.
 
 ## Usage
 
@@ -304,10 +301,10 @@ Feedback is welcome -- please don't hesitate to send issues & PRs.
 
 - `raw(url, opts)`
 
-  Make direct Rest API calls to a given CellNode URI endpoint.  
+  Make direct Rest API calls to an entity's CellNode URI endpoint.  
   Requires DID-Authentication and performs stateless validation of
   messages.  
-  See the cell node API docs for available endpoints.
+  See the CellNode API docs for available endpoints.
 
 - `entity.create(data, signature)`
 
