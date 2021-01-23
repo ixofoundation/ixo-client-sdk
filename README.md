@@ -118,7 +118,27 @@ Your feedback is welcome -- please don't hesitate to send issues & submit PRs.
 - `makeStdMsg(input)`
 
   Formats any unsigned message into the format required for
-  validation by Tendermint, using the given input.
+  validation by Tendermint, using the given input. Input example:
+
+      {
+          msgs: [
+              {
+                  type: 'treasury/MsgSend',
+                  value: {
+                      from_did: 'did:ixo:U7GK8p8rVhJMKhBVRCJJ8c',
+                      to_did_or_addr: 'did:ixo:4XJLBfGtWSGKSz4BeRxdun',
+                      amount: [{amount: '100'), denom: 'uixo'}],
+                  }
+              }
+          ],
+          chain_id: '<chain id>',
+          fee: {amount: [{amount: '5000', denom: 'uixo'}], gas: '200000'},
+          memo: '',
+          account_number: '<a valid account number>',
+          sequence: '<a valid sequence>',
+      }
+
+  See `messages.md` for a catalogue of valid message types and values.
 
 - `broadcast(signedTx)`
 
