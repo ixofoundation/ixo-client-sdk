@@ -262,7 +262,7 @@ const makeFetcher = (urlPrefix = '') => async (path, opts = {}) => {
         },
     }
 
-    debug('> Request ' + url + ' :\n' + util.inspect(opts, {level: 10}))
+    debug('> Request ' + url + ' :\n' + util.inspect(opts, {depth: 10}))
 
     const
         resp = await fetch(url, opts),
