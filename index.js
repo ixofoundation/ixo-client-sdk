@@ -8,7 +8,8 @@ const
     bitcoinjs = require('bitcoinjs-lib'),
     bech32 = require('bech32'),
     sovrin = require('sovrin-did'),
-    secp256k1 = require('secp256k1')
+    secp256k1 = require('secp256k1'),
+    fetch = require('isomorphic-unfetch')
 
 
 const
