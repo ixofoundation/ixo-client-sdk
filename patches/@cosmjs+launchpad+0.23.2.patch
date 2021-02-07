@@ -1,0 +1,98 @@
+diff --git a/node_modules/@cosmjs/launchpad/build/cosmosclient.js b/node_modules/@cosmjs/launchpad/build/cosmosclient.js
+index 5bbee21..a21bd27 100644
+--- a/node_modules/@cosmjs/launchpad/build/cosmosclient.js
++++ b/node_modules/@cosmjs/launchpad/build/cosmosclient.js
+@@ -190,6 +190,7 @@ class CosmosClient {
+             }
+             : {
+                 logs: result.logs ? logs_1.parseLogs(result.logs) : [],
++                events: result.events.map(logs_1.parseEvent),
+                 rawLog: result.raw_log || "",
+                 transactionHash: result.txhash,
+                 data: result.data ? encoding_1.fromHex(result.data) : undefined,
+diff --git a/node_modules/@cosmjs/launchpad/build/logs.js b/node_modules/@cosmjs/launchpad/build/logs.js
+index a934ca8..7a48b44 100644
+--- a/node_modules/@cosmjs/launchpad/build/logs.js
++++ b/node_modules/@cosmjs/launchpad/build/logs.js
+@@ -36,17 +36,14 @@ exports.parseEvent = parseEvent;
+ function parseLog(input) {
+     if (!utils_1.isNonNullObject(input))
+         throw new Error("Log must be a non-null object");
+-    const { msg_index, log, events } = input;
++    const { msg_index, log } = input;
+     if (typeof msg_index !== "number")
+         throw new Error("Log's msg_index must be a number");
+     if (typeof log !== "string")
+         throw new Error("Log's log must be a string");
+-    if (!Array.isArray(events))
+-        throw new Error("Log's events must be an array");
+     return {
+         msg_index: msg_index,
+         log: log,
+-        events: events.map(parseEvent),
+     };
+ }
+ exports.parseLog = parseLog;
+diff --git a/node_modules/@cosmjs/launchpad/build/secp256k1hdwallet.js b/node_modules/@cosmjs/launchpad/build/secp256k1hdwallet.js
+index 0448cbb..636d2aa 100644
+--- a/node_modules/@cosmjs/launchpad/build/secp256k1hdwallet.js
++++ b/node_modules/@cosmjs/launchpad/build/secp256k1hdwallet.js
+@@ -69,7 +69,7 @@ class Secp256k1HdWallet {
+         const seed = await crypto_1.Bip39.mnemonicToSeed(mnemonicChecked);
+         const { privkey } = crypto_1.Slip10.derivePath(crypto_1.Slip10Curve.Secp256k1, seed, hdPath);
+         const uncompressed = (await crypto_1.Secp256k1.makeKeypair(privkey)).pubkey;
+-        return new Secp256k1HdWallet(mnemonicChecked, hdPath, privkey, crypto_1.Secp256k1.compressPubkey(uncompressed), prefix);
++        return new this(mnemonicChecked, hdPath, privkey, crypto_1.Secp256k1.compressPubkey(uncompressed), prefix);
+     }
+     /**
+      * Generates a new wallet with a BIP39 mnemonic of the given length.
+@@ -82,7 +82,7 @@ class Secp256k1HdWallet {
+         const entropyLength = 4 * Math.floor((11 * length) / 33);
+         const entropy = crypto_1.Random.getBytes(entropyLength);
+         const mnemonic = crypto_1.Bip39.encode(entropy);
+-        return Secp256k1HdWallet.fromMnemonic(mnemonic.toString(), hdPath, prefix);
++        return this.fromMnemonic(mnemonic.toString(), hdPath, prefix);
+     }
+     /**
+      * Restores a wallet from an encrypted serialization.
+@@ -96,7 +96,7 @@ class Secp256k1HdWallet {
+             throw new Error("Root document is not an object.");
+         switch (root.type) {
+             case serializationTypeV1:
+-                return Secp256k1HdWallet.deserializeTypeV1(serialization, password);
++                return this.deserializeTypeV1(serialization, password);
+             default:
+                 throw new Error("Unsupported serialization type");
+         }
+@@ -128,7 +128,7 @@ class Secp256k1HdWallet {
+                 const account = accounts[0];
+                 if (!isDerivationJson(account))
+                     throw new Error("Account is not in the correct format.");
+-                return Secp256k1HdWallet.fromMnemonic(mnemonic, crypto_1.stringToPath(account.hdPath), account.prefix);
++                return this.fromMnemonic(mnemonic, crypto_1.stringToPath(account.hdPath), account.prefix);
+             }
+             default:
+                 throw new Error("Unsupported serialization type");
+@@ -139,7 +139,7 @@ class Secp256k1HdWallet {
+         if (!utils_1.isNonNullObject(root))
+             throw new Error("Root document is not an object.");
+         const encryptionKey = await wallet_1.executeKdf(password, root.kdf);
+-        return Secp256k1HdWallet.deserializeWithEncryptionKey(serialization, encryptionKey);
++        return this.deserializeWithEncryptionKey(serialization, encryptionKey);
+     }
+     get mnemonic() {
+         return this.secret.toString();
+diff --git a/node_modules/@cosmjs/launchpad/build/signingcosmosclient.js b/node_modules/@cosmjs/launchpad/build/signingcosmosclient.js
+index 123b9c6..77f08d3 100644
+--- a/node_modules/@cosmjs/launchpad/build/signingcosmosclient.js
++++ b/node_modules/@cosmjs/launchpad/build/signingcosmosclient.js
+@@ -51,7 +51,8 @@ class SigningCosmosClient extends cosmosclient_1.CosmosClient {
+      * creates a single signature, assembles the signed transaction and broadcasts it.
+      */
+     async signAndBroadcast(msgs, fee, memo = "") {
+-        const { accountNumber, sequence } = await this.getSequence();
++        const { accountNumber = 0, sequence = 0 } = await this.getSequence().catch(() => ({}));
++
+         const chainId = await this.getChainId();
+         const signDoc = encoding_1.makeSignDoc(msgs, fee, chainId, memo, accountNumber, sequence);
+         const { signed, signature } = await this.signer.sign(this.senderAddress, signDoc);

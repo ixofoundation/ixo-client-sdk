@@ -1,261 +1,260 @@
 const
-    util = require('util'),
     debug = require('debug')('ixo-client-sdk'),
-    crypto = require('crypto'),
-    base58 = require('bs58'),
-    bip39 = require('bip39'),
-    bip32 = require('bip32'),
-    bitcoinjs = require('bitcoinjs-lib'),
-    bech32 = require('bech32'),
-    sovrin = require('sovrin-did'),
-    secp256k1 = require('secp256k1'),
-    fetch = require('isomorphic-unfetch')
+
+    fetch = require('isomorphic-unfetch'),
+
+    {
+        Secp256k1HdWallet, makeCosmoshubPath, SigningCosmosClient, GasPrice,
+        coins,
+    } =
+        require('@cosmjs/launchpad'),
+
+    {sortedJsonStringify} = require('@cosmjs/launchpad/build/encoding'),
+
+    IxoAgentWallet = require('./IxoAgentWallet')
 
 
 const
-    bech32MainPrefix = 'ixo',
-    derivationPath = 'm/44\'/118\'/0\'/0/0'
+    defaultBlockchainUrl =
+        'https://ixo-testnet-validator-mt.simply-vc.com.mt/api',
 
-const ixoCrypto = {
-    generateMnemonic: entropy =>
-        entropy
-            ? bip39.entropyToMnemonic(entropy)
-            : bip39.generateMnemonic(),
+    defaultBlocksyncUrl = 'https://block-sync-pandora.ixo.world',
 
-    deriveAddress: mnemonic => {
-        if (!bip39.validateMnemonic(mnemonic))
-            throw new Error('mnemonic phrases have invalid checksums')
+    defaultCellnodeUrl = 'https://pds-pandora.ixo.world'
 
-        const
-            seed = bip39.mnemonicToSeedSync(mnemonic),
-            node = bip32.fromSeed(seed),
-            child = node.derivePath(derivationPath),
-            words = bech32.toWords(child.identifier)
 
-        return bech32.encode(bech32MainPrefix, words)
-    },
+const makeWallet = async (mnemonicOrSerialization, serializationPwd) => {
+    let secp, agent
 
-    deriveECKeyPair: mnemonic => {
-        const
-            seed = bip39.mnemonicToSeedSync(mnemonic),
-            node = bip32.fromSeed(seed),
-            child = node.derivePath(derivationPath),
-            ecpair = bitcoinjs.ECPair.fromPrivateKey(child.privateKey, {
-                compressed : false,
+    if (mnemonicOrSerialization && mnemonicOrSerialization.startsWith('{"')) {
+        const serialized = JSON.parse(mnemonicOrSerialization)
+
+        ;[secp, agent] = await Promise.all([
+            Secp256k1HdWallet.deserialize(serialized.secp, serializationPwd),
+            IxoAgentWallet.deserialize(serialized.agent, serializationPwd),
+        ])
+    } else {
+        secp = await (
+            mnemonicOrSerialization
+                ?  Secp256k1HdWallet
+                    .fromMnemonic(
+                        mnemonicOrSerialization, makeCosmoshubPath(0), 'ixo')
+
+                :  Secp256k1HdWallet.generate(12, makeCosmoshubPath(0), 'ixo')
+        )
+
+        agent = await IxoAgentWallet.fromMnemonic(secp.secret.data)
+    }
+
+    const serialize = pwd =>
+        Promise.all([
+            secp.serialize(pwd),
+            agent.serialize(pwd),
+        ])
+            .then(([secp, agent]) =>
+                JSON.stringify({secp, agent}))
+
+    return {secp, agent, serialize}
+}
+
+const makeClient = (
+    signer,
+    blockchainUrl = defaultBlockchainUrl,
+    blocksyncUrl = defaultBlocksyncUrl,
+) => {
+    const
+        cosmosCli = {
+            secp: new SigningCosmosClient(
+                blockchainUrl,
+                signer.secp.address,
+                signer.secp,
+                GasPrice.fromString('2000uixo'),
+            ),
+
+            agent:
+                new SigningCosmosClient(
+                    blockchainUrl,
+                    signer.agent.address,
+                    signer.agent,
+                    GasPrice.fromString('0uixo')
+                ),
+        },
+
+        bsFetch = makeFetcher(blocksyncUrl),
+
+        getProject = did =>
+            bsFetch('/api/project/getByProjectDid/' + did).then(r => r.body),
+
+        getProjectHead = async projRecOrDid => {
+            if (typeof projRecOrDid === 'object')
+                return {
+                    projectDid: projRecOrDid.projectDid,
+
+                    serviceEndpoint:
+                        (projRecOrDid.data.nodes || projRecOrDid.nodes)
+                            .items
+                            .find(i => i['@type'] === 'CellNode')
+                            .serviceEndpoint
+                            .replace(/\/$/, ''),
+                }
+
+            return getProjectHead(await getProject(projRecOrDid))
+        },
+
+        cnFetch = makeFetcher(),
+
+        cnRpc = async (target, dataCb) => {
+            const {projectDid, serviceEndpoint}
+                = typeof target === 'string' && target.startsWith('http')
+                    ? {projectDid: null, serviceEndpoint: target}
+                    : (await getProjectHead(target))
+
+            const
+                {method, tplName, data, public = false} = dataCb(projectDid),
+
+                message =
+                    public
+                        ? makePublicRpcMsg(method, data)
+
+                        : makeRpcMsg(method, tplName, data, {
+                            type: 'ed25519-sha-256',
+                            created: (new Date()).toISOString(),
+                            creator: 'did:ixo:' + signer.agent.did,
+                            signatureValue:
+                                (await signer.agent.sign(
+                                    signer.agent.address,
+                                    data
+                                ))
+                                    .signature.signature,
+                        }),
+
+                path = public ? '/api/public' : '/api/request'
+
+            const resp = await cnFetch(serviceEndpoint + path, {
+                method: 'POST',
+                body: message,
             })
 
-        return ecpair
-    },
+            if (resp.body.error)
+                throw resp.body.error
 
-    signEC: (stdSignMsg, ecpairPriv) => {
-        const
-            signMessage = stdSignMsg.json,
-
-            hash =
-                crypto.createHash('sha256')
-                    .update(JSON.stringify(signMessage))
-                    .digest(),
-
-            {signature} = secp256k1.sign(hash, ecpairPriv),
-
-            signatureBase64 = Buffer.from(signature).toString('base64')
-
-        return signatureBase64
-    },
-
-    deriveDidDoc: mnemonic =>
-        sovrin.fromSeed(
-            crypto.createHash('sha256').update(mnemonic).digest().slice(0, 32)),
-
-    deriveAgentAddress: verifyKey => {
-        const hashedVerifyKey =
-            crypto.createHash('sha256')
-                .update(base58.decode(verifyKey))
-                .digest()
-                .slice(0, 20)
-
-        return bech32.encode(bech32MainPrefix, bech32.toWords(hashedVerifyKey))
-    },
-}
-
-const makeBlockchainClient = chainUrl => {
-    const csFetch = makeFetcher(chainUrl)
-
-    return {
-        raw: csFetch,
-
-        getAccounts: address =>
-            csFetch('/auth/accounts' + address),
-
-        makeStdMsg: input => ({
-            json: input,
-            bytes: convertStringToBytes(JSON.stringify(input)),
-        }),
-
-        broadcast: signedTx =>
-            csFetch('/txs', {method: 'POST', body: signedTx}),
-    }
-}
-
-const makeBlocksyncClient = blockSyncUrl => {
-    const
-        bsFetch = makeFetcher(blockSyncUrl),
-
-        signAndPrepareTx = async (type, value, didDoc) => {
-            const
-                msgJson = JSON.stringify({type, value}),
-
-                msgUppercaseHex =
-                    new Buffer(msgJson).toString('hex').toUpperCase(),
-
-                body = {msg: msgUppercaseHex, pub_key: didDoc.verifyKey},
-
-                {body: {sign_bytes, fee}} =
-                    await bsFetch('/api/sign_data', {method: 'POST', body}),
-
-                fullSignature =
-                    sovrin.signMessage(
-                        sign_bytes,
-                        didDoc.secret.signKey,
-                        didDoc.verifyKey,
-                    ),
-
-                signatureBase64 =
-                    Buffer.from(fullSignature).slice(0, 64).toString('base64')
-
-            return {
-                msg: [{type, value}],
-                fee,
-                signatures: [{
-                    signature: signatureBase64,
-                    pub_key: {
-                        type: 'tendermint/PubKeyEd25519',
-                        value:
-                            base58.decode(didDoc.encryptionPublicKey)
-                                .toString('base64'),
-                    },
-                }],
-            }
+            return resp.body.result
         }
 
     return {
-        raw: bsFetch,
+        getSecpAccount: () => cosmosCli.secp.getAccount(),
 
-        ping: () => bsFetch('/'),
+        getAgentAccount: () => cosmosCli.agent.getAccount(),
 
-        getStats: () => bsFetch('/api/stats/listStats'),
-
-        registerUser: async didDoc => {
-            const
-                lightDidDoc = {
-                    did: 'did:ixo:' + didDoc.did,
-                    pubKey: didDoc.verifyKey, // See note [1]
-                    credentials: [],
+        register: verifyKey =>
+            cosmosCli.agent.signAndBroadcast([{
+                type: 'did/AddDid',
+                value: {
+                    did: 'did:ixo:' + signer.agent.did,
+                    pubKey: signer.agent.verifykey || verifyKey, // [1]
                 },
-
-                tx = await signAndPrepareTx('did/AddDid', lightDidDoc, didDoc)
-
-            const resp = await bsFetch('/api/blockchain/txs', {
-                method: 'POST',
-                body: {tx, mode: 'block'},
-            })
-
-            if (resp.body.code && resp.body.code > 0)
-                throw resp
-
-            return resp
-        },
-
-        getDidDoc: did => bsFetch('/api/did/getByDid/' + did),
-
-        listProjects: senderDid =>
-            !senderDid
-                ? bsFetch('/api/project/listProjects')
-
-                : bsFetch('/api/project', {
-                    method: 'POST',
-                    body:
-                        makePublicRpcMsg('listProjectBySenderDid', {senderDid}),
-                }),
-
-        getProject: did => bsFetch('/api/project/getByProjectDid/' + did),
-    }
-}
-
-const makeCellNodeClient = cnUrl => {
-    const
-        cnFetch = makeFetcher(cnUrl),
-
-        cnRpc = (method, tplName, data, signature) =>
-            cnFetch('/api/request', {
-                method: 'POST',
-                body: makeRpcMsg(method, tplName, signature, data),
+            }], {
+                amount: [],
+                gas: '0',
             }),
 
-        cnRpcPublic = (method, payload) =>
-            cnFetch('/api/request', {
-                method: 'POST',
-                body: makePublicRpcMsg(method, payload),
-            })
+        getDidDoc: did => bsFetch('/api/did/getByDid/' + did).then(r => r.body),
 
-    return {
-        raw: cnFetch,
-        rawRpc: cnRpc,
-        rawRpcPublic: cnRpcPublic,
+        listEntities: () =>
+            bsFetch('/api/project/listProjects').then(r => r.body),
 
-        entity: {
-            create: (data, signature) =>
-                cnRpc('createProject', 'create_project', signature, data),
+        getEntity: getProject,
 
-            update: (data, signature) =>
-                cnRpc('updateProjectStatus', 'project_status', signature,data),
+        createEntity: (projData, cnUrl = defaultCellnodeUrl) =>
+            cnRpc(cnUrl, () => ({
+                method: 'createProject',
+                tplName: 'create_project',
+                data: projData,
+            })),
 
-            fund: (data, signature) =>
-                cnRpc('fundProject', 'fund_project', signature, data),
+        createEntityFile: (target, dataUrl) => {
+            const [, data, contentType] =
+                dataUrl.match('^data:([^;]+);base64,(.+)$')
 
-            createPublic: (base64Content) => {
-                const [, data, contentType] =
-                    base64Content.match('^data:([^;]+);base64,(.+)$')
-
-                return cnRpcPublic('createPublic', {data, contentType})
-            },
-
-            fetchPublic: key =>
-                cnRpcPublic('fetchPublic', {key})
-                    .then(({result}) =>
-                        result.data ? result : Promise.reject(result)),
+            return cnRpc(target, () => ({
+                method: 'createPublic',
+                data: {data, contentType},
+                public: true,
+            }))
         },
 
-        agent: {
-            create: (data, signature) =>
-                cnRpc('createAgent', 'create_agent', data, signature),
+        getEntityFile: (target, key) =>
+            cnRpc(target, () => ({
+                method: 'fetchPublic',
+                data: {key},
+                public: true,
+            })),
 
-            list: (data, signature) =>
-                cnRpc('listAgents', 'list_agent', data, signature),
+        updateEntityStatus: (projRecOrDid, status) =>
+            cnRpc(projRecOrDid, projectDid => ({
+                method: 'updateProjectStatus',
+                tplName: 'project_status',
+                data: {projectDid, status},
+            })),
 
-            updateStatus: (data, signature) =>
-                cnRpc('updateAgentStatus', 'agent_status', data, signature),
-        },
+        listAgents: projRecOrDid =>
+            cnRpc(projRecOrDid, projectDid => ({
+                method: 'listAgents',
+                tplName: 'list_agent',
+                data: {projectDid},
+            })),
 
-        claim: {
-            create: (data, signature) =>
-                cnRpc('submitClaim', 'submit_claim', data, signature),
+        createAgent: (projRecOrDid, {did, role, email, name}) =>
+            cnRpc(projRecOrDid, projectDid => ({
+                method: 'createAgent',
+                tplName: 'create_agent',
+                data: {projectDid, agentDid: did, role, email, name},
+            })),
 
-            evaluate: (data, signature) =>
-                cnRpc('evaluateClaim', 'evaluate_claim', data, signature),
+        updateAgent: (projRecOrDid, agentDid, {status, role, version}) =>
+            cnRpc(projRecOrDid, projectDid => ({
+                method: 'updateAgentStatus',
+                tplName: 'agent_status',
+                data: {projectDid, agentDid, status, role, version},
+            })),
 
-            list: (data, signature) =>
-                cnRpc('listClaims', 'list_claim', data, signature),
-        },
+        listClaims: (projRecOrDid, tplId) =>
+            cnRpc(projRecOrDid, projectDid => ({
+                method: tplId ? 'listClaimsByTemplateId' : 'listClaims',
+                tplName: 'list_claim',
+                data: {projectDid, claimTemplateId: tplId},
+            })),
+
+        createClaim: (projRecOrDid, claimData) =>
+            cnRpc(projRecOrDid, projectDid => ({
+                method: 'submitClaim',
+                tplName: 'submit_claim',
+                data: {...claimData, projectDid},
+            })),
+
+        evaluateClaim: (projRecOrDid, claimId, status) =>
+            cnRpc(projRecOrDid, projectDid => ({
+                method: 'evaluateClaim',
+                tplName: 'evaluate_claim',
+                data: {projectDid, claimId, status},
+            })),
+
+        sendTokens: (to, amount, denom = 'uixo') =>
+            cosmosCli.secp.sendTokens(to, coins(amount, denom)),
+
+        custom: (type, msg) =>
+            cosmosCli[type].signAndBroadcast([msg]),
     }
 }
 
 const makeFetcher = (urlPrefix = '') => async (path, opts = {}) => {
-    const url = urlPrefix + path
+    const
+        url = urlPrefix + path,
+        rawBody = opts.body
 
     opts = {
         ...opts,
-        body: opts.body && JSON.stringify(opts.body),
+        body: opts.body && sortedJsonStringify(opts.body),
         headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
@@ -263,14 +262,18 @@ const makeFetcher = (urlPrefix = '') => async (path, opts = {}) => {
         },
     }
 
-    debug('> Request ' + url + ' :\n' + util.inspect(opts, {depth: 10}))
+    debug('> Request', {url, ...opts, body: rawBody})
 
     const
         resp = await fetch(url, opts),
         isJson =resp.headers.get('content-type').startsWith('application/json'),
         body = await resp[isJson ? 'json' : 'text']()
 
-    debug('< Response:\n' + util.inspect({status: resp.status, headers: resp.headers, body}))
+    debug('< Response', {
+        status: resp.status,
+        headers: Object.fromEntries(resp.headers.entries()),
+        body: body,
+    })
 
     return Promise[resp.ok ? 'resolve' : 'reject']({
         status: resp.status,
@@ -279,9 +282,16 @@ const makeFetcher = (urlPrefix = '') => async (path, opts = {}) => {
     })
 }
 
-const generateTxId = Math.floor(Math.random() * 1000000 + 1)
+const generateTxId = () => Math.floor(Math.random() * 1000000 + 1)
 
-const makeRpcMsg = (method, templateName, signature, data) => ({
+const makePublicRpcMsg = (method, params = {}) => ({
+    jsonrpc: '2.0',
+    method,
+    id: generateTxId(),
+    params,
+})
+
+const makeRpcMsg = (method, templateName, data, signature) => ({
     jsonrpc: '2.0',
     method,
     id: generateTxId(),
@@ -294,30 +304,10 @@ const makeRpcMsg = (method, templateName, signature, data) => ({
     },
 })
 
-const makePublicRpcMsg = (method, params = {}) => ({
-    jsonrpc: '2.0',
-    method,
-    id: generateTxId(),
-    params,
-})
-
-const convertStringToBytes = str => {
-    const
-        myBuffer = [],
-        buffer = Buffer.from(str, 'utf8')
-
-    for (let i = 0; i < buffer.length; i++)
-        myBuffer.push(buffer[i])
-
-    return myBuffer
-}
-
 
 module.exports = {
-    crypto: ixoCrypto,
-    makeBlockchainClient,
-    makeBlocksyncClient,
-    makeCellNodeClient,
+    makeWallet,
+    makeClient,
 }
 
 
