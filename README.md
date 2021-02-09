@@ -59,8 +59,8 @@ ixo client
 
   - `verifyKey`: Only required if the client is configured to use
     a custom signer. No need to provide this if the client is
-    initialized with a regular wallet, as the value can be
-    obtained from it.
+    initialized with wallet created with `makeWallet`, as the
+    value can be obtained from it.
 
 - `getSecpAccount()`: Get account info for the SECP subwallet
 
@@ -70,7 +70,7 @@ ixo client
 
   - `targetAddress`: A wallet address to send coins to
 
-  - `amount`
+  - `amount`: Any positive number
 
   - `denom`: Coin type. Optional, defaults to `"uixo"`.
 
@@ -196,7 +196,7 @@ properties:
 - `agent`: An instance of `IxoAgentWallet` which is a subclass of
   `Secp256k1HdWallet` and 100% API compatible with it.
 
-- `serialize()`: Method that serializes the wallet
+- `serialize()`
 
 
 ## Debugging
