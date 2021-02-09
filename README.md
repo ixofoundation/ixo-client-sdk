@@ -190,7 +190,7 @@ new wallet
 `makeWallet` returns a wallet object with the following
 properties:
 
-- `secp`: An instance os CosmJS'
+- `secp`: An instance of CosmJS'
   [`Secp256k1HdWallet`](https://github.com/cosmos/cosmjs/tree/main/packages/launchpad#create-a-wallet)
 
 - `agent`: An instance of `IxoAgentWallet` which is a subclass of
