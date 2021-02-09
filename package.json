@@ -1,13 +1,13 @@
 {
   "name": "@ixo/client-sdk",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "One ixo client to rule them all",
   "main": "index.js",
   "license": "ISC",
   "author": "gwn <dev@gwn.wtf>",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/ixofoundation/ixo-client-sdk"
+    "type": "git",
+    "url": "https://github.com/ixofoundation/ixo-client-sdk"
   },
   "scripts": {
     "postinstall": "patch-package"
