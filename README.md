@@ -70,7 +70,8 @@ Client methods:
       - `address`
       - `sign(address, document)`
 
-    See the wallet API for more info on `secp` and `agent` keywords.
+    See [the wallet API](#wallet-api) for more info on `secp` and
+    `agent` keywords.
 
   - `blockchainURL`: The URL of the target ixo chain. Optional,
     defaults to the current mainnet URL.
@@ -186,7 +187,7 @@ Client methods:
 
 - `custom(walletType, msg)`: Send a custom message to the blockchain <a id='custom' />
 
-  - `walletType`: Either `"secp"` or `"agent"`. See the wallet API
+  - `walletType`: Either `"secp"` or `"agent"`. See [the wallet API](#wallet-api)
     for more info
 
   - `msg`: See
