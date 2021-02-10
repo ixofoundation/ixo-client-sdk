@@ -1,8 +1,8 @@
 # ixo-client SDK
 
 A complete package of client software for developing client
-applications which connect to the ixo software stack and build on
-the Internet of Impact.
+applications which connect to the [ixo](https://ixo.world/)
+software stack and build on the Internet of Impact.
 
 
 ## Usage Example
@@ -24,49 +24,75 @@ const someClaims = await client.listClaims(someEntity)
 console.log('Here are the claims', someClaims)
 ```
 
-
-## Client API
-
-`makeClient(signer, blockchainURL, blocksyncURL)`: Create a new
-ixo client
-
-- `signer`: Either a wallet object created by `makeWallet` or a
-  custom signer object with the following properties:
-
-  - `secp`: Object with the following properties:
-
-    - `address`
-    - `sign(address, document)`
-
-  - `agent`: Object with the following properties:
-
-    - `did`
-    - `address`
-    - `sign(address, document)`
-
-  See the wallet API for more info on `secp` and `agent` keywords.
-
-- `blockchainURL`: The URL of the target ixo chain. Optional,
-  defaults to the current mainnet URL.
-
-- `blocksyncURL`: The URL of the target ixo blocksync service.
-  Optional, defaults to the current main blocksync service URL.
+See [client API](#client-api) and [wallet API](#wallet-api) for
+details.
 
 
-`makeClient` returns an object with the following properties:
+## Client API <a id='client-api' />
 
-- `register(verifyKey)`: Register the current user
+- [`makeClient`](#makeClient) to create a new client
+
+Client methods:
+
+- [`register`](#register)
+- [`getSecpAccount`](#getSecpAccount)
+- [`getAgentAccount`](#getAgentAccount)
+- [`sendTokens`](#sendTokens)
+- [`getDidDoc`](#getDidDoc)
+- [`listEntities`](#listEntities)
+- [`getEntity`](#getEntity)
+- [`createEntity`](#createEntity)
+- [`createEntityFile`](#createEntityFile)
+- [`listAgents`](#listAgents)
+- [`createAgent`](#createAgent)
+- [`updateAgentStatus`](#updateAgentStatus)
+- [`listClaims`](#listClaims)
+- [`createClaim`](#createClaim)
+- [`evaluateClaim`](#evaluateClaim)
+- [`custom`](#custom)
+
+### Create a new client
+
+- `makeClient(signer, blockchainURL, blocksyncURL)`: Create a new ixo client <a id='makeClient' />
+
+  - `signer`: Either a wallet object created by
+    [`makeWallet`](#makeWallet) or a custom signer object with the
+    following properties:
+
+    - `secp`: Object with the following properties:
+
+      - `address`
+      - `sign(address, document)`
+
+    - `agent`: Object with the following properties:
+
+      - `did`
+      - `address`
+      - `sign(address, document)`
+
+    See the wallet API for more info on `secp` and `agent` keywords.
+
+  - `blockchainURL`: The URL of the target ixo chain. Optional,
+    defaults to the current mainnet URL.
+
+  - `blocksyncURL`: The URL of the target ixo blocksync service.
+    Optional, defaults to the current main blocksync service URL.
+
+### Client methods
+
+- `register(verifyKey)`: Register the current user <a id='register' />
 
   - `verifyKey`: Only required if the client is configured to use
     a custom signer. No need to provide this if the client is
-    initialized with wallet created with `makeWallet`, as the
-    value can be obtained from it.
+    initialized with a wallet created with
+    [`makeWallet`](#makeWallet), as the value can be obtained from
+    it.
 
-- `getSecpAccount()`: Get account info for the SECP subwallet
+- `getSecpAccount()`: Get account info for the SECP subwallet <a id='getSecpAccount' />
 
-- `getAgentAccount()`: Get account info for the agent subwallet
+- `getAgentAccount()`: Get account info for the agent subwallet <a id='getAgentAccount' />
 
-- `sendTokens(targetAddress, amount, denom)`
+- `sendTokens(targetAddress, amount, denom)` <a id='sendTokens' />
 
   - `targetAddress`: A wallet address to send coins to
 
@@ -74,32 +100,30 @@ ixo client
 
   - `denom`: Coin type. Optional, defaults to `"uixo"`.
 
-- `getDidDoc(did)`: Return the full DID document for the given DID
+- `getDidDoc(did)`: Return the full DID document for the given DID <a id='getDidDoc' />
 
-- `listEntities()`: Lists all available entities
+- `listEntities()`: Lists all available entities <a id='listEntities' />
 
-- `getEntity(entityDid)`: Get complete entity record for the given
-  DID
+- `getEntity(entityDid)`: Get complete entity record for the given DID <a id='getEntity' />
 
-- `createEntity(entityData, cellnodeURL)`: Create a new entity
+- `createEntity(entityData, cellnodeURL)`: Create a new entity <a id='createEntity' />
 
     - `entityData`: To be documented; for now please see
       [here](https://github.com/ixofoundation/ixo-apimodule/blob/master/src/common/dummyData.ts#L3-L207)
       for an example
 
     - `cellnodeURL`: URL of the cell node where various project
-      data will be kept. Optional, defaults to ixo's shared cell
-      node
+      data will be kept. Optional, defaults to the URL of ixo's
+      shared cell node
 
-- `createEntityFile(target, dataUrl)`: Upload a file to project's
-  cell node
+- `createEntityFile(target, dataUrl)`: Upload a file to project's cell node <a id='createEntityFile' />
 
   - `target`: Either a project record, a project DID, or a cell
     node URL
 
   - `dataUrl`: Any valid [data URL](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs)
 
-- `getEntityFile(target, key)`
+- `getEntityFile(target, key)` <a id='getEntityFile' />
 
   - `target`: Either a project record, a project DID, or a cell
     node URL
@@ -107,10 +131,9 @@ ixo client
   - `key`: Key of the target file, as returned from
     `createEntityFile`.
 
-- `listAgents(entityRecordOrDid)`: List agents belonging to a given entity
+- `listAgents(entityRecordOrDid)`: List agents belonging to a given entity <a id='listAgents' />
 
-- `createAgent(entityRecordOrDid, agentRecord)`: Create an agent for the
-  given entity
+- `createAgent(entityRecordOrDid, agentRecord)`: Create an agent for the given entity <a id='createAgent' />
 
   - `agentRecord`: An object with the following properties:
 
@@ -127,7 +150,7 @@ ixo client
       - `"SA"` for service provider
       - `"IA"` for investor
 
-- `updateAgentStatus(entityRecordOrDid, agentDid, updates)`
+- `updateAgentStatus(entityRecordOrDid, agentDid, updates)` <a id='updateAgentStatus' />
 
   - `updates`: An object with the following properties:
 
@@ -142,16 +165,16 @@ ixo client
 
     - `version`: Optional
 
-- `listClaims(entityRecordOrDid, entityTemplateId)`
+- `listClaims(entityRecordOrDid, entityTemplateId)` <a id='listClaims' />
 
   - `entityTemplateId`: Optional, provide a value to filter claims
     by template id
 
-- `createClaim(entityRecordOrDid, claimData)`
+- `createClaim(entityRecordOrDid, claimData)` <a id='createClaim' />
 
   - `claimData`: Any object is accepted
 
-- `evaluateClaim(entityRecordOrDid, claimId, status)`
+- `evaluateClaim(entityRecordOrDid, claimId, status)` <a id='evaluateClaim' />
 
   - `claimId`: A claim id as returned from `createClaim`
 
@@ -161,7 +184,7 @@ ixo client
     - `1` for approved
     - `2` for rejected
 
-- `custom(walletType, msg)`: Send a custom message to the blockchain
+- `custom(walletType, msg)`: Send a custom message to the blockchain <a id='custom' />
 
   - `walletType`: Either `"secp"` or `"agent"`. See the wallet API
     for more info
@@ -171,10 +194,9 @@ ixo client
     for available options
 
 
-## Wallet API
+## Wallet API <a id='wallet-api' />
 
-`makeWallet(mnemonicOrSerialization, serializationPwd)`: Create a
-new wallet
+`makeWallet(mnemonicOrSerialization, serializationPwd)`: Create a new wallet <a id='makeWallet' />
 
 - `mnemonicOrSerialization`: Either a mnemonic string or a
   serialized wallet string. Optional.
