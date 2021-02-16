@@ -1,6 +1,6 @@
 {
   "name": "@ixo/client-sdk",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "One ixo client to rule them all",
   "main": "index.js",
   "license": "ISC",
