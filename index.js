@@ -23,15 +23,15 @@ const
     defaultCellnodeUrl = 'https://pds-pandora.ixo.world'
 
 
-const makeWallet = async (mnemonicOrSerialization, serializationPwd) => {
+const makeWallet = async (src, serializationPwd) => {
     let secp, agent
 
-    if (typeof mnemonicOrSerialization === 'object') {
-        secp = new Secp256k1HdWallet(...mnemonicOrSerialization.secp)
-        agent = new IxoAgentWallet(...mnemonicOrSerialization.agent)
+    if (typeof src === 'object') {
+        secp = new Secp256k1HdWallet(...src.secp)
+        agent = new IxoAgentWallet(...src.agent)
 
-    } else if (mnemonicOrSerialization && mnemonicOrSerialization.startsWith('{"')) {
-        const serialized = JSON.parse(mnemonicOrSerialization)
+    } else if (src && src.startsWith('{"')) {
+        const serialized = JSON.parse(src)
 
         ;[secp, agent] = await Promise.all([
             Secp256k1HdWallet.deserialize(serialized.secp, serializationPwd),
@@ -40,10 +40,9 @@ const makeWallet = async (mnemonicOrSerialization, serializationPwd) => {
 
     } else {
         secp = await (
-            mnemonicOrSerialization
+            src
                 ?  Secp256k1HdWallet
-                    .fromMnemonic(
-                        mnemonicOrSerialization, makeCosmoshubPath(0), 'ixo')
+                    .fromMnemonic(src, makeCosmoshubPath(0), 'ixo')
 
                 :  Secp256k1HdWallet.generate(12, makeCosmoshubPath(0), 'ixo')
         )
