@@ -15,11 +15,10 @@
   "dependencies": {
     "@cosmjs/crypto": "^0.23.2",
     "@cosmjs/encoding": "^0.23.2",
-    "@cosmjs/launchpad": "^0.23.2",
+    "@cosmjs/launchpad": "git+https://github.com/gwn/ixo-cosmjs-launchpad.git",
     "bs58": "^4.0.1",
     "debug": "^4.3.1",
     "isomorphic-unfetch": "^3.1.0",
-    "patch-package": "^6.2.2",
     "sovrin-did": "^1.4.0"
   },
   "devDependencies": {}
