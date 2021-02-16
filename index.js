@@ -26,13 +26,18 @@ const
 const makeWallet = async (mnemonicOrSerialization, serializationPwd) => {
     let secp, agent
 
-    if (mnemonicOrSerialization && mnemonicOrSerialization.startsWith('{"')) {
+    if (typeof mnemonicOrSerialization === 'object') {
+        secp = new Secp256k1HdWallet(...mnemonicOrSerialization.secp)
+        agent = new IxoAgentWallet(...mnemonicOrSerialization.agent)
+
+    } else if (mnemonicOrSerialization && mnemonicOrSerialization.startsWith('{"')) {
         const serialized = JSON.parse(mnemonicOrSerialization)
 
         ;[secp, agent] = await Promise.all([
             Secp256k1HdWallet.deserialize(serialized.secp, serializationPwd),
             IxoAgentWallet.deserialize(serialized.agent, serializationPwd),
         ])
+
     } else {
         secp = await (
             mnemonicOrSerialization

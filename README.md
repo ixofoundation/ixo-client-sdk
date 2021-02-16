@@ -197,14 +197,17 @@ Client methods:
 
 ## Wallet API <a id='wallet-api' />
 
-`makeWallet(mnemonicOrSerialization, serializationPwd)`: Create a new wallet <a id='makeWallet' />
+`makeWallet(source, serializationPwd)`: Create a new wallet <a id='makeWallet' />
 
-- `mnemonicOrSerialization`: Either a mnemonic string or a
-  serialized wallet string. Optional.
+- `source`: Either a mnemonic string, a serialized wallet string,
+  or an object with the schema `{secp, agent}` containing
+  constructor arguments for Secp256k1HdWallet and IxoAgentWallet
+  classes. Optional.
 
   If empty, a brand new wallet is generated. If a mnemonic string,
   recovers a wallet based on the mnemonic. If serialized wallet,
-  deserializes it.
+  deserializes it. If an object of constructor arguments,
+  instantiates the wallet using those arguments.
 
 - `serializationPwd`: Serializations involve encryption so a
   password is *required* if the first parameter is an encryption
