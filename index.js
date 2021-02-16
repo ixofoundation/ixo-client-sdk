@@ -67,22 +67,33 @@ const makeClient = (
     blocksyncUrl = defaultBlocksyncUrl,
 ) => {
     const
-        cosmosCli = {
-            secp: new SigningCosmosClient(
-                blockchainUrl,
-                signer.secp.address,
-                signer.secp,
-                GasPrice.fromString('2000uixo'),
-            ),
+        cosmosCli =
+            signer
+                ? {
+                    secp: new SigningCosmosClient(
+                        blockchainUrl,
+                        signer.secp.address,
+                        signer.secp,
+                        GasPrice.fromString('2000uixo'),
+                    ),
 
-            agent:
-                new SigningCosmosClient(
-                    blockchainUrl,
-                    signer.agent.address,
-                    signer.agent,
-                    GasPrice.fromString('0uixo')
-                ),
-        },
+                    agent:
+                        new SigningCosmosClient(
+                            blockchainUrl,
+                            signer.agent.address,
+                            signer.agent,
+                            GasPrice.fromString('0uixo')
+                        ),
+                }
+                : new Proxy({}, {
+                    get() {
+                        throw new Error(
+                            'The client needs to be initialized with a'
+                            + ' wallet / signer in order for this method'
+                            + ' to be used'
+                        )
+                    },
+                }),
 
         bsFetch = makeFetcher(blocksyncUrl),
 

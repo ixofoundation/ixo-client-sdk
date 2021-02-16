@@ -73,6 +73,9 @@ Client methods:
     See [the wallet API](#wallet-api) for more info on `secp` and
     `agent` keywords.
 
+    Optional. If empty, client methods that require a signer won't
+    work.
+
   - `blockchainURL`: The URL of the target ixo chain. Optional,
     defaults to the current mainnet URL.
 
