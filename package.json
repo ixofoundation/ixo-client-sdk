@@ -9,9 +9,6 @@
     "type": "git",
     "url": "https://github.com/ixofoundation/ixo-client-sdk"
   },
-  "scripts": {
-    "postinstall": "patch-package"
-  },
   "dependencies": {
     "@cosmjs/crypto": "^0.23.2",
     "@cosmjs/encoding": "^0.23.2",
