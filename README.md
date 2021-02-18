@@ -203,14 +203,13 @@ Client methods:
 `makeWallet(source, serializationPwd)`: Create a new wallet <a id='makeWallet' />
 
 - `source`: Either a mnemonic string, a serialized wallet string,
-  or an object with the schema `{secp, agent}` containing
-  constructor arguments for Secp256k1HdWallet and IxoAgentWallet
-  classes. Optional.
+  or a plain object representing a wallet state (possibly obtained
+  via `toJSON()` -see below for details). Optional.
 
   If empty, a brand new wallet is generated. If a mnemonic string,
   recovers a wallet based on the mnemonic. If serialized wallet,
-  deserializes it. If an object of constructor arguments,
-  instantiates the wallet using those arguments.
+  deserializes it. If a state object, revives the wallet using
+  that state.
 
 - `serializationPwd`: Serializations involve encryption so a
   password is *required* if the first parameter is an encryption
@@ -225,7 +224,12 @@ properties:
 - `agent`: An instance of `IxoAgentWallet` which is a subclass of
   `Secp256k1HdWallet` and 100% API compatible with it.
 
-- `serialize()`
+- `toJSON()`: Standard
+  [`toJSON`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#tojson_behavior)
+  method for `JSON.stringify` integration. One can also use this
+  to get a representation of the wallet's internal state as a
+  plain object and use it in a context where a class instance is
+  not supported. (e.g. Global application state of a client app)
 
 
 ## Debugging

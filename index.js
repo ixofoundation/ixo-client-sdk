@@ -11,6 +11,10 @@ const
 
     {sortedJsonStringify} = require('@cosmjs/launchpad/build/encoding'),
 
+    {toHex, fromHex} = require('@cosmjs/encoding'),
+
+    {pathToString, stringToPath} = require('@cosmjs/crypto'),
+
     IxoAgentWallet = require('./IxoAgentWallet')
 
 
@@ -27,8 +31,7 @@ const makeWallet = async (src, serializationPwd) => {
     let secp, agent
 
     if (typeof src === 'object') {
-        secp = new Secp256k1HdWallet(...src.secp)
-        agent = new IxoAgentWallet(...src.agent)
+        ({secp, agent} = plainStateToWallet(src))
 
     } else if (src && src.startsWith('{"')) {
         const serialized = JSON.parse(src)
@@ -50,16 +53,52 @@ const makeWallet = async (src, serializationPwd) => {
         agent = await IxoAgentWallet.fromMnemonic(secp.secret.data)
     }
 
-    const serialize = pwd =>
-        Promise.all([
-            secp.serialize(pwd),
-            agent.serialize(pwd),
-        ])
-            .then(([secp, agent]) =>
-                JSON.stringify({secp, agent}))
+    const toJSON = () => walletToPlainState({secp, agent})
 
-    return {secp, agent, serialize}
+    return {secp, agent, toJSON}
 }
+
+const walletToPlainState = w => ({
+    secp: {
+        secret: w.secp.secret.data,
+        hdPath: pathToString(w.secp.accounts[0].hdPath),
+        prefix: w.secp.accounts[0].prefix,
+        privkey: toHex(w.secp.privkey),
+        pubkey: toHex(w.secp.pubkey),
+    },
+    agent: {
+        secret: w.agent.secret.data,
+        hdPath: pathToString(w.agent.accounts[0].hdPath),
+        prefix: w.agent.accounts[0].prefix,
+        privkey: w.agent.privkey,
+        pubkey: w.agent.pubkey,
+        signkey: w.agent.signkey,
+        verifykey: w.agent.verifykey,
+        did: w.agent.did,
+        address: w.agent.address,
+    },
+})
+
+const plainStateToWallet = s => ({
+    secp: new Secp256k1HdWallet(
+        s.secp.secret,
+        stringToPath(s.secp.hdPath),
+        fromHex(s.secp.privkey),
+        fromHex(s.secp.pubkey),
+        s.secp.prefix,
+    ),
+
+    agent: new IxoAgentWallet(
+        s.agent.secret,
+        stringToPath(s.agent.hdPath),
+        s.agent.privkey,
+        s.agent.pubkey,
+        s.agent.signkey,
+        s.agent.verifykey,
+        s.agent.did,
+        s.agent.prefix,
+    ),
+})
 
 const makeClient = (
     signer,
