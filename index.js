@@ -65,6 +65,7 @@ const walletToPlainState = w => ({
         prefix: w.secp.accounts[0].prefix,
         privkey: toHex(w.secp.privkey),
         pubkey: toHex(w.secp.pubkey),
+        address: w.secp.address,
     },
     agent: {
         secret: w.agent.secret.data,
