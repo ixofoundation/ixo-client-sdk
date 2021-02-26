@@ -209,8 +209,8 @@ const makeClient = (
                     pubKey: signer.agent.verifykey || verifyKey, // [1]
                 },
             }], {
-                amount: [],
-                gas: '0',
+                amount: coins(2000, 'uixo'),
+                gas: '80000',
             }),
 
         getDidDoc: did => bsFetch('/api/did/getByDid/' + did).then(r => r.body),
