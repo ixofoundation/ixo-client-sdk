@@ -127,11 +127,7 @@ const makeClient = (
                 }
                 : new Proxy({}, {
                     get() {
-                        throw new Error(
-                            'The client needs to be initialized with a'
-                            + ' wallet / signer in order for this method'
-                            + ' to be used'
-                        )
+                        throw new Error('The client needs to be initialized with a wallet / signer in order for this method to be used') // eslint-disable-line max-len
                     },
                 }),
 
