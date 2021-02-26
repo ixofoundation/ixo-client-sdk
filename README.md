@@ -18,9 +18,9 @@ await client.register()
 
 await client.sendTokens('<target address>', 10)
 
-const someEntity = await client.getEntity('<a valid entity DID>')
+const someProject = await client.getProject('<a valid project DID>')
 
-const someClaims = await client.listClaims(someEntity)
+const someClaims = await client.listClaims(someProject)
 console.log('Here are the claims', someClaims)
 ```
 
@@ -39,10 +39,15 @@ Client methods:
 - [`getAgentAccount`](#getAgentAccount)
 - [`sendTokens`](#sendTokens)
 - [`getDidDoc`](#getDidDoc)
-- [`listEntities`](#listEntities)
-- [`getEntity`](#getEntity)
-- [`createEntity`](#createEntity)
-- [`createEntityFile`](#createEntityFile)
+- [`listProjects`](#listProjects)
+- [`listTemplates`](#listTemplates)
+- [`listCells`](#listCells)
+- [`getProject`](#getProject)
+- [`getTemplate`](#getTemplate)
+- [`getCell`](#getCell)
+- [`createProject`](#createProject)
+- [`createProjectFile`](#createProjectFile)
+- [`getProjectFile`](#getProjectFile)
 - [`listAgents`](#listAgents)
 - [`createAgent`](#createAgent)
 - [`updateAgentStatus`](#updateAgentStatus)
@@ -106,13 +111,21 @@ Client methods:
 
 - `getDidDoc(did)`: Return the full DID document for the given DID <a id='getDidDoc' />
 
-- `listEntities()`: Lists all available entities <a id='listEntities' />
+- `listProjects()`: Lists all available projects <a id='listProjects' />
 
-- `getEntity(entityDid)`: Get complete entity record for the given DID <a id='getEntity' />
+- `listTemplates()`: Lists all available templates <a id='listTemplates' />
 
-- `createEntity(entityData, cellnodeURL)`: Create a new entity <a id='createEntity' />
+- `listCells()`: Lists all available cells <a id='listCells' />
 
-    - `entityData`: To be documented; for now please see
+- `getProject(projectDid)`: Get complete project record for the given DID <a id='getProject' />
+
+- `getTemplate(tplDid)`: Get complete template record for the given DID <a id='getTemplate' />
+
+- `getCell(cellDid)`: Get complete cell record for the given DID <a id='getCell' />
+
+- `createProject(projectData, cellnodeURL)`: Create a new project <a id='createProject' />
+
+    - `projectData`: To be documented; for now please see
       [here](https://github.com/ixofoundation/ixo-apimodule/blob/master/src/common/dummyData.ts#L3-L207)
       for an example
 
@@ -120,24 +133,24 @@ Client methods:
       data will be kept. Optional, defaults to the URL of ixo's
       shared cell node
 
-- `createEntityFile(target, dataUrl)`: Upload a file to project's cell node <a id='createEntityFile' />
+- `createProjectFile(target, dataUrl)`: Upload a file to project's cell node <a id='createProjectFile' />
 
   - `target`: Either a project record, a project DID, or a cell
     node URL
 
   - `dataUrl`: Any valid [data URL](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs)
 
-- `getEntityFile(target, key)` <a id='getEntityFile' />
+- `getProjectFile(target, key)` <a id='getProjectFile' />
 
   - `target`: Either a project record, a project DID, or a cell
     node URL
 
   - `key`: Key of the target file, as returned from
-    `createEntityFile`.
+    `createProjectFile`.
 
-- `listAgents(entityRecordOrDid)`: List agents belonging to a given entity <a id='listAgents' />
+- `listAgents(projectRecordOrDid)`: List agents belonging to a given project <a id='listAgents' />
 
-- `createAgent(entityRecordOrDid, agentRecord)`: Create an agent for the given entity <a id='createAgent' />
+- `createAgent(projectRecordOrDid, agentRecord)`: Create an agent for the given project <a id='createAgent' />
 
   - `agentRecord`: An object with the following properties:
 
@@ -154,7 +167,7 @@ Client methods:
       - `"SA"` for service provider
       - `"IA"` for investor
 
-- `updateAgentStatus(entityRecordOrDid, agentDid, updates)` <a id='updateAgentStatus' />
+- `updateAgentStatus(projectRecordOrDid, agentDid, updates)` <a id='updateAgentStatus' />
 
   - `updates`: An object with the following properties:
 
@@ -169,16 +182,16 @@ Client methods:
 
     - `version`: Optional
 
-- `listClaims(entityRecordOrDid, entityTemplateId)` <a id='listClaims' />
+- `listClaims(projectRecordOrDid, projectTemplateId)` <a id='listClaims' />
 
-  - `entityTemplateId`: Optional, provide a value to filter claims
+  - `projectTemplateId`: Optional, provide a value to filter claims
     by template id
 
-- `createClaim(entityRecordOrDid, claimData)` <a id='createClaim' />
+- `createClaim(projectRecordOrDid, claimData)` <a id='createClaim' />
 
   - `claimData`: Any object is accepted
 
-- `evaluateClaim(entityRecordOrDid, claimId, status)` <a id='evaluateClaim' />
+- `evaluateClaim(projectRecordOrDid, claimId, status)` <a id='evaluateClaim' />
 
   - `claimId`: A claim id as returned from `createClaim`
 

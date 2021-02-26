@@ -133,23 +133,39 @@ const makeClient = (
 
         bsFetch = makeFetcher(blocksyncUrl),
 
-        getProject = did =>
+        listEntities = async type => {
+            const ents =
+                await bsFetch('/api/project/listProjects').then(r => r.body)
+
+            if (!type)
+                return ents
+
+            return ents.filter(e => e['@type'] === type)
+        },
+
+        getEntity = did =>
             bsFetch('/api/project/getByProjectDid/' + did).then(r => r.body),
 
         getProjectHead = async projRecOrDid => {
-            if (typeof projRecOrDid === 'object')
-                return {
-                    projectDid: projRecOrDid.projectDid,
+            if (typeof projRecOrDid === 'object') {
+                const {projectDid} = projRecOrDid
+                let serviceEndpoint
 
-                    serviceEndpoint:
-                        (projRecOrDid.data.nodes || projRecOrDid.nodes)
-                            .items
+                try {
+                    serviceEndpoint =
+                        projRecOrDid.data.nodes.items
                             .find(i => i['@type'] === 'CellNode')
                             .serviceEndpoint
-                            .replace(/\/$/, ''),
+                            .replace(/\/$/, '')
+
+                } catch (e) {
+                    throw new Error('Project doesn\'t have an associated Cell Node record!') // eslint-disable-line max-len
                 }
 
-            return getProjectHead(await getProject(projRecOrDid))
+                return {projectDid, serviceEndpoint}
+            }
+
+            return getProjectHead(await getEntity(projRecOrDid))
         },
 
         cnFetch = makeFetcher(),
@@ -211,19 +227,23 @@ const makeClient = (
 
         getDidDoc: did => bsFetch('/api/did/getByDid/' + did).then(r => r.body),
 
-        listEntities: () =>
-            bsFetch('/api/project/listProjects').then(r => r.body),
+        listEntities,
+        listProjects: () => listEntities('Project'),
+        listTemplates: () => listEntities('Template'),
+        listCells: () => listEntities('Cell'),
 
-        getEntity: getProject,
+        getProject: getEntity,
+        getTemplate: getEntity,
+        getCell: getEntity,
 
-        createEntity: (projData, cnUrl = defaultCellnodeUrl) =>
+        createProject: (projectData, cnUrl = defaultCellnodeUrl) =>
             cnRpc(cnUrl, () => ({
                 method: 'createProject',
                 tplName: 'create_project',
-                data: projData,
+                data: projectData,
             })),
 
-        createEntityFile: (target, dataUrl) => {
+        createProjectFile: (target, dataUrl) => {
             const [, data, contentType] =
                 dataUrl.match('^data:([^;]+);base64,(.+)$')
 
@@ -234,14 +254,14 @@ const makeClient = (
             }))
         },
 
-        getEntityFile: (target, key) =>
+        getProjectFile: (target, key) =>
             cnRpc(target, () => ({
                 method: 'fetchPublic',
                 data: {key},
                 public: true,
             })),
 
-        updateEntityStatus: (projRecOrDid, status) =>
+        updateProjectStatus: (projRecOrDid, status) =>
             cnRpc(projRecOrDid, projectDid => ({
                 method: 'updateProjectStatus',
                 tplName: 'project_status',
