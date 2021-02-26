@@ -114,7 +114,7 @@ const makeClient = (
                         blockchainUrl,
                         signer.secp.address,
                         signer.secp,
-                        GasPrice.fromString('2000uixo'),
+                        GasPrice.fromString('0.025uixo'),
                     ),
 
                     agent:
@@ -122,7 +122,7 @@ const makeClient = (
                             blockchainUrl,
                             signer.agent.address,
                             signer.agent,
-                            GasPrice.fromString('0uixo')
+                            GasPrice.fromString('0.025uixo')
                         ),
                 }
                 : new Proxy({}, {
