@@ -3,17 +3,16 @@ const
 
     fetch = require('isomorphic-unfetch'),
 
-    {
-        Secp256k1HdWallet, makeCosmoshubPath, SigningCosmosClient, GasPrice,
-        coins,
-    } =
-        require('@cosmjs/launchpad'),
+    {Secp256k1HdWallet, makeCosmoshubPath, GasPrice, coins}
+        = require('@cosmjs/launchpad'),
 
     {sortedJsonStringify} = require('@cosmjs/launchpad/build/encoding'),
 
     {toHex, fromHex} = require('@cosmjs/encoding'),
 
     {pathToString, stringToPath} = require('@cosmjs/crypto'),
+
+    SigningCosmosClient = require('./SigningCosmosClient'),
 
     IxoAgentWallet = require('./IxoAgentWallet')
 
