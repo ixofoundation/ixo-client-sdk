@@ -170,6 +170,9 @@ const makeClient = (
         cnFetch = makeFetcher(),
 
         cnRpc = async (target, dataCb) => {
+            if (!signer)
+                throw new Error('The client needs to be initialized with a wallet / signer in order for this method to be used') // eslint-disable-line max-len
+
             const {projectDid, serviceEndpoint}
                 = typeof target === 'string' && target.startsWith('http')
                     ? {projectDid: null, serviceEndpoint: target}
@@ -212,8 +215,11 @@ const makeClient = (
 
         getAgentAccount: () => cosmosCli.agent.getAccount(),
 
-        register: verifyKey =>
-            cosmosCli.agent.signAndBroadcast([{
+        register: verifyKey => {
+            if (!signer)
+                throw new Error('The client needs to be initialized with a wallet / signer in order for this method to be used') // eslint-disable-line max-len
+
+            return cosmosCli.agent.signAndBroadcast([{
                 type: 'did/AddDid',
                 value: {
                     did: 'did:ixo:' + signer.agent.did,
@@ -222,7 +228,8 @@ const makeClient = (
             }], {
                 amount: coins(2000, 'uixo'),
                 gas: '80000',
-            }),
+            })
+        },
 
         getDidDoc: did => bsFetch('/api/did/getByDid/' + did).then(r => r.body),
 
