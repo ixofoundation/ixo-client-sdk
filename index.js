@@ -139,7 +139,7 @@ const makeClient = (
             if (!type)
                 return ents
 
-            return ents.filter(e => e['@type'] === type)
+            return ents.filter(e => e.data['@type'] === type)
         },
 
         getEntity = did =>
