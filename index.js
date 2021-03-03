@@ -158,7 +158,8 @@ const makeClient = (
                             .replace(/\/$/, '')
 
                 } catch (e) {
-                    throw new Error('Project doesn\'t have an associated Cell Node record!') // eslint-disable-line max-len
+                    serviceEndpoint = defaultCellnodeUrl
+                    /* throw new Error('Project doesn\'t have an associated Cell Node record!') */// eslint-disable-line max-len
                 }
 
                 return {projectDid, serviceEndpoint}
