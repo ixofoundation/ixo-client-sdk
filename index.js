@@ -8,7 +8,7 @@ const
 
     {sortedJsonStringify} = require('@cosmjs/launchpad/build/encoding'),
 
-    {toHex, fromHex} = require('@cosmjs/encoding'),
+    {toHex, fromHex, fromBase64} = require('@cosmjs/encoding'),
 
     {pathToString, stringToPath} = require('@cosmjs/crypto'),
 
@@ -209,7 +209,14 @@ const makeClient = (
                 throw resp.body.error
 
             return resp.body.result
-        }
+        },
+
+        getEntityFile = (target, key) =>
+            cnRpc(target, () => ({
+                method: 'fetchPublic',
+                data: {key},
+                public: true,
+            }))
 
     return {
         getSecpAccount: () => cosmosCli.secp.getAccount(),
@@ -240,7 +247,24 @@ const makeClient = (
         listCells: () => listEntities('Cell'),
 
         getProject: getEntity,
-        getTemplate: getEntity,
+
+        getTemplate: async tplDid => {
+            const
+                tplDoc = await getEntity(tplDid),
+
+                {data: rawTplContent} =
+                    await getEntityFile(tplDoc, tplDoc.data.page.cid),
+
+                decodedTplContent =
+                    String.fromCharCode.apply(null, fromBase64(rawTplContent)),
+
+                parsedTplContent = JSON.parse(decodedTplContent)
+
+            tplDoc.data.page.content = parsedTplContent
+
+            return tplDoc
+        },
+
         getCell: getEntity,
 
         createProject: (projectData, cnUrl = defaultCellnodeUrl) =>
@@ -261,12 +285,7 @@ const makeClient = (
             }))
         },
 
-        getEntityFile: (target, key) =>
-            cnRpc(target, () => ({
-                method: 'fetchPublic',
-                data: {key},
-                public: true,
-            })),
+        getEntityFile,
 
         updateProjectStatus: (projRecOrDid, status) =>
             cnRpc(projRecOrDid, projectDid => ({
