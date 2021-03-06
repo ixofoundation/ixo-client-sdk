@@ -145,7 +145,7 @@ const makeClient = (
         getEntity = did =>
             bsFetch('/api/project/getByProjectDid/' + did).then(r => r.body),
 
-        getProjectHead = async projRecOrDid => {
+        getEntityHead = async projRecOrDid => {
             if (typeof projRecOrDid === 'object') {
                 const {projectDid} = projRecOrDid
                 let serviceEndpoint
@@ -165,7 +165,7 @@ const makeClient = (
                 return {projectDid, serviceEndpoint}
             }
 
-            return getProjectHead(await getEntity(projRecOrDid))
+            return getEntityHead(await getEntity(projRecOrDid))
         },
 
         cnFetch = makeFetcher(),
@@ -177,7 +177,7 @@ const makeClient = (
             const {projectDid, serviceEndpoint}
                 = typeof target === 'string' && target.startsWith('http')
                     ? {projectDid: null, serviceEndpoint: target}
-                    : (await getProjectHead(target))
+                    : (await getEntityHead(target))
 
             const
                 {method, tplName, data, public = false} = dataCb(projectDid),
@@ -250,7 +250,7 @@ const makeClient = (
                 data: projectData,
             })),
 
-        createProjectFile: (target, dataUrl) => {
+        createEntityFile: (target, dataUrl) => {
             const [, data, contentType] =
                 dataUrl.match('^data:([^;]+);base64,(.+)$')
 
@@ -261,7 +261,7 @@ const makeClient = (
             }))
         },
 
-        getProjectFile: (target, key) =>
+        getEntityFile: (target, key) =>
             cnRpc(target, () => ({
                 method: 'fetchPublic',
                 data: {key},
