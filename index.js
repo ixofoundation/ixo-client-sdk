@@ -100,11 +100,10 @@ const plainStateToWallet = s => ({
     ),
 })
 
-const makeClient = (
-    signer,
+const makeClient = (signer, {
     blockchainUrl = defaultBlockchainUrl,
     blocksyncUrl = defaultBlocksyncUrl,
-) => {
+} = {}) => {
     const
         cosmosCli =
             signer
