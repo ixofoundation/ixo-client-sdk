@@ -103,6 +103,7 @@ const plainStateToWallet = s => ({
 const makeClient = (signer, {
     blockchainUrl = defaultBlockchainUrl,
     blocksyncUrl = defaultBlocksyncUrl,
+    dashifyUrls = false,
 } = {}) => {
     const
         cosmosCli =
@@ -155,6 +156,9 @@ const makeClient = (signer, {
                             .find(i => i['@type'] === 'CellNode')
                             .serviceEndpoint
                             .replace(/\/$/, '')
+
+                    if (dashifyUrls)
+                        serviceEndpoint = dashifyUrl(serviceEndpoint)
 
                 } catch (e) {
                     serviceEndpoint = defaultCellnodeUrl
@@ -215,7 +219,18 @@ const makeClient = (signer, {
                 method: 'fetchPublic',
                 data: {key},
                 public: true,
-            }))
+            })),
+
+        dashifyProjUrls = projRec => {
+            [
+                'logo',
+                'image',
+            ]
+                .forEach(propName =>
+                    projRec[propName] = dashifyUrl(projRec[propName]))
+
+            return projRec
+        }
 
     return {
         getSecpAccount: () => cosmosCli.secp.getAccount(),
@@ -241,11 +256,28 @@ const makeClient = (signer, {
         getDidDoc: did => bsFetch('/api/did/getByDid/' + did).then(r => r.body),
 
         listEntities,
-        listProjects: () => listEntities('Project'),
+
+        listProjects: async () => {
+            const projRecs = await listEntities('Project')
+
+            if (dashifyUrls)
+                projRecs.forEach(dashifyProjUrls)
+
+            return projRecs
+        },
+
         listTemplates: () => listEntities('Template'),
+
         listCells: () => listEntities('Cell'),
 
-        getProject: getEntity,
+        getProject: async projDid => {
+            const projRec = getEntity(projDid)
+
+            if (dashifyUrls)
+                dashifyProjUrls(projRec)
+
+            return projRec
+        },
 
         getTemplate: async tplDid => {
             const
@@ -399,6 +431,12 @@ const makeRpcMsg = (method, templateName, data, signature) => ({
         signature,
     },
 })
+
+const dashifyUrl = urlStr =>
+    urlStr.replace(
+        /^(https?:\/\/)([^/]+)(\/.*)?/,
+        (_, proto, host, path) => proto + host.replace('_', '-') + (path || ''),
+    )
 
 
 module.exports = {
