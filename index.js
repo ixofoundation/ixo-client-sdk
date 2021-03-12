@@ -59,7 +59,7 @@ const makeWallet = async (src, serializationPwd) => {
 
 const walletToPlainState = w => ({
     secp: {
-        secret: w.secp.secret.data,
+        secret: w.secp.secret && w.secp.secret.data,
         hdPath: pathToString(w.secp.accounts[0].hdPath),
         prefix: w.secp.accounts[0].prefix,
         privkey: toHex(w.secp.privkey),
@@ -67,7 +67,7 @@ const walletToPlainState = w => ({
         address: w.secp.address,
     },
     agent: {
-        secret: w.agent.secret.data,
+        secret: w.agent.secret && w.secp.secret.data,
         hdPath: pathToString(w.agent.accounts[0].hdPath),
         prefix: w.agent.accounts[0].prefix,
         privkey: w.agent.privkey,
