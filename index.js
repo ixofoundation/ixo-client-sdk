@@ -183,10 +183,10 @@ const makeClient = (signer, {
                     : (await getEntityHead(target))
 
             const
-                {method, tplName, data, public = false} = dataCb(projectDid),
+                {method, tplName, data, isPublic = false} = dataCb(projectDid),
 
                 message =
-                    public
+                    isPublic
                         ? makePublicRpcMsg(method, data)
 
                         : makeRpcMsg(method, tplName, data, {
@@ -201,7 +201,7 @@ const makeClient = (signer, {
                                     .signature.signature,
                         }),
 
-                path = public ? '/api/public' : '/api/request'
+                path = isPublic ? '/api/public' : '/api/request'
 
             const resp = await cnFetch(serviceEndpoint + path, {
                 method: 'POST',
@@ -218,7 +218,7 @@ const makeClient = (signer, {
             cnRpc(target, () => ({
                 method: 'fetchPublic',
                 data: {key},
-                public: true,
+                isPublic: true,
             })),
 
         dashifyProjUrls = projRec => {
@@ -312,7 +312,7 @@ const makeClient = (signer, {
             return cnRpc(target, () => ({
                 method: 'createPublic',
                 data: {data, contentType},
-                public: true,
+                isPublic: true,
             }))
         },
 
