@@ -230,6 +230,23 @@ const makeClient = (signer, {
                     projRec[propName] = dashifyUrl(projRec[propName]))
 
             return projRec
+        },
+
+        getTemplate = async tplDid => {
+            const
+                tplDoc = await getEntity(tplDid),
+
+                {data: rawTplContent} =
+                    await getEntityFile(tplDoc, tplDoc.data.page.cid),
+
+                decodedTplContent =
+                    String.fromCharCode.apply(null, fromBase64(rawTplContent)),
+
+                parsedTplContent = JSON.parse(decodedTplContent)
+
+            tplDoc.data.page.content = parsedTplContent
+
+            return tplDoc
         }
 
     return {
@@ -279,22 +296,7 @@ const makeClient = (signer, {
             return projRec
         },
 
-        getTemplate: async tplDid => {
-            const
-                tplDoc = await getEntity(tplDid),
-
-                {data: rawTplContent} =
-                    await getEntityFile(tplDoc, tplDoc.data.page.cid),
-
-                decodedTplContent =
-                    String.fromCharCode.apply(null, fromBase64(rawTplContent)),
-
-                parsedTplContent = JSON.parse(decodedTplContent)
-
-            tplDoc.data.page.content = parsedTplContent
-
-            return tplDoc
-        },
+        getTemplate,
 
         getCell: getEntity,
 
@@ -353,12 +355,34 @@ const makeClient = (signer, {
                 data: {projectDid, claimTemplateId: tplId},
             })),
 
-        createClaim: (projRecOrDid, claimData) =>
-            cnRpc(projRecOrDid, projectDid => ({
-                method: 'submitClaim',
-                tplName: 'submit_claim',
-                data: {...claimData, projectDid},
-            })),
+        createClaim: async (projRecOrDid, tplRecOrDid, claimItems) => {
+            const tplRec = typeof tplRecOrDid !== 'object'
+                ? await getTemplate(tplRecOrDid)
+                : tplRecOrDid
+
+            return await cnRpc(projRecOrDid, projectDid => {
+                const foo = {
+                    method: 'submitClaim',
+                    tplName: 'submit_claim',
+                    data: {
+                        '@context': 'https://schema.ixo.foundation/claims/53690e7d550278dbe228ddf35e0ba72b2666cba6', // eslint-disable-line max-len
+                        id: tplRec.projectDid,
+                        type: tplRec.data.page.claimInfo.type,
+                        issuerId: signer.agent.did,
+                        claimSubject: {id: projectDid},
+                        items: claimItems,
+                        projectDid,
+                        dateTime: (new Date()).toISOString(),
+                    },
+                }
+
+                console.log('submitting claim',  foo)
+
+                return foo
+            })
+        },
+        // TODO: We can optionally validate the given claims against the schema
+        // of the claim template in the future.
 
         evaluateClaim: (projRecOrDid, claimId, status) =>
             cnRpc(projRecOrDid, projectDid => ({

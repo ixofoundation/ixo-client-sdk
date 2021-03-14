@@ -187,9 +187,18 @@ Client methods:
   - `projectTemplateId`: Optional, provide a value to filter claims
     by template id
 
-- `createClaim(projectRecordOrDid, claimData)` <a id='createClaim' />
+- `createClaim(projectRecordOrDid, templateRecordOrDid, claimItems)` <a id='createClaim' />
 
-  - `claimData`: Any object is accepted
+  - `claimItems`: Array of objects that has the following schema:
+
+    - `id`: Id of the claim item. Must match the value in the
+      claim template.
+
+    - `attribute`: Attribute of the claim item. Must match the
+      value in the claim template.
+
+    - `value`: Value of the claim item.
+
 
 - `evaluateClaim(projectRecordOrDid, claimId, status)` <a id='evaluateClaim' />
 
