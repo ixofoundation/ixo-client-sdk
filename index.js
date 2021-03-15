@@ -226,6 +226,8 @@ const makeClient = (signer, {
                 'logo',
                 'image',
             ]
+                .filter(propName => projRec[propName])
+
                 .forEach(propName =>
                     projRec[propName] = dashifyUrl(projRec[propName]))
 
