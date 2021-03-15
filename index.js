@@ -290,7 +290,7 @@ const makeClient = (signer, {
         listCells: () => listEntities('Cell'),
 
         getProject: async projDid => {
-            const projRec = getEntity(projDid)
+            const projRec = await getEntity(projDid)
 
             if (dashifyUrls)
                 dashifyProjUrls(projRec)
