@@ -183,7 +183,8 @@ const makeClient = (signer, {
                     : (await getEntityHead(target))
 
             const
-                {method, tplName, data, isPublic = false} = dataCb(projectDid),
+                {method, tplName, data, isPublic = false, then = x => x} =
+                    dataCb(projectDid, serviceEndpoint),
 
                 message =
                     isPublic
@@ -211,7 +212,7 @@ const makeClient = (signer, {
             if (resp.body.error)
                 throw resp.body.error
 
-            return resp.body.result
+            return then(resp.body.result)
         },
 
         getEntityFile = (target, key) =>
