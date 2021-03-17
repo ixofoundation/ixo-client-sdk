@@ -234,19 +234,30 @@ const makeClient = (signer, {
             return projRec
         },
 
-        getTemplate = async tplDid => {
+        getTemplate = async tplRecOrDid => {
             const
-                tplDoc = await getEntity(tplDid),
+                tplDoc =
+                    typeof tplRecOrDid === 'object'
+                        ? tplRecOrDid
+                        : (await getEntity(tplRecOrDid))
 
-                {data: rawTplContent} =
-                    await getEntityFile(tplDoc, tplDoc.data.page.cid),
+            if (!tplDoc.data.page.content) {
+                const
+                    {data: rawTplContent} =
+                        await getEntityFile(tplDoc, tplDoc.data.page.cid),
 
-                decodedTplContent =
-                    String.fromCharCode.apply(null, fromBase64(rawTplContent)),
+                    decodedTplContent =
+                        String.fromCharCode.apply(
+                            null, fromBase64(rawTplContent)),
 
-                parsedTplContent = JSON.parse(decodedTplContent)
+                    parsedTplContent = JSON.parse(decodedTplContent)
 
-            tplDoc.data.page.content = parsedTplContent
+                tplDoc.data.page.content = parsedTplContent
+                // Here we're arbitrarily extending the template schema to add a
+                // "content" property under "page", and populate it with the
+                // actual claim template content fetched from the relevant cell
+                // node.
+            }
 
             return tplDoc
         }
