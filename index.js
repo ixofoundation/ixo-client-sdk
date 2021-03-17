@@ -314,10 +314,11 @@ const makeClient = (signer, {
             const [, data, contentType] =
                 dataUrl.match('^data:([^;]+);base64,(.+)$')
 
-            return cnRpc(target, () => ({
+            return cnRpc(target, (_, serviceEndpoint) => ({
                 method: 'createPublic',
                 data: {data, contentType},
                 isPublic: true,
+                then: data => serviceEndpoint + '/public/' + data,
             }))
         },
 
