@@ -18,8 +18,7 @@ const
 
 
 const
-    defaultBlockchainUrl =
-        'https://ixo-testnet-validator-mt.simply-vc.com.mt/api',
+    defaultBlockchainUrl = 'https://testnet.ixo.world',
 
     defaultBlocksyncUrl = 'https://block-sync-pandora.ixo.world',
 
