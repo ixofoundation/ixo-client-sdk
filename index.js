@@ -370,9 +370,7 @@ const makeClient = (signer, {
             })),
 
         createClaim: async (projRecOrDid, tplRecOrDid, claimItems) => {
-            const tplRec = typeof tplRecOrDid !== 'object'
-                ? await getTemplate(tplRecOrDid)
-                : tplRecOrDid
+            const tplRec = await getTemplate(tplRecOrDid)
 
             return await cnRpc(projRecOrDid, projectDid => {
                 const foo = {
@@ -381,7 +379,7 @@ const makeClient = (signer, {
                     data: {
                         '@context': 'https://schema.ixo.foundation/claims/53690e7d550278dbe228ddf35e0ba72b2666cba6', // eslint-disable-line max-len
                         id: tplRec.projectDid,
-                        type: tplRec.data.page.claimInfo.type,
+                        type: tplRec.data.page.content.claimInfo.type,
                         issuerId: signer.agent.did,
                         claimSubject: {id: projectDid},
                         items: claimItems,
