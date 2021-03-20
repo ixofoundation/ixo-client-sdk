@@ -226,10 +226,10 @@ const makeClient = (signer, {
                 'logo',
                 'image',
             ]
-                .filter(propName => projRec[propName])
+                .filter(propName => projRec.data[propName])
 
                 .forEach(propName =>
-                    projRec[propName] = dashifyUrl(projRec[propName]))
+                    projRec.data[propName] = dashifyUrl(projRec.data[propName]))
 
             return projRec
         },
