@@ -129,6 +129,8 @@ const makeClient = (signer, {
                     },
                 }),
 
+        bcFetch = makeFetcher(blockchainUrl),
+
         bsFetch = makeFetcher(blocksyncUrl),
 
         listEntities = async type => {
@@ -340,6 +342,9 @@ const makeClient = (signer, {
                 tplName: 'project_status',
                 data: {projectDid, status},
             })),
+
+        getProjectFundAddress: async projDid =>
+            (await bcFetch('/projectAccounts/' + projDid)).body[projDid],
 
         listAgents: projRecOrDid =>
             cnRpc(projRecOrDid, projectDid => ({

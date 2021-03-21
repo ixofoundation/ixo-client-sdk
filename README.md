@@ -49,6 +49,7 @@ Client methods:
 - [`createEntityFile`](#createEntityFile)
 - [`getEntityFile`](#getEntityFile)
 - [`updateProjectStatus`](#updateProjectStatus)
+- [`getProjectFundAddress`](#getProjectFundAddress)
 - [`listAgents`](#listAgents)
 - [`createAgent`](#createAgent)
 - [`updateAgentStatus`](#updateAgentStatus)
@@ -167,6 +168,11 @@ Client methods:
   which is going to be fixed as soon as possible. For now just
   please keep this in mind. Use `getProjectFundAddress` below to
   get the wallet address to send tokens to.
+
+  Use `getProjectFundAddress` below to get the wallet address to
+  send tokens to.
+
+- `getProjectFundAddress(projectDid)` <a id='getProjectFundAddress' />
 
 - `listAgents(projectRecordOrDid)`: List agents belonging to a given project <a id='listAgents' />
 
