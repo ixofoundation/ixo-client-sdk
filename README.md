@@ -46,8 +46,9 @@ Client methods:
 - [`getTemplate`](#getTemplate)
 - [`getCell`](#getCell)
 - [`createProject`](#createProject)
-- [`createProjectFile`](#createProjectFile)
-- [`getProjectFile`](#getProjectFile)
+- [`createEntityFile`](#createEntityFile)
+- [`getEntityFile`](#getEntityFile)
+- [`updateProjectStatus`](#updateProjectStatus)
 - [`listAgents`](#listAgents)
 - [`createAgent`](#createAgent)
 - [`updateAgentStatus`](#updateAgentStatus)
@@ -133,20 +134,39 @@ Client methods:
       data will be kept. Optional, defaults to the URL of ixo's
       shared cell node
 
-- `createProjectFile(target, dataUrl)`: Upload a file to project's cell node <a id='createProjectFile' />
+- `createEntityFile(target, dataUrl)`: Upload a file to entity's cell node <a id='createEntityFile' />
 
-  - `target`: Either a project record, a project DID, or a cell
+  - `target`: Either an entity record, an entity DID, or a cell
     node URL
 
   - `dataUrl`: Any valid [data URL](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs)
 
-- `getProjectFile(target, key)` <a id='getProjectFile' />
+- `getEntityFile(target, key)` <a id='getEntityFile' />
 
-  - `target`: Either a project record, a project DID, or a cell
+  - `target`: Either an entity record, an entity DID, or a cell
     node URL
 
   - `key`: Key of the target file, as returned from
     `createProjectFile`.
+
+- `updateProjectStatus(target, status)` <a id='updateProjectStatus' />
+
+  - `target`: Either a project record or a project DID
+
+  - `status`: `"CREATED"` | `"PENDING"` | `"FUNDED"` | `"STARTED"` | `"STOPPED"` | `"PAIDOUT"`
+
+  **Note I**: Status is a state machine in that you can only
+  update it in the order seen above. So `"CREATED"` -> `"PENDING"`
+  is a valid transition while `"CREATED"` -> `"STARTED"` is not.
+
+  **Note II**: Before setting a project's status to `FUNDED`, you
+  have to send some tokens to the project's wallet first. If you
+  don't do that before trying to set the status to `FUNDED`, you
+  won't get an error but the status won't be changed either. This
+  is because of a poor error handling logic in the ixo backend
+  which is going to be fixed as soon as possible. For now just
+  please keep this in mind. Use `getProjectFundAddress` below to
+  get the wallet address to send tokens to.
 
 - `listAgents(projectRecordOrDid)`: List agents belonging to a given project <a id='listAgents' />
 
