@@ -382,7 +382,7 @@ const makeClient = (signer, {
                 tplName: 'submit_claim',
                 data: {
                     '@context': 'https://schema.ixo.foundation/claims/53690e7d550278dbe228ddf35e0ba72b2666cba6', // eslint-disable-line max-len
-                    id: tplRec.projectDid,
+                    claimTemplateId: tplRec.projectDid,
                     type: tplRec.data.page.content.claimInfo.type,
                     issuerId: signer.agent.did,
                     claimSubject: {id: projectDid},
