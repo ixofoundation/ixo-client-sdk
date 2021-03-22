@@ -377,26 +377,20 @@ const makeClient = (signer, {
         createClaim: async (projRecOrDid, tplRecOrDid, claimItems) => {
             const tplRec = await getTemplate(tplRecOrDid)
 
-            return await cnRpc(projRecOrDid, projectDid => {
-                const foo = {
-                    method: 'submitClaim',
-                    tplName: 'submit_claim',
-                    data: {
-                        '@context': 'https://schema.ixo.foundation/claims/53690e7d550278dbe228ddf35e0ba72b2666cba6', // eslint-disable-line max-len
-                        id: tplRec.projectDid,
-                        type: tplRec.data.page.content.claimInfo.type,
-                        issuerId: signer.agent.did,
-                        claimSubject: {id: projectDid},
-                        items: claimItems,
-                        projectDid,
-                        dateTime: (new Date()).toISOString(),
-                    },
-                }
-
-                console.log('submitting claim',  foo)
-
-                return foo
-            })
+            return await cnRpc(projRecOrDid, projectDid => ({
+                method: 'submitClaim',
+                tplName: 'submit_claim',
+                data: {
+                    '@context': 'https://schema.ixo.foundation/claims/53690e7d550278dbe228ddf35e0ba72b2666cba6', // eslint-disable-line max-len
+                    id: tplRec.projectDid,
+                    type: tplRec.data.page.content.claimInfo.type,
+                    issuerId: signer.agent.did,
+                    claimSubject: {id: projectDid},
+                    items: claimItems,
+                    projectDid,
+                    dateTime: (new Date()).toISOString(),
+                },
+            }))
         },
         // TODO: We can optionally validate the given claims against the schema
         // of the claim template in the future.
