@@ -193,6 +193,9 @@ Client methods:
       - `"SA"` for service provider
       - `"IA"` for investor
 
+    **Note**: The new agent will need to be approved before they
+    can start their activity. See `updateAgentStatus` below:
+
 - `updateAgentStatus(projectRecordOrDid, agentDid, updates)` <a id='updateAgentStatus' />
 
   - `updates`: An object with the following properties:
