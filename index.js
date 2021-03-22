@@ -1,4 +1,6 @@
 const
+    {inspect} = require('util'),
+
     debug = require('debug')('ixo-client-sdk'),
 
     fetch = require('isomorphic-unfetch'),
@@ -425,18 +427,18 @@ const makeFetcher = (urlPrefix = '') => async (path, opts = {}) => {
         },
     }
 
-    debug('> Request', {url, ...opts, body: rawBody})
+    debug('> Request', inspect({url, ...opts, body: rawBody}, {depth: 10}))
 
     const
         resp = await fetch(url, opts),
         isJson =resp.headers.get('content-type').startsWith('application/json'),
         body = await resp[isJson ? 'json' : 'text']()
 
-    debug('< Response', {
+    debug('< Response', inspect({
         status: resp.status,
         headers: Object.fromEntries(resp.headers.entries()),
         body: body,
-    })
+    }, {depth: 10}))
 
     return Promise[resp.ok ? 'resolve' : 'reject']({
         status: resp.status,
