@@ -325,7 +325,7 @@ const makeClient = (signer, {
             })),
 
         createEntityFile: (target, dataUrl) => {
-            const [, data, contentType] =
+            const [, contentType, data] =
                 dataUrl.match('^data:([^;]+);base64,(.+)$')
 
             return cnRpc(target, (_, serviceEndpoint) => ({
