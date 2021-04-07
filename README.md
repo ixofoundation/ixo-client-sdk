@@ -99,6 +99,15 @@ Client methods:
     [`makeWallet`](#makeWallet), as the value can be obtained from
     it.
 
+    **Note**: Registering triggers a write operation on the
+    blockchain which requires a gas fee in terms of ixo tokens to
+    be paid. So the account you are trying to register has to have
+    some ixo tokens. To credit accounts on the testnet you can use
+    the [faucet](https://t.me/joinchat/I4_MXBmVGJKAMmEVX3SVaA).
+    The specific address you will need to use is the address of
+    the agent subwallet. Get it with `wallet.agent.address`. See
+    [wallet API](#wallet-api) for more info.
+
 - `getSecpAccount()`: Get account info for the SECP subwallet <a id='getSecpAccount' />
 
 - `getAgentAccount()`: Get account info for the agent subwallet <a id='getAgentAccount' />
