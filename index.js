@@ -16,7 +16,9 @@ const
 
     SigningCosmosClient = require('./SigningCosmosClient'),
 
-    IxoAgentWallet = require('./IxoAgentWallet')
+    IxoAgentWallet = require('./IxoAgentWallet'),
+
+    {entries} = Object
 
 
 const
@@ -106,6 +108,15 @@ const makeClient = (signer, {
     blocksyncUrl = defaultBlocksyncUrl,
     dashifyUrls = false,
 } = {}) => {
+    if (signer && !typecheck(signer, {
+        secp: Secp256k1HdWallet,
+        agent: IxoAgentWallet,
+    }, {
+        secp: {address: String, sign: Function},
+        agent: {address: String, sign: Function, did: String},
+    }))
+        throw new Error('Invalid signer')
+
     const
         cosmosCli =
             signer
@@ -473,6 +484,14 @@ const dashifyUrl = urlStr =>
     urlStr.replace(
         /^(https?:\/\/)([^/]+)(\/.*)?/,
         (_, proto, host, path) => proto + host.replace('_', '-') + (path || ''),
+    )
+
+const typecheck = (obj, ...schemas) =>
+    schemas.some(schema =>
+        obj.constructor !== Object
+            ? obj.constructor === schema
+            : entries(schema)
+                .every(([k, v]) => typecheck(obj[k], v))
     )
 
 
