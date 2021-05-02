@@ -5,8 +5,8 @@ const
 
     fetch = require('isomorphic-unfetch'),
 
-    {Secp256k1HdWallet, makeCosmoshubPath, GasPrice, coins}
-        = require('@cosmjs/launchpad'),
+    {Secp256k1HdWallet, makeCosmoshubPath, GasPrice,
+        coins, LcdClient, setupStakingExtension} = require('@cosmjs/launchpad'),
 
     {sortedJsonStringify} = require('@cosmjs/launchpad/build/encoding'),
 
@@ -18,7 +18,9 @@ const
 
     IxoAgentWallet = require('./IxoAgentWallet'),
 
-    {entries} = Object
+    {entries} = Object,
+
+    {isArray} = Array
 
 
 const
@@ -141,6 +143,23 @@ const makeClient = (signer, {
                         throw new Error('The client needs to be initialized with a wallet / signer in order for this method to be used') // eslint-disable-line max-len
                     },
                 }),
+
+        lcdCli = LcdClient.withExtensions(
+            {apiUrl: blockchainUrl},
+            setupStakingExtension,
+        ),
+
+        signAndBroadcast = (walletToUse, msgs, fee) => {
+            const defaultFee = {amount: coins(5000, 'uixo'), gas: '200000'}
+
+            if (!isArray(msgs))
+                msgs = [msgs]
+
+            return cosmosCli[walletToUse].signAndBroadcast(
+                msgs,
+                fee || defaultFee,
+            )
+        },
 
         bcFetch = makeFetcher(blockchainUrl),
 
@@ -286,15 +305,12 @@ const makeClient = (signer, {
             if (!signer)
                 throw new Error('The client needs to be initialized with a wallet / signer in order for this method to be used') // eslint-disable-line max-len
 
-            return cosmosCli.agent.signAndBroadcast([{
+            return signAndBroadcast('agent', {
                 type: 'did/AddDid',
                 value: {
                     did: 'did:ixo:' + signer.agent.did,
                     pubKey: signer.agent.verifykey || verifyKey, // [1]
                 },
-            }], {
-                amount: coins(2000, 'uixo'),
-                gas: '80000',
             })
         },
 
@@ -418,8 +434,77 @@ const makeClient = (signer, {
         sendTokens: (to, amount, denom = 'uixo') =>
             cosmosCli.secp.sendTokens(to, coins(amount, denom)),
 
-        custom: (type, msg) =>
-            cosmosCli[type].signAndBroadcast([msg]),
+        custom: (walletToUse, msgs, fee) =>
+            signAndBroadcast(walletToUse, msgs, fee),
+
+        staking: {
+            listValidators: (...args) =>
+                lcdCli.staking.validators(...args),
+
+            getValidator: addr =>
+                lcdCli.staking.validator(addr),
+
+            myDelegations: () =>
+                lcdCli.staking.delegatorDelegations(signer.secp.address),
+
+            delegate: (validator_address, amount) =>
+                signAndBroadcast('secp', {
+                    type: 'cosmos-sdk/MsgDelegate',
+                    value: {
+                        amount: {denom: 'uixo', amount: String(amount)},
+                        delegator_address: signer.secp.address,
+                        validator_address,
+                    },
+                }),
+
+            undelegate: (validator_address, amount) =>
+                signAndBroadcast('secp', {
+                    type: 'cosmos-sdk/MsgUndelegate',
+                    value: {
+                        amount: {denom: 'uixo', amount: String(amount)},
+                        delegator_address: signer.secp.address,
+                        validator_address,
+                    },
+                }),
+
+            redelegate: (validator_src_address, validator_dst_address, amount)=>
+                signAndBroadcast('secp', {
+                    type: 'cosmos-sdk/MsgBeginRedelegate',
+                    value: {
+                        amount: {denom: 'uixo', amount: String(amount)},
+                        delegator_address: signer.secp.address,
+                        validator_src_address,
+                        validator_dst_address,
+                    },
+                }),
+        },
+
+        bonds: {
+            list: () => bcFetch('/bonds_detailed'),
+
+            buy: ({bondDid, bondToken, reserveToken, amount, maxPrice}) =>
+                signAndBroadcast('agent', {
+                    type: 'bonds/MsgBuy',
+                    value: {
+                        buyer_did: 'did:ixo:' + signer.agent.did,
+                        bond_did: bondDid,
+                        amount: {amount: String(amount), denom: bondToken},
+                        max_prices: [
+                            {amount: String(maxPrice), denom: reserveToken},
+                        ],
+                    },
+                }),
+
+            sell: ({bondDid, bondToken, amount}) =>
+                signAndBroadcast('agent', {
+                    type: 'bonds/MsgSell',
+                    value: {
+                        seller_did: 'did:ixo:' + signer.agent.did,
+                        bond_did: bondDid,
+                        amount: {amount: String(amount), denom: bondToken},
+                    },
+                }),
+        },
     }
 }
 

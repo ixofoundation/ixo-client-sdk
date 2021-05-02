@@ -248,6 +248,12 @@ Client methods:
     - `1` for approved
     - `2` for rejected
 
+- `delegate(delegatorAddress, validatorAddress, amount)`: <a id='delegate' />
+
+- `undelegate(delegatorAddress, validatorAddress, amount)`: <a id='undelegate' />
+
+- `redelegate(delegatorAddress, validatorAddress, amount)`: <a id='redelegate' />
+
 - `custom(walletType, msg)`: Send a custom message to the blockchain <a id='custom' />
 
   - `walletType`: Either `"secp"` or `"agent"`. See [the wallet API](#wallet-api)
