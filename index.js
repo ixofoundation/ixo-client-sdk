@@ -452,7 +452,7 @@ const makeClient = (signer, {
 
             validatorDistrubution: (addr) => bcFetch('/distribution/validators/' + addr),
 
-            delegations: (delegatorAddr, validatorAddr) => lcdCli.staking.delegatorValidator(delegatorAddr, validatorAddr),
+            delegation: (delegatorAddr, validatorAddr) => lcdCli.staking.delegation(delegatorAddr, validatorAddr),
 
 
             delegate: (validator_address, amount) =>
