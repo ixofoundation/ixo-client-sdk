@@ -6,7 +6,7 @@ const
     fetch = require('isomorphic-unfetch'),
 
     {Secp256k1HdWallet, makeCosmoshubPath, GasPrice,
-        coins, LcdClient, setupStakingExtension} = require('@cosmjs/launchpad'),
+        coins, LcdClient, setupStakingExtension, setupBankExtension} = require('@cosmjs/launchpad'),
 
     {sortedJsonStringify} = require('@cosmjs/launchpad/build/encoding'),
 
@@ -147,6 +147,7 @@ const makeClient = (signer, {
         lcdCli = LcdClient.withExtensions(
             {apiUrl: blockchainUrl},
             setupStakingExtension,
+            setupBankExtension
         ),
 
         signAndBroadcast = (walletToUse, msgs, fee) => {
@@ -164,6 +165,7 @@ const makeClient = (signer, {
         bcFetch = makeFetcher(blockchainUrl),
 
         bsFetch = makeFetcher(blocksyncUrl),
+        kbFetch = makeFetcher('https://keybase.io/_/api/1.0'),
 
         listEntities = async type => {
             const ents =
@@ -452,9 +454,38 @@ const makeClient = (signer, {
 
             validatorDistrubution: (addr) => bcFetch('/distribution/validators/' + addr),
 
-            validatorRewards: (delegatorAddr, validatorAddr) => bcFetch(`/distribution/delegators/${delegatorAddr}/rewards/${validatorAddr}`),
+            delegatorValidatorRewards: (delegatorAddr, validatorAddr) => bcFetch(`/distribution/delegators/${delegatorAddr}/rewards/${validatorAddr}`),
 
             delegation: (delegatorAddr, validatorAddr) => lcdCli.staking.delegation(delegatorAddr, validatorAddr),
+            
+            delegatorDelegations: (addr) => lcdCli.staking.delegatorDelegations(addr),
+
+            delegatorUnboundingDelegations: (addr) => lcdCli.staking.delegatorUnbondingDelegations(addr),
+
+            delegetorRewards: (addr) => bcFetch(`/distribution/delegators/${addr}/rewards`),
+
+            availableStake: () => bcFetch(`/auth/accounts/${signer.secp.address}`),
+
+            validatorAvatarUrl: async (identity) => {
+                try {
+                    const {
+                        body: {
+                            keys: [{key_fingerprint}]
+                        }
+                    } = await kbFetch(`/key/fetch.json?pgp_key_ids=${identity}`)
+                    const {
+                        body: {
+                            them: [{
+                                pictures: {primary: {url}}
+                            }]
+                        }
+                    } = await kbFetch(`/user/lookup.json?key_fingerprint=${key_fingerprint}`)
+                    
+                    return url;
+                } catch(e) {
+                    return null
+                }
+            },
 
             delegate: (validator_address, amount) =>
                 signAndBroadcast('secp', {
@@ -489,6 +520,7 @@ const makeClient = (signer, {
         },
 
         bonds: {
+            byId: (did) => bcFetch('/bonds/' + did),
             list: () => bcFetch('/bonds_detailed'),
 
             buy: ({bondDid, bondToken, reserveToken, amount, maxPrice}) =>
