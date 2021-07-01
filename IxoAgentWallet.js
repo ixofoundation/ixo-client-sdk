@@ -6,6 +6,8 @@ const
     {Secp256k1HdWallet, makeCosmoshubPath, serializeSignDoc} =
         require('@cosmjs/launchpad')
 
+const didPrefix = 'did:ixo:'
+
 
 class IxoAgentWallet extends Secp256k1HdWallet {
     constructor(
@@ -29,7 +31,7 @@ class IxoAgentWallet extends Secp256k1HdWallet {
             didDoc.encryptionPublicKey,
             didDoc.secret.signKey,
             didDoc.verifyKey,
-            didDoc.did,
+            didPrefix + didDoc.did,
             prefix,
         )
     }

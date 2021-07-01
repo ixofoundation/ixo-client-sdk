@@ -221,7 +221,7 @@ const makeClient = (signer, {
                         : makeRpcMsg(method, tplName, data, {
                             type: 'ed25519-sha-256',
                             created: (new Date()).toISOString(),
-                            creator: 'did:ixo:' + signer.agent.did,
+                            creator: signer.agent.did,
                             signatureValue:
                                 (await signer.agent.sign(
                                     signer.agent.address,
@@ -303,7 +303,7 @@ const makeClient = (signer, {
             return signAndBroadcast('agent', {
                 type: 'did/AddDid',
                 value: {
-                    did: 'did:ixo:' + signer.agent.did,
+                    did: signer.agent.did,
                     pubKey: signer.agent.verifykey || verifyKey, // [1]
                 },
             })
@@ -408,7 +408,7 @@ const makeClient = (signer, {
                     '@context': 'https://schema.ixo.foundation/claims/53690e7d550278dbe228ddf35e0ba72b2666cba6', // eslint-disable-line max-len
                     claimTemplateId: tplRec.projectDid,
                     type: tplRec.data.page.content.claimInfo.type,
-                    issuerId: 'did:ixo:' + signer.agent.did,
+                    issuerId: signer.agent.did,
                     claimSubject: {id: projectDid},
                     items: claimItems,
                     projectDid,
