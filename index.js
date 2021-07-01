@@ -18,7 +18,9 @@ const
 
     IxoAgentWallet = require('./IxoAgentWallet'),
 
-    {entries} = Object
+    {entries} = Object,
+
+    {isArray} = Array
 
 
 const
@@ -141,6 +143,18 @@ const makeClient = (signer, {
                         throw new Error('The client needs to be initialized with a wallet / signer in order for this method to be used') // eslint-disable-line max-len
                     },
                 }),
+
+        signAndBroadcast = (walletToUse, msgs, fee) => {
+            const defaultFee = {amount: coins(5000, 'uixo'), gas: '200000'}
+
+            if (!isArray(msgs))
+                msgs = [msgs]
+
+            return cosmosCli[walletToUse].signAndBroadcast(
+                msgs,
+                fee || defaultFee,
+            )
+        },
 
         bcFetch = makeFetcher(blockchainUrl),
 
@@ -286,15 +300,12 @@ const makeClient = (signer, {
             if (!signer)
                 throw new Error('The client needs to be initialized with a wallet / signer in order for this method to be used') // eslint-disable-line max-len
 
-            return cosmosCli.agent.signAndBroadcast([{
+            return signAndBroadcast('agent', {
                 type: 'did/AddDid',
                 value: {
                     did: 'did:ixo:' + signer.agent.did,
                     pubKey: signer.agent.verifykey || verifyKey, // [1]
                 },
-            }], {
-                amount: coins(2000, 'uixo'),
-                gas: '80000',
             })
         },
 
@@ -418,8 +429,8 @@ const makeClient = (signer, {
         sendTokens: (to, amount, denom = 'uixo') =>
             cosmosCli.secp.sendTokens(to, coins(amount, denom)),
 
-        custom: (type, msg) =>
-            cosmosCli[type].signAndBroadcast([msg]),
+        custom: (walletToUse, msgs, fee) =>
+            signAndBroadcast(walletToUse, msgs, fee),
     }
 }
 
