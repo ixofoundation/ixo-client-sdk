@@ -17,5 +17,8 @@
     "debug": "^4.3.1",
     "isomorphic-unfetch": "^3.1.0",
     "sovrin-did": "^1.4.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.29.0"
   }
 }
