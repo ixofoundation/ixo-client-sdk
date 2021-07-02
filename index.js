@@ -431,6 +431,33 @@ const makeClient = (signer, {
 
         custom: (walletToUse, msgs, fee) =>
             signAndBroadcast(walletToUse, msgs, fee),
+
+        bonds: {
+            list: () => bcFetch('/bonds_detailed'),
+
+            buy: ({bondDid, bondToken, reserveToken, amount, maxPrice}) =>
+                signAndBroadcast('agent', {
+                    type: 'bonds/MsgBuy',
+                    value: {
+                        buyer_did: signer.agent.did,
+                        bond_did: bondDid,
+                        amount: {amount: String(amount), denom: bondToken},
+                        max_prices: [
+                            {amount: String(maxPrice), denom: reserveToken},
+                        ],
+                    },
+                }),
+
+            sell: ({bondDid, bondToken, amount}) =>
+                signAndBroadcast('agent', {
+                    type: 'bonds/MsgSell',
+                    value: {
+                        seller_did: signer.agent.did,
+                        bond_did: bondDid,
+                        amount: {amount: String(amount), denom: bondToken},
+                    },
+                }),
+        },
     }
 }
 
