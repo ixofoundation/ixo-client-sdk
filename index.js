@@ -5,8 +5,8 @@ const
 
     fetch = require('isomorphic-unfetch'),
 
-    {Secp256k1HdWallet, makeCosmoshubPath, GasPrice, coins}
-        = require('@cosmjs/launchpad'),
+    {Secp256k1HdWallet, makeCosmoshubPath, GasPrice,
+        coins, LcdClient, setupStakingExtension} = require('@cosmjs/launchpad'),
 
     {sortedJsonStringify} = require('@cosmjs/launchpad/build/encoding'),
 
@@ -143,6 +143,11 @@ const makeClient = (signer, {
                         throw new Error('The client needs to be initialized with a wallet / signer in order for this method to be used') // eslint-disable-line max-len
                     },
                 }),
+
+        lcdCli = LcdClient.withExtensions(
+            {apiUrl: blockchainUrl},
+            setupStakingExtension,
+        ),
 
         signAndBroadcast = (walletToUse, msgs, fee) => {
             const defaultFee = {amount: coins(5000, 'uixo'), gas: '200000'}
@@ -431,6 +436,48 @@ const makeClient = (signer, {
 
         custom: (walletToUse, msgs, fee) =>
             signAndBroadcast(walletToUse, msgs, fee),
+
+        staking: {
+            listValidators: (...args) =>
+                lcdCli.staking.validators(...args),
+
+            getValidator: addr =>
+                lcdCli.staking.validator(addr),
+
+            myDelegations: () =>
+                lcdCli.staking.delegatorDelegations(signer.secp.address),
+
+            delegate: (validator_address, amount) =>
+                signAndBroadcast('secp', {
+                    type: 'cosmos-sdk/MsgDelegate',
+                    value: {
+                        amount: {denom: 'uixo', amount: String(amount)},
+                        delegator_address: signer.secp.address,
+                        validator_address,
+                    },
+                }),
+
+            undelegate: (validator_address, amount) =>
+                signAndBroadcast('secp', {
+                    type: 'cosmos-sdk/MsgUndelegate',
+                    value: {
+                        amount: {denom: 'uixo', amount: String(amount)},
+                        delegator_address: signer.secp.address,
+                        validator_address,
+                    },
+                }),
+
+            redelegate: (validator_src_address, validator_dst_address, amount)=>
+                signAndBroadcast('secp', {
+                    type: 'cosmos-sdk/MsgBeginRedelegate',
+                    value: {
+                        amount: {denom: 'uixo', amount: String(amount)},
+                        delegator_address: signer.secp.address,
+                        validator_src_address,
+                        validator_dst_address,
+                    },
+                }),
+        },
     }
 }
 
