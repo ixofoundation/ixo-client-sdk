@@ -225,7 +225,7 @@ Client methods:
   - `projectTemplateId`: Optional, provide a value to filter claims
     by template id
 
-- `createClaim(projectRecordOrDid, templateRecordOrDid, claimItems)` <a id='createClaim' />
+- `createClaim(projectRecordOrDid, templateRecordOrDid, claimItems, opts)` <a id='createClaim' />
 
   - `claimItems`: Array of objects that has the following schema:
 
@@ -236,6 +236,11 @@ Client methods:
       value in the claim template.
 
     - `value`: Value of the claim item.
+
+  - `opts`: An object with the following properties:
+
+    - `dryRun`: Instead of creating the claims, returns the full
+      HTTP request that will create the claims.
 
 
 - `evaluateClaim(projectRecordOrDid, claimId, status)` <a id='evaluateClaim' />

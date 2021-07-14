@@ -201,7 +201,7 @@ const makeClient = (signer, {
 
         cnFetch = makeFetcher(),
 
-        cnRpc = async (target, dataCb) => {
+        cnRpc = async (target, dataCb, fetchOpts) => {
             if (!signer)
                 throw new Error('The client needs to be initialized with a wallet / signer in order for this method to be used') // eslint-disable-line max-len
 
@@ -235,7 +235,11 @@ const makeClient = (signer, {
             const resp = await cnFetch(serviceEndpoint + path, {
                 method: 'POST',
                 body: message,
+                ...fetchOpts,
             })
+
+            if (fetchOpts.dryRun)
+                return resp
 
             if (resp.body.error)
                 throw resp.body.error
@@ -398,8 +402,8 @@ const makeClient = (signer, {
                 data: {projectDid, claimTemplateId: tplId},
             })),
 
-        createClaim: async (projRecOrDid, tplRecOrDid, claimItems) => {
             const tplRec = await getTemplate(tplRecOrDid)
+        createClaim: async (projRecOrDid, tplRecOrDid, claimItems, fetchOpts) => {
 
             return await cnRpc(projRecOrDid, projectDid => ({
                 method: 'submitClaim',
@@ -414,7 +418,7 @@ const makeClient = (signer, {
                     projectDid,
                     dateTime: (new Date()).toISOString(),
                 },
-            }))
+            }), fetchOpts)
         },
         // TODO: We can optionally validate the given claims against the schema
         // of the claim template in the future.
@@ -448,6 +452,9 @@ const makeFetcher = (urlPrefix = '') => async (path, opts = {}) => {
             ...opts.headers,
         },
     }
+
+    if (opts.dryRun)
+        return {url, ...opts}
 
     debug('> Request', inspect({url, ...opts, body: rawBody}, {depth: 10}))
 
