@@ -402,8 +402,8 @@ const makeClient = (signer, {
                 data: {projectDid, claimTemplateId: tplId},
             })),
 
-            const tplRec = await getTemplate(tplRecOrDid)
         createClaim: async (projRecOrDid, tplRecOrDid, claimItems, fetchOpts) => {
+            const tplRec = await getTemplate(tplRecOrDid)
 
             return await cnRpc(projRecOrDid, projectDid => ({
                 method: 'submitClaim',
