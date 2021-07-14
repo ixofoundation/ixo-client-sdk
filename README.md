@@ -239,8 +239,9 @@ Client methods:
 
   - `opts`: An object with the following properties:
 
-    - `dryRun`: Instead of creating the claims, returns the full
-      HTTP request that will create the claims.
+    - `dryRun`: Boolean, default `false`. If `true`, Instead of
+      creating the claims, returns the full HTTP request that will
+      create the claims.
 
 
 - `evaluateClaim(projectRecordOrDid, claimId, status)` <a id='evaluateClaim' />
