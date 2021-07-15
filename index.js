@@ -201,7 +201,7 @@ const makeClient = (signer, {
 
         cnFetch = makeFetcher(),
 
-        cnRpc = async (target, dataCb, fetchOpts) => {
+        cnRpc = async (target, dataCb, fetchOpts = {}) => {
             if (!signer)
                 throw new Error('The client needs to be initialized with a wallet / signer in order for this method to be used') // eslint-disable-line max-len
 
