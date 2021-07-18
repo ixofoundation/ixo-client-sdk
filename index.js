@@ -228,7 +228,7 @@ const makeClient = (signer, {
                             signatureValue:
                                 (await signer.agent.sign(
                                     signer.agent.address,
-                                    data
+                                    data,
                                 ))
                                     .signature.signature,
                         }),
@@ -299,9 +299,11 @@ const makeClient = (signer, {
         }
 
     return {
-        getSecpAccount: () => bcFetch('/cosmos/auth/v1beta1/accounts/' + signer.secp.address),
+        getSecpAccount: () =>
+            bcFetch('/cosmos/auth/v1beta1/accounts/' + signer.secp.address),
 
-        getAgentAccount: () => bcFetch('/cosmos/auth/v1beta1/accounts/' + signer.agent.address),
+        getAgentAccount: () =>
+            bcFetch('/cosmos/auth/v1beta1/accounts/' + signer.agent.address),
 
         register: verifyKey => {
             if (!signer)
@@ -405,7 +407,7 @@ const makeClient = (signer, {
                 data: {projectDid, claimTemplateId: tplId},
             })),
 
-        createClaim: async (projRecOrDid, tplRecOrDid, claimItems, fetchOpts) => {
+        createClaim: async (projRecOrDid, tplRecOrDid, claimItems, fetchOpts)=>{
             const tplRec = await getTemplate(tplRecOrDid)
 
             return await cnRpc(projRecOrDid, projectDid => ({
@@ -519,7 +521,7 @@ const typecheck = (obj, ...schemas) =>
         obj.constructor !== Object
             ? obj.constructor === schema
             : entries(schema)
-                .every(([k, v]) => typecheck(obj[k], v))
+                .every(([k, v]) => typecheck(obj[k], v)),
     )
 
 const convertToHex = str =>
