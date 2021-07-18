@@ -1,10 +1,57 @@
 const
     base58 = require('bs58'),
     sovrin = require('sovrin-did'),
-    {sha256} = require('@cosmjs/crypto'),
-    {toBase64, Bech32} = require('@cosmjs/encoding'),
-    {serializeSignDoc} = require('@cosmjs/amino')
+    {Secp256k1HdWallet, serializeSignDoc} = require('@cosmjs/amino'),
+    {EnglishMnemonic,
+        pathToString, stringToPath, sha256} = require('@cosmjs/crypto'),
+    {toBase64, Bech32} = require('@cosmjs/encoding')
 
+
+const makeWallet = async src => {
+    let secp, agent
+
+    if (typeof src === 'object') {
+        ({secp, agent} = plainStateToWallet(src))
+
+    } else {
+        secp = await (
+            src
+                ?  Secp256k1HdWallet.fromMnemonic(src, {prefix: 'ixo'})
+                :  Secp256k1HdWallet.generate(12, {prefix: 'ixo'})
+        )
+
+        agent = await makeAgentWallet(secp.mnemonic)
+    }
+
+    const toJSON = () => walletToPlainState({secp, agent})
+
+    return {secp, agent, toJSON}
+}
+
+const walletToPlainState = w => ({
+    secp: {
+        mnemonic: w.secp.mnemonic,
+        seed: base58.encode(w.secp.seed),
+        accounts: w.secp.accounts.map(a => ({
+            ...a,
+            hdPath: pathToString(a.hdPath),
+        })),
+    },
+    agent: {
+        mnemonic: w.agent.mnemonic,
+        didDoc: w.agent.didDoc,
+    },
+})
+
+const plainStateToWallet = s => ({
+    secp: new Secp256k1HdWallet(new EnglishMnemonic(s.secp.mnemonic), {
+        seed: Uint8Array.from(base58.decode(s.secp.seed)),
+        prefix: s.secp.accounts[0].prefix,
+        hdPaths: s.secp.accounts.map(a => stringToPath(a.hdPath)),
+    }),
+
+    agent: makeAgentWallet(s.agent.mnemonic, s.agent.didDoc),
+})
 
 /* @returns OfflineAminoSigner: https://github.com/cosmos/cosmjs/blob/98e91ae5fe699733497befef95204923c93a7373/packages/amino/src/signer.ts#L22-L38 */// eslint-disable-line max-len
 const makeAgentWallet = (
@@ -65,4 +112,4 @@ const makeAgentWallet = (
 })
 
 
-module.exports = makeAgentWallet
+module.exports = makeWallet
