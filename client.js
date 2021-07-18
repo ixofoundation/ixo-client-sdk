@@ -1,24 +1,16 @@
 const
     {inspect} = require('util'),
-
     debug = require('debug')('ixo-client-sdk'),
-
     fetch = require('isomorphic-unfetch'),
-
     {sortedJsonStringify} = require('@cosmjs/amino/build/signdoc'),
-
     {fromBase64} = require('@cosmjs/encoding'),
-
     base58 = require('bs58'),
-
     memoize = require('lodash.memoize')
 
 
 const
     defaultBlockchainUrl = 'https://testnet.ixo.world',
-
     defaultBlocksyncUrl = 'https://block-sync-pandora.ixo.world',
-
     defaultCellnodeUrl = 'https://pds-pandora.ixo.world'
 
 
