@@ -10,12 +10,13 @@
     "url": "https://github.com/ixofoundation/ixo-client-sdk"
   },
   "dependencies": {
-    "@cosmjs/crypto": "^0.23.2",
-    "@cosmjs/encoding": "^0.23.2",
-    "@cosmjs/launchpad": "git+https://github.com/gwn/ixo-cosmjs-launchpad.git#54326765a1abc0468cf82eb2c30ee67180b9917f",
+    "@cosmjs/amino": "^0.25.5",
+    "@cosmjs/crypto": "^0.25.5",
+    "@cosmjs/encoding": "^0.25.5",
     "bs58": "^4.0.1",
     "debug": "^4.3.1",
     "isomorphic-unfetch": "^3.1.0",
+    "lodash.memoize": "^4.1.2",
     "sovrin-did": "^1.4.0"
   },
   "devDependencies": {

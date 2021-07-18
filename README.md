@@ -91,9 +91,9 @@ Client methods:
 
 ### Client methods
 
-- `register(verifyKey)`: Register the current user <a id='register' />
+- `register(pubKey)`: Register the current user <a id='register' />
 
-  - `verifyKey`: Only required if the client is configured to use
+  - `pubKey`: Only required if the client is configured to use
     a custom signer. No need to provide this if the client is
     initialized with a wallet created with
     [`makeWallet`](#makeWallet), as the value can be obtained from
@@ -105,8 +105,8 @@ Client methods:
     some ixo tokens. To credit accounts on the testnet you can use
     the [faucet](https://t.me/joinchat/I4_MXBmVGJKAMmEVX3SVaA).
     The specific address you will need to use is the address of
-    the agent subwallet. Get it with `wallet.agent.address`. See
-    [wallet API](#wallet-api) for more info.
+    the agent subwallet. Get it with `wallet.agent.getAccounts`.
+    See [wallet API](#wallet-api) for more info.
 
 - `getSecpAccount()`: Get account info for the SECP subwallet <a id='getSecpAccount' />
 
@@ -266,20 +266,15 @@ Client methods:
 
 ## Wallet API <a id='wallet-api' />
 
-`makeWallet(source, serializationPwd)`: Create a new wallet <a id='makeWallet' />
+`makeWallet(source)`: Create a new wallet <a id='makeWallet' />
 
-- `source`: Either a mnemonic string, a serialized wallet string,
-  or a plain object representing a wallet state (possibly obtained
-  via `toJSON()` -see below for details). Optional.
+- `source`: Either a mnemonic string or a plain object
+  representing a wallet state (possibly obtained via `toJSON()`
+  -see below for details). Optional.
 
   If empty, a brand new wallet is generated. If a mnemonic string,
-  recovers a wallet based on the mnemonic. If serialized wallet,
-  deserializes it. If a state object, revives the wallet using
-  that state.
-
-- `serializationPwd`: Serializations involve encryption so a
-  password is *required* if the first parameter is an encryption
-  string.
+  recovers a wallet based on the mnemonic. If a state object,
+  revives the wallet using that state.
 
 `makeWallet` returns a wallet object with the following
 properties:

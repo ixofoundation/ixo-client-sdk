@@ -5,19 +5,19 @@ const
 
     fetch = require('isomorphic-unfetch'),
 
-    {Secp256k1HdWallet, makeCosmoshubPath}= require('@cosmjs/launchpad'),
+    {Secp256k1HdWallet} = require('@cosmjs/amino'),
 
-    {sortedJsonStringify} = require('@cosmjs/launchpad/build/encoding'),
+    {sortedJsonStringify} = require('@cosmjs/amino/build/signdoc'),
 
-    {toHex, fromHex, fromBase64} = require('@cosmjs/encoding'),
+    {fromBase64} = require('@cosmjs/encoding'),
 
-    {pathToString, stringToPath} = require('@cosmjs/crypto'),
+    {EnglishMnemonic, pathToString, stringToPath} = require('@cosmjs/crypto'),
 
     base58 = require('bs58'),
 
-    IxoAgentWallet = require('./IxoAgentWallet'),
+    memoize = require('lodash.memoize'),
 
-    {entries} = Object
+    makeAgentWallet = require('./IxoAgentWallet')
 
 
 const
@@ -28,30 +28,20 @@ const
     defaultCellnodeUrl = 'https://pds-pandora.ixo.world'
 
 
-const makeWallet = async (src, serializationPwd) => {
+const makeWallet = async src => {
     let secp, agent
 
     if (typeof src === 'object') {
         ({secp, agent} = plainStateToWallet(src))
 
-    } else if (src && src.startsWith('{"')) {
-        const serialized = JSON.parse(src)
-
-        ;[secp, agent] = await Promise.all([
-            Secp256k1HdWallet.deserialize(serialized.secp, serializationPwd),
-            IxoAgentWallet.deserialize(serialized.agent, serializationPwd),
-        ])
-
     } else {
         secp = await (
             src
-                ?  Secp256k1HdWallet
-                    .fromMnemonic(src, makeCosmoshubPath(0), 'ixo')
-
-                :  Secp256k1HdWallet.generate(12, makeCosmoshubPath(0), 'ixo')
+                ?  Secp256k1HdWallet.fromMnemonic(src, {prefix: 'ixo'})
+                :  Secp256k1HdWallet.generate(12, {prefix: 'ixo'})
         )
 
-        agent = await IxoAgentWallet.fromMnemonic(secp.secret.data)
+        agent = await makeAgentWallet(secp.mnemonic)
     }
 
     const toJSON = () => walletToPlainState({secp, agent})
@@ -61,45 +51,27 @@ const makeWallet = async (src, serializationPwd) => {
 
 const walletToPlainState = w => ({
     secp: {
-        secret: w.secp.secret && w.secp.secret.data,
-        hdPath: pathToString(w.secp.accounts[0].hdPath),
-        prefix: w.secp.accounts[0].prefix,
-        privkey: toHex(w.secp.privkey),
-        pubkey: toHex(w.secp.pubkey),
-        address: w.secp.address,
+        mnemonic: w.secp.mnemonic,
+        seed: base58.encode(w.secp.seed),
+        accounts: w.secp.accounts.map(a => ({
+            ...a,
+            hdPath: pathToString(a.hdPath),
+        })),
     },
     agent: {
-        secret: w.agent.secret && w.secp.secret.data,
-        hdPath: pathToString(w.agent.accounts[0].hdPath),
-        prefix: w.agent.accounts[0].prefix,
-        privkey: w.agent.privkey,
-        pubkey: w.agent.pubkey,
-        signkey: w.agent.signkey,
-        verifykey: w.agent.verifykey,
-        did: w.agent.did,
-        address: w.agent.address,
+        mnemonic: w.agent.mnemonic,
+        didDoc: w.agent.didDoc,
     },
 })
 
 const plainStateToWallet = s => ({
-    secp: new Secp256k1HdWallet(
-        s.secp.secret,
-        stringToPath(s.secp.hdPath),
-        fromHex(s.secp.privkey),
-        fromHex(s.secp.pubkey),
-        s.secp.prefix,
-    ),
+    secp: new Secp256k1HdWallet(new EnglishMnemonic(s.secp.mnemonic), {
+        seed: Uint8Array.from(base58.decode(s.secp.seed)),
+        prefix: s.secp.accounts[0].prefix,
+        hdPaths: s.secp.accounts.map(a => stringToPath(a.hdPath)),
+    }),
 
-    agent: new IxoAgentWallet(
-        s.agent.secret,
-        stringToPath(s.agent.hdPath),
-        s.agent.privkey,
-        s.agent.pubkey,
-        s.agent.signkey,
-        s.agent.verifykey,
-        s.agent.did,
-        s.agent.prefix,
-    ),
+    agent: makeAgentWallet(s.agent.mnemonic, s.agent.didDoc),
 })
 
 const makeClient = (signer, {
@@ -107,38 +79,33 @@ const makeClient = (signer, {
     blocksyncUrl = defaultBlocksyncUrl,
     dashifyUrls = false,
 } = {}) => {
-    if (signer && !typecheck(signer, {
-        secp: Secp256k1HdWallet,
-        agent: IxoAgentWallet,
-    }, {
-        secp: {address: String, sign: Function},
-        agent: {address: String, sign: Function, did: String},
-    }))
-        throw new Error('Invalid signer')
+    assertSignerIsValid(signer)
 
     const
+        getSignerAddress = memoize(walletToUse =>
+            signer[walletToUse].getAccounts().then(as => as[0].address)),
+
+        sign = async (walletToUse, signDoc) =>
+            signer[walletToUse].signAmino(
+                await getSignerAddress(walletToUse),
+                signDoc,
+            ),
+
         signAndBroadcast = async (walletToUse, msg, fee) => {
             const
+                [account] = await signer[walletToUse].getAccounts(),
+
                 signDocResp = await bcFetch('/txs/sign_data', {
                     method: 'POST',
                     body: {
                         msg: convertToHex(JSON.stringify(msg)).toUpperCase(),
-
-                        pub_key: {
-                            agent: signer.agent.verifykey,
-                            secp: base58.encode(signer.secp.pubkey),
-                        }[
-                            walletToUse
-                        ],
+                        pub_key: base58.encode(account.pubkey),
                     },
                 }),
 
                 signDoc = JSON.parse(signDocResp.body.sign_bytes),
 
-                {signature} = await signer[walletToUse].sign(
-                    signer[walletToUse].address,
-                    signDoc,
-                ),
+                {signature} = await sign(walletToUse, signDoc),
 
                 txResp = await bcFetch('/txs', {
                     method: 'POST',
@@ -226,11 +193,7 @@ const makeClient = (signer, {
                             created: (new Date()).toISOString(),
                             creator: signer.agent.did,
                             signatureValue:
-                                (await signer.agent.sign(
-                                    signer.agent.address,
-                                    data,
-                                ))
-                                    .signature.signature,
+                                (await sign('agent', data)).signature.signature,
                         }),
 
                 path = isPublic ? '/api/public' : '/api/request'
@@ -299,13 +262,17 @@ const makeClient = (signer, {
         }
 
     return {
-        getSecpAccount: () =>
-            bcFetch('/cosmos/auth/v1beta1/accounts/' + signer.secp.address),
+        getSecpAccount: async () =>
+            await bcFetch(
+                '/cosmos/auth/v1beta1/accounts/'
+                    + (await getSignerAddress('secp'))),
 
-        getAgentAccount: () =>
-            bcFetch('/cosmos/auth/v1beta1/accounts/' + signer.agent.address),
+        getAgentAccount: async () =>
+            await bcFetch(
+                '/cosmos/auth/v1beta1/accounts/'
+                    + (await getSignerAddress('agent'))),
 
-        register: verifyKey => {
+        register: pubKey => {
             if (!signer)
                 throw new Error('The client needs to be initialized with a wallet / signer in order for this method to be used') // eslint-disable-line max-len
 
@@ -313,7 +280,7 @@ const makeClient = (signer, {
                 type: 'did/AddDid',
                 value: {
                     did: signer.agent.did,
-                    pubKey: signer.agent.verifykey || verifyKey,
+                    pubKey: signer.agent.didDoc.verifyKey || pubKey,
                 },
             })
         },
@@ -435,12 +402,12 @@ const makeClient = (signer, {
                 data: {projectDid, claimId, status},
             })),
 
-        sendTokens: (to, amount, denom = 'uixo') =>
-            signAndBroadcast('secp', {
+        sendTokens: async (to, amount, denom = 'uixo') =>
+            await signAndBroadcast('secp', {
                 type: 'cosmos-sdk/MsgSend',
                 value: {
                     amount: [{amount, denom}],
-                    from_address: signer.secp.address,
+                    from_address: (await getSignerAddress('secp')),
                     to_address: to,
                 },
             }),
@@ -448,6 +415,20 @@ const makeClient = (signer, {
         custom: (walletToUse, msg, fee) =>
             signAndBroadcast(walletToUse, msg, fee),
     }
+}
+
+const assertSignerIsValid = signer => {
+    if (
+        !signer
+        || !signer.secp
+        || !signer.agent
+        || typeof signer.secp.getAccounts !== 'function'
+        || typeof signer.secp.signAmino !== 'function'
+        || typeof signer.agent.getAccounts !== 'function'
+        || typeof signer.agent.signAmino !== 'function'
+        || typeof signer.agent.did !== 'string'
+    )
+        throw new Error('Invalid signer')
 }
 
 const makeFetcher = (urlPrefix = '') => async (path, opts = {}) => {
@@ -514,14 +495,6 @@ const dashifyUrl = urlStr =>
     urlStr.replace(
         /^(https?:\/\/)([^/]+)(\/.*)?/,
         (_, proto, host, path) => proto + host.replace('_', '-') + (path || ''),
-    )
-
-const typecheck = (obj, ...schemas) =>
-    schemas.some(schema =>
-        obj.constructor !== Object
-            ? obj.constructor === schema
-            : entries(schema)
-                .every(([k, v]) => typecheck(obj[k], v)),
     )
 
 const convertToHex = str =>
