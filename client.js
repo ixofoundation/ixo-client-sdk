@@ -30,18 +30,18 @@ const makeClient = (signer, {
     assertSignerIsValid(signer)
 
     const
-        getSignerAddress = memoize(walletToUse =>
-            signer[walletToUse].getAccounts().then(as => as[0].address)),
+        getSignerAddress = memoize(signerToUse =>
+            signer[signerToUse].getAccounts().then(as => as[0].address)),
 
-        sign = async (walletToUse, signDoc) =>
-            signer[walletToUse].signAmino(
-                await getSignerAddress(walletToUse),
+        sign = async (signerToUse, signDoc) =>
+            signer[signerToUse].signAmino(
+                await getSignerAddress(signerToUse),
                 signDoc,
             ),
 
-        signAndBroadcast = async (walletToUse, msg, fee) => {
+        signAndBroadcast = async (signerToUse, msg, fee) => {
             const
-                [account] = await signer[walletToUse].getAccounts(),
+                [account] = await signer[signerToUse].getAccounts(),
 
                 signDocResp = await bcFetch('/txs/sign_data', {
                     method: 'POST',
@@ -53,7 +53,7 @@ const makeClient = (signer, {
 
                 signDoc = JSON.parse(signDocResp.body.sign_bytes),
 
-                {signature} = await sign(walletToUse, signDoc),
+                {signature} = await sign(signerToUse, signDoc),
 
                 txResp = await bcFetch('/txs', {
                     method: 'POST',
@@ -360,8 +360,8 @@ const makeClient = (signer, {
                 },
             }),
 
-        custom: (walletToUse, msg, fee) =>
-            signAndBroadcast(walletToUse, msg, fee),
+        custom: (signerToUse, msg, fee) =>
+            signAndBroadcast(signerToUse, msg, fee),
     }
 }
 
