@@ -66,16 +66,11 @@ Client methods:
     [`makeWallet`](#makeWallet) or a custom signer object with the
     following properties:
 
-    - `secp`: Object with the following properties:
+    - `secp`: Object implementing [OfflineAminoSigner][offline-amino-signer]
 
-      - `address`
-      - `sign(address, document)`
-
-    - `agent`: Object with the following properties:
+    - `agent`: Object implementing [OfflineAminoSigner][offline-amino-signer] with the following extra property:
 
       - `did`
-      - `address`
-      - `sign(address, document)`
 
     See [the wallet API](#wallet-api) for more info on `secp` and
     `agent` keywords.
@@ -282,8 +277,7 @@ properties:
 - `secp`: An instance of CosmJS'
   [`Secp256k1HdWallet`](https://github.com/cosmos/cosmjs/tree/main/packages/launchpad#create-a-wallet)
 
-- `agent`: An instance of `IxoAgentWallet` which is a subclass of
-  `Secp256k1HdWallet` and 100% API compatible with it.
+- `agent`: A custom wallet instance implementing [OfflineAminoSigner][offline-amino-signer]
 
 - `toJSON()`: Standard
   [`toJSON`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#tojson_behavior)
@@ -298,3 +292,9 @@ properties:
 Put the `ixo-client-sdk` string into your `DEBUG` environment
 variable to log network requests and responses. See [the `debug`
 package](https://www.npmjs.com/package/debug) for more info.
+
+
+
+
+
+[offline-amino-signer]: https://github.com/cosmos/cosmjs/blob/98e91ae5fe699733497befef95204923c93a7373/packages/amino/src/signer.ts#L22-L38
