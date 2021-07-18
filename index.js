@@ -5,8 +5,7 @@ const
 
     fetch = require('isomorphic-unfetch'),
 
-    {Secp256k1HdWallet, makeCosmoshubPath, GasPrice, coins}
-        = require('@cosmjs/launchpad'),
+    {Secp256k1HdWallet, makeCosmoshubPath}= require('@cosmjs/launchpad'),
 
     {sortedJsonStringify} = require('@cosmjs/launchpad/build/encoding'),
 
@@ -14,13 +13,11 @@ const
 
     {pathToString, stringToPath} = require('@cosmjs/crypto'),
 
-    SigningCosmosClient = require('./SigningCosmosClient'),
+    base58 = require('bs58'),
 
     IxoAgentWallet = require('./IxoAgentWallet'),
 
-    {entries} = Object,
-
-    {isArray} = Array
+    {entries} = Object
 
 
 const
@@ -120,40 +117,46 @@ const makeClient = (signer, {
         throw new Error('Invalid signer')
 
     const
-        cosmosCli =
-            signer
-                ? {
-                    secp: new SigningCosmosClient(
-                        blockchainUrl,
-                        signer.secp.address,
-                        signer.secp,
-                        GasPrice.fromString('0.025uixo'),
-                    ),
+        signAndBroadcast = async (walletToUse, msg, fee) => {
+            const
+                signDocResp = await bcFetch('/txs/sign_data', {
+                    method: 'POST',
+                    body: {
+                        msg: convertToHex(JSON.stringify(msg)).toUpperCase(),
 
-                    agent:
-                        new SigningCosmosClient(
-                            blockchainUrl,
-                            signer.agent.address,
-                            signer.agent,
-                            GasPrice.fromString('0.025uixo')
-                        ),
-                }
-                : new Proxy({}, {
-                    get() {
-                        throw new Error('The client needs to be initialized with a wallet / signer in order for this method to be used') // eslint-disable-line max-len
+                        pub_key: {
+                            agent: signer.agent.verifykey,
+                            secp: base58.encode(signer.secp.pubkey),
+                        }[
+                            walletToUse
+                        ],
                     },
                 }),
 
-        signAndBroadcast = (walletToUse, msgs, fee) => {
-            const defaultFee = {amount: coins(5000, 'uixo'), gas: '200000'}
+                signDoc = JSON.parse(signDocResp.body.sign_bytes),
 
-            if (!isArray(msgs))
-                msgs = [msgs]
+                {signature} = await signer[walletToUse].sign(
+                    signer[walletToUse].address,
+                    signDoc,
+                ),
 
-            return cosmosCli[walletToUse].signAndBroadcast(
-                msgs,
-                fee || defaultFee,
-            )
+                txResp = await bcFetch('/txs', {
+                    method: 'POST',
+                    body: {
+                        tx: {
+                            msg: [msg],
+                            fee: fee || signDocResp.body.fee,
+                            signatures: [{
+                                ...signature,
+                                account_number: signDoc.account_number,
+                                sequence: signDoc.sequence,
+                            }],
+                        },
+                        mode: 'sync',
+                    },
+                })
+
+            return txResp
         },
 
         bcFetch = makeFetcher(blockchainUrl),
@@ -296,9 +299,9 @@ const makeClient = (signer, {
         }
 
     return {
-        getSecpAccount: () => cosmosCli.secp.getAccount(),
+        getSecpAccount: () => bcFetch('/cosmos/auth/v1beta1/accounts/' + signer.secp.address),
 
-        getAgentAccount: () => cosmosCli.agent.getAccount(),
+        getAgentAccount: () => bcFetch('/cosmos/auth/v1beta1/accounts/' + signer.agent.address),
 
         register: verifyKey => {
             if (!signer)
@@ -308,7 +311,7 @@ const makeClient = (signer, {
                 type: 'did/AddDid',
                 value: {
                     did: signer.agent.did,
-                    pubKey: signer.agent.verifykey || verifyKey, // [1]
+                    pubKey: signer.agent.verifykey || verifyKey,
                 },
             })
         },
@@ -431,10 +434,17 @@ const makeClient = (signer, {
             })),
 
         sendTokens: (to, amount, denom = 'uixo') =>
-            cosmosCli.secp.sendTokens(to, coins(amount, denom)),
+            signAndBroadcast('secp', {
+                type: 'cosmos-sdk/MsgSend',
+                value: {
+                    amount: [{amount, denom}],
+                    from_address: signer.secp.address,
+                    to_address: to,
+                },
+            }),
 
-        custom: (walletToUse, msgs, fee) =>
-            signAndBroadcast(walletToUse, msgs, fee),
+        custom: (walletToUse, msg, fee) =>
+            signAndBroadcast(walletToUse, msg, fee),
     }
 }
 
@@ -512,14 +522,14 @@ const typecheck = (obj, ...schemas) =>
                 .every(([k, v]) => typecheck(obj[k], v))
     )
 
+const convertToHex = str =>
+    str
+        .split('')
+        .map(c => c.charCodeAt(0).toString(16))
+        .join('')
+
 
 module.exports = {
     makeWallet,
     makeClient,
 }
-
-
-// [1] Note that we are assigning the verify key to the property "pubKey". This
-// is not an error. Apparently some backend guy decided to call the "verify key"
-// the "public key", which is a very bad thing to do in this context as another
-// key that is called the "public key" already exists.
