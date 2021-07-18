@@ -24,8 +24,36 @@ const someClaims = await client.listClaims(someProject)
 console.log('Here are the claims', someClaims)
 ```
 
-See [client API](#client-api) and [wallet API](#wallet-api) for
+See [wallet API](#wallet-api) and [client API](#client-api) for
 details.
+
+
+## Wallet API <a id='wallet-api' />
+
+`makeWallet(source)`: Create a new wallet <a id='makeWallet' />
+
+- `source`: Either a mnemonic string or a plain object
+  representing a wallet state (possibly obtained via `toJSON()`
+  -see below for details). Optional.
+
+  If empty, a brand new wallet is generated. If a mnemonic string,
+  recovers a wallet based on the mnemonic. If a state object,
+  revives the wallet using that state.
+
+`makeWallet` returns a wallet object with the following
+properties:
+
+- `secp`: An instance of CosmJS'
+  [`Secp256k1HdWallet`](https://github.com/cosmos/cosmjs/tree/main/packages/launchpad#create-a-wallet)
+
+- `agent`: A custom wallet instance implementing [OfflineAminoSigner][offline-amino-signer]
+
+- `toJSON()`: Standard
+  [`toJSON`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#tojson_behavior)
+  method for `JSON.stringify` integration. One can also use this
+  to get a representation of the wallet's internal state as a
+  plain object and use it in a context where a class instance is
+  not supported. (e.g. Global application state of a client app)
 
 
 ## Client API <a id='client-api' />
@@ -257,34 +285,6 @@ Client methods:
   - `msg`: See
     [here](https://github.com/ixofoundation/ixo-client-sdk/blob/74725d861ac7cf73e8983ce3dc9d91868cd4ce62/messages.md)
     for available options
-
-
-## Wallet API <a id='wallet-api' />
-
-`makeWallet(source)`: Create a new wallet <a id='makeWallet' />
-
-- `source`: Either a mnemonic string or a plain object
-  representing a wallet state (possibly obtained via `toJSON()`
-  -see below for details). Optional.
-
-  If empty, a brand new wallet is generated. If a mnemonic string,
-  recovers a wallet based on the mnemonic. If a state object,
-  revives the wallet using that state.
-
-`makeWallet` returns a wallet object with the following
-properties:
-
-- `secp`: An instance of CosmJS'
-  [`Secp256k1HdWallet`](https://github.com/cosmos/cosmjs/tree/main/packages/launchpad#create-a-wallet)
-
-- `agent`: A custom wallet instance implementing [OfflineAminoSigner][offline-amino-signer]
-
-- `toJSON()`: Standard
-  [`toJSON`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#tojson_behavior)
-  method for `JSON.stringify` integration. One can also use this
-  to get a representation of the wallet's internal state as a
-  plain object and use it in a context where a class instance is
-  not supported. (e.g. Global application state of a client app)
 
 
 ## Debugging
