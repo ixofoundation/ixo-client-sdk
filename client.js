@@ -22,12 +22,12 @@ const makeClient = (signer, {
     assertSignerIsValid(signer)
 
     const
-        getSignerAddress = memoize(signerToUse =>
-            signer[signerToUse].getAccounts().then(as => as[0].address)),
+        getSignerAccount = memoize(signerToUse =>
+            signer[signerToUse].getAccounts().then(as => as[0])),
 
         sign = async (signerToUse, signDoc) =>
             signer[signerToUse].signAmino(
-                await getSignerAddress(signerToUse),
+                (await getSignerAccount(signerToUse)).address,
                 signDoc,
             ),
 
@@ -205,12 +205,12 @@ const makeClient = (signer, {
         getSecpAccount: async () =>
             await bcFetch(
                 '/cosmos/auth/v1beta1/accounts/'
-                    + (await getSignerAddress('secp'))),
+                    + (await getSignerAccount('secp')).address),
 
         getAgentAccount: async () =>
             await bcFetch(
                 '/cosmos/auth/v1beta1/accounts/'
-                    + (await getSignerAddress('agent'))),
+                    + (await getSignerAccount('agent')).address),
 
         register: pubKey => {
             if (!signer)
@@ -347,7 +347,7 @@ const makeClient = (signer, {
                 type: 'cosmos-sdk/MsgSend',
                 value: {
                     amount: [{amount, denom}],
-                    from_address: (await getSignerAddress('secp')),
+                    from_address: (await getSignerAccount('secp')).address,
                     to_address: to,
                 },
             }),
