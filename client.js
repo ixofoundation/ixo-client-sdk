@@ -2,9 +2,9 @@ const
     {inspect} = require('util'),
     debug = require('debug')('ixo-client-sdk'),
     fetch = require('isomorphic-unfetch'),
+    {coins} = require('@cosmjs/amino'),
     {sortedJsonStringify} = require('@cosmjs/amino/build/signdoc'),
     {fromBase64} = require('@cosmjs/encoding'),
-    base58 = require('bs58'),
     memoize = require('lodash.memoize')
 
 
@@ -25,25 +25,35 @@ const makeClient = (signer, {
         getSignerAccount = memoize(signerToUse =>
             signer[signerToUse].getAccounts().then(as => as[0])),
 
+        getNodeInfo = memoize(() =>
+            bcFetch('/node_info').then(resp => resp.body.node_info)),
+
         sign = async (signerToUse, signDoc) =>
             signer[signerToUse].signAmino(
                 (await getSignerAccount(signerToUse)).address,
                 signDoc,
             ),
 
-        signAndBroadcast = async (signerToUse, msg, fee) => {
+        signAndBroadcast = async (
+            signerToUse,
+            msg,
+            fee = {amount: coins(5000, 'uixo'), gas: '200000'},
+            memo = '',
+        ) => {
             const
-                [account] = await signer[signerToUse].getAccounts(),
+                {address} = await getSignerAccount(signerToUse),
 
-                signDocResp = await bcFetch('/txs/sign_data', {
-                    method: 'POST',
-                    body: {
-                        msg: convertToHex(JSON.stringify(msg)).toUpperCase(),
-                        pub_key: base58.encode(account.pubkey),
-                    },
-                }),
+                {body: {account: {account_number, sequence}}} =
+                    await bcFetch('/cosmos/auth/v1beta1/accounts/' + address),
 
-                signDoc = JSON.parse(signDocResp.body.sign_bytes),
+                signDoc = {
+                    account_number,
+                    chain_id: (await getNodeInfo()).network,
+                    fee,
+                    memo,
+                    msgs: [msg],
+                    sequence,
+                },
 
                 {signature} = await sign(signerToUse, signDoc),
 
@@ -52,11 +62,11 @@ const makeClient = (signer, {
                     body: {
                         tx: {
                             msg: [msg],
-                            fee: fee || signDocResp.body.fee,
+                            fee,
                             signatures: [{
                                 ...signature,
-                                account_number: signDoc.account_number,
-                                sequence: signDoc.sequence,
+                                account_number,
+                                sequence,
                             }],
                         },
                         mode: 'sync',
@@ -436,12 +446,6 @@ const dashifyUrl = urlStr =>
         /^(https?:\/\/)([^/]+)(\/.*)?/,
         (_, proto, host, path) => proto + host.replace('_', '-') + (path || ''),
     )
-
-const convertToHex = str =>
-    str
-        .split('')
-        .map(c => c.charCodeAt(0).toString(16))
-        .join('')
 
 
 module.exports = makeClient
