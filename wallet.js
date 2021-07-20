@@ -103,7 +103,7 @@ const makeAgentWallet = (
                 pub_key: {
                     type: 'tendermint/PubKeyEd25519',
                     value:
-                        base58.decode(didDoc.encryptionPublicKey)
+                        base58.decode(didDoc.verifyKey)
                             .toString('base64'),
                 },
             },
