@@ -356,7 +356,7 @@ const makeClient = (signer, {
             await signAndBroadcast('secp', {
                 type: 'cosmos-sdk/MsgSend',
                 value: {
-                    amount: [{amount, denom}],
+                    amount: [{amount: String(amount), denom}],
                     from_address: (await getSignerAccount('secp')).address,
                     to_address: to,
                 },
