@@ -383,7 +383,8 @@ const assertSignerIsValid = signer => {
 
 const makeFetcher = (urlPrefix = '') => async (path, opts = {}) => {
     const
-        url = urlPrefix + path,
+        urlParams = new URLSearchParams(opts.urlParams).toString(),
+        url = urlPrefix + path + (urlParams ? '?' + urlParams : ''),
         rawBody = opts.body
 
     opts = {
