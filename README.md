@@ -84,6 +84,20 @@ Client methods:
 - [`listClaims`](#listClaims)
 - [`createClaim`](#createClaim)
 - [`evaluateClaim`](#evaluateClaim)
+- [`staking.listValidators`](#staking.listValidators)
+- [`staking.getValidator`](#staking.getValidator)
+- [`staking.myDelegations`](#staking.myDelegations)
+- [`staking.pool`](#staking.pool)
+- [`staking.validatorDistribution`](#staking.validatorDistribution)
+- [`staking.delegatorValidatorRewards`](#staking.delegatorValidatorRewards)
+- [`staking.delegation`](#staking.delegation)
+- [`staking.delegatorDelegations`](#staking.delegatorDelegations)
+- [`staking.delegatorUnbondingDelegations`](#staking.delegatorUnbondingDelegations)
+- [`staking.delegatorRewards`](#staking.delegatorRewards)
+- [`staking.balances`](#staking.balances)
+- [`staking.delegate`](#staking.delegate)
+- [`staking.undelegate`](#staking.undelegate)
+- [`staking.redelegate`](#staking.redelegate)
 - [`custom`](#custom)
 
 ### Create a new client
@@ -276,6 +290,83 @@ Client methods:
     - `0` for pending
     - `1` for approved
     - `2` for rejected
+
+- `staking`:
+
+    An object that groups the following staking related methods:
+
+    - `listValidators(urlParams)` <a id='staking.listValidators' />
+
+        See
+        [here](https://testnet.ixo.world/swagger/#/Staking/get_staking_validators)
+        for a description of the url params of the related
+        endpoint, and its return value.
+
+    - `getValidator(validatorAddress)` <a id='staking.getValidator' />
+
+        See
+        [here](https://testnet.ixo.world/swagger/#/Staking/get_staking_validators__validatorAddr_])
+        for the return value.
+
+    - `myDelegations()` <a id='staking.myDelegations' />
+
+        See
+        [here](https://testnet.ixo.world/swagger/#/Staking/get_staking_delegators__delegatorAddr__delegations)
+        for the return value.
+
+    - `pool()` <a id='staking.pool' />
+
+        See
+        [here](https://testnet.ixo.world/swagger/#/Staking/get_staking_pool)
+        for the return value.
+
+    - `validatorDistribution(validatorAddress)` <a id='staking.validatorDistribution' />
+
+        See
+        [here](https://testnet.ixo.world/swagger/#/Distribution/get_distribution_validators__validatorAddr_)
+        for the return value.
+
+    - `delegatorValidatorRewards(delegatorAddress, validatorAddress)` <a id='staking.delegatorValidatorRewards' />
+
+        See
+        [here](https://testnet.ixo.world/swagger/#/Distribution/get_distribution_delegators__delegatorAddr__rewards__validatorAddr_)
+        for the return value.
+
+    - `delegation(delegatorAddr, validatorAddress)` <a id='staking.delegation' />
+
+        See
+        [here](https://testnet.ixo.world/swagger/#/Staking/get_staking_delegators__delegatorAddr__delegations__validatorAddr_)
+        for the return value.
+
+    - `delegatorDelegations(delegatorAddress)` <a id='staking.delegatorDelegations' />
+
+        See
+        [here](https://testnet.ixo.world/swagger/#/Staking/get_staking_delegators__delegatorAddr__delegations)
+        for the return value.
+
+    - `delegatorUnbondingDelegations(delegatorAddress)` <a id='staking.delegatorUnbondingDelegations' />
+
+        See
+        [here](https://testnet.ixo.world/swagger/#/Staking/get_staking_delegators__delegatorAddr__unbonding_delegations)
+        for the return value.
+
+    - `delegatorRewards(delegatorAddress)` <a id='staking.delegatorRewards' />
+
+        See
+        [here](https://testnet.ixo.world/swagger/#/Distribution/get_distribution_delegators__delegatorAddr__rewards)
+        for the return value.
+
+    - `balances()` <a id='staking.balances' />
+
+        See
+        [here](https://testnet.ixo.world/swagger/#/Bank/get_bank_balances__address_)
+        for the return value.
+
+    - `delegate(validatorAddress, amount)` <a id='staking.delegate' />
+
+    - `undelegate(validatorAddress, amount)` <a id='staking.undelegate' />
+
+    - `redelegate(validatorSourceAddress, validatorDestinationAddress)` <a id='staking.redelegate' />
 
 - `custom(walletType, msg)`: Send a custom message to the blockchain <a id='custom' />
 

@@ -1,5 +1,5 @@
 const
-    {inspect} = require('util'),
+    {format: fmt, inspect} = require('util'),
     debug = require('debug')('ixo-client-sdk'),
     fetch = require('isomorphic-unfetch'),
     {coins} = require('@cosmjs/amino'),
@@ -361,6 +361,94 @@ const makeClient = (signer, {
                     to_address: to,
                 },
             }),
+
+        staking: {
+            listValidators: urlParams =>
+                bcFetch('/staking/validators', {urlParams}),
+
+            getValidator: validatorAddr =>
+                bcFetch('/staking/validators/' + validatorAddr),
+
+            myDelegations: async () =>
+                await bcFetch(fmt(
+                    '/staking/delegators/%s/delegations',
+                    (await getSignerAccount('secp')).address,
+                )),
+
+            pool: () => bcFetch('/staking/pool'),
+
+            validatorDistribution: validatorAddr =>
+                bcFetch('/distribution/validators/' + validatorAddr),
+
+            delegatorValidatorRewards: (delegatorAddr, validatorAddr) =>
+                bcFetch(fmt(
+                    '/distribution/delegators/%s/rewards/%s',
+                    delegatorAddr,
+                    validatorAddr,
+                )),
+
+            delegation: (delegatorAddr, validatorAddr) =>
+                bcFetch(fmt(
+                    '/staking/delegators/%s/delegations/%s',
+                    delegatorAddr,
+                    validatorAddr,
+                )),
+
+            delegatorDelegations: delegatorAddr =>
+                bcFetch(fmt(
+                    '/staking/delegators/%s/delegations',
+                    delegatorAddr,
+                )),
+
+            delegatorUnbondingDelegations: delegatorAddr =>
+                bcFetch(fmt(
+                    '/staking/delegators/%s/unbonding_delegations',
+                    delegatorAddr,
+                )),
+
+            delegatorRewards: delegatorAddr =>
+                bcFetch(`/distribution/delegators/${delegatorAddr}/rewards`),
+
+            balances: async () =>
+                await bcFetch(fmt(
+                    '/bank/balances/%s',
+                    (await getSignerAccount('secp')).address,
+                )),
+
+            delegate: async (validatorAddr, amount) =>
+                await signAndBroadcast('secp', {
+                    type: 'cosmos-sdk/MsgDelegate',
+                    value: {
+                        amount: {denom: 'uixo', amount: String(amount)},
+                        delegator_address:
+                            (await getSignerAccount('secp')).address,
+                        validator_address: validatorAddr,
+                    },
+                }),
+
+            undelegate: async (validatorAddr, amount) =>
+                await signAndBroadcast('secp', {
+                    type: 'cosmos-sdk/MsgUndelegate',
+                    value: {
+                        amount: {denom: 'uixo', amount: String(amount)},
+                        delegator_address:
+                            (await getSignerAccount('secp')).address,
+                        validator_address: validatorAddr,
+                    },
+                }),
+
+            redelegate: async (validatorSrcAddr, validatorDstAddr, amount) =>
+                await signAndBroadcast('secp', {
+                    type: 'cosmos-sdk/MsgBeginRedelegate',
+                    value: {
+                        amount: {denom: 'uixo', amount: String(amount)},
+                        delegator_address:
+                            (await getSignerAccount('secp')).address,
+                        validator_src_address: validatorSrcAddr,
+                        validator_dst_address: validatorDstAddr,
+                    },
+                }),
+        },
 
         custom: (signerToUse, msg, fee) =>
             signAndBroadcast(signerToUse, msg, fee),
