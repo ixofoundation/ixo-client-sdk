@@ -98,6 +98,10 @@ Client methods:
 - [`staking.delegate`](#staking.delegate)
 - [`staking.undelegate`](#staking.undelegate)
 - [`staking.redelegate`](#staking.redelegate)
+- [`bonds.byId`](#bonds.byId)
+- [`bonds.list`](#bonds.list)
+- [`bonds.buy`](#bonds.buy)
+- [`bonds.sell`](#bonds.sell)
 - [`custom`](#custom)
 
 ### Create a new client
@@ -367,6 +371,18 @@ Client methods:
     - `undelegate(validatorAddress, amount)` <a id='staking.undelegate' />
 
     - `redelegate(validatorSourceAddress, validatorDestinationAddress)` <a id='staking.redelegate' />
+
+- `bonds`:
+
+    An object that groups the following bond related methods:
+
+    - `byId(did)` <a id='bonds.byId' />
+
+    - `list()` <a id='bonds.list' />
+
+    - `buy({bondDid, bondToken, reserveToken, amount, maxPrice})` <a id='bonds.buy' />
+
+    - `sell({bondDid, bondToken, amount})` <a id='bonds.sell' />
 
 - `custom(walletType, msg)`: Send a custom message to the blockchain <a id='custom' />
 
