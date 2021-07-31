@@ -19,7 +19,8 @@ const makeClient = (signer, {
     blocksyncUrl = defaultBlocksyncUrl,
     dashifyUrls = false,
 } = {}) => {
-    assertSignerIsValid(signer)
+    if (signer)
+        assertSignerIsValid(signer)
 
     const
         getSignerAccount = memoize(signerToUse =>
