@@ -11,7 +11,7 @@ const makeWallet = async src => {
     let secp, agent
 
     if (typeof src === 'object') {
-        ({secp, agent} = plainStateToWallet(src))
+        ({secp, agent} = fromSerializableWallet(src))
 
     } else {
         secp = await (
@@ -23,12 +23,12 @@ const makeWallet = async src => {
         agent = await makeAgentWallet(secp.mnemonic)
     }
 
-    const toJSON = () => walletToPlainState({secp, agent})
+    const toJSON = () => toSerializableWallet({secp, agent})
 
     return {secp, agent, toJSON}
 }
 
-const walletToPlainState = w => ({
+const toSerializableWallet = w => ({
     secp: {
         mnemonic: w.secp.mnemonic,
         seed: base58.encode(w.secp.seed),
@@ -43,7 +43,7 @@ const walletToPlainState = w => ({
     },
 })
 
-const plainStateToWallet = s => ({
+const fromSerializableWallet = s => ({
     secp: new Secp256k1HdWallet(new EnglishMnemonic(s.secp.mnemonic), {
         seed: Uint8Array.from(base58.decode(s.secp.seed)),
         prefix: s.secp.accounts[0].prefix,
