@@ -7,9 +7,6 @@ const
     {toBase64, Bech32} = require('@cosmjs/encoding')
 
 
-const didPrefix = 'did:ixo:'
-
-
 const makeWallet = async src => {
     let secp, agent
 
@@ -43,7 +40,6 @@ const walletToPlainState = w => ({
     agent: {
         mnemonic: w.agent.mnemonic,
         didDoc: w.agent.didDoc,
-        did: didPrefix + w.agent.didDoc.did,
     },
 })
 
@@ -64,7 +60,7 @@ const makeAgentWallet = (
 ) => ({
     mnemonic,
     didDoc,
-    did: didPrefix + didDoc.did,
+    did: 'did:ixo:' + didDoc.did,
 
     async getAccounts() {
         return [
