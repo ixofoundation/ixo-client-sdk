@@ -410,10 +410,10 @@ const makeClient = (signer, {
             delegatorRewards: delegatorAddr =>
                 bcFetch(`/distribution/delegators/${delegatorAddr}/rewards`),
 
-            balances: async () =>
+            balances: async accountType =>
                 await bcFetch(fmt(
                     '/bank/balances/%s',
-                    (await getSignerAccount('secp')).address,
+                    (await getSignerAccount(accountType)).address,
                 )),
 
             delegate: async (validatorAddr, amount) =>
