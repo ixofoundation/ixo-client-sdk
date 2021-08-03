@@ -44,7 +44,7 @@ const toSerializableWallet = w => ({
 })
 
 const fromSerializableWallet = s => ({
-    secp: new Secp256k1HdWallet(new EnglishMnemonic(s.secp.mnemonic), {
+    secp: new Secp256k1HdWallet(s.secp.mnemonic && new EnglishMnemonic(s.secp.mnemonic), {
         seed: Uint8Array.from(base58.decode(s.secp.seed)),
         prefix: s.secp.accounts[0].prefix,
         hdPaths: s.secp.accounts.map(a => stringToPath(a.hdPath)),
