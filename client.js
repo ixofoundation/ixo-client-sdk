@@ -223,6 +223,12 @@ const makeClient = (signer, {
                 '/cosmos/auth/v1beta1/accounts/'
                     + (await getSignerAccount('agent')).address),
 
+        balances: async accountType =>
+            await bcFetch(fmt(
+                '/bank/balances/%s',
+                (await getSignerAccount(accountType)).address,
+            )),
+
         register: pubKey => {
             if (!signer)
                 throw new Error('The client needs to be initialized with a wallet / signer in order for this method to be used') // eslint-disable-line max-len
@@ -409,12 +415,6 @@ const makeClient = (signer, {
 
             delegatorRewards: delegatorAddr =>
                 bcFetch(`/distribution/delegators/${delegatorAddr}/rewards`),
-
-            balances: async accountType =>
-                await bcFetch(fmt(
-                    '/bank/balances/%s',
-                    (await getSignerAccount(accountType)).address,
-                )),
 
             delegate: async (validatorAddr, amount) =>
                 await signAndBroadcast('secp', {

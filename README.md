@@ -65,6 +65,7 @@ Client methods:
 - [`register`](#register)
 - [`getSecpAccount`](#getSecpAccount)
 - [`getAgentAccount`](#getAgentAccount)
+- [`balances`](#balances)
 - [`sendTokens`](#sendTokens)
 - [`getDidDoc`](#getDidDoc)
 - [`listProjects`](#listProjects)
@@ -94,7 +95,6 @@ Client methods:
 - [`staking.delegatorDelegations`](#staking.delegatorDelegations)
 - [`staking.delegatorUnbondingDelegations`](#staking.delegatorUnbondingDelegations)
 - [`staking.delegatorRewards`](#staking.delegatorRewards)
-- [`staking.balances`](#staking.balances)
 - [`staking.delegate`](#staking.delegate)
 - [`staking.undelegate`](#staking.undelegate)
 - [`staking.redelegate`](#staking.redelegate)
@@ -360,7 +360,7 @@ Client methods:
         [here](https://testnet.ixo.world/swagger/#/Distribution/get_distribution_delegators__delegatorAddr__rewards)
         for the return value.
 
-    - `balances()` <a id='staking.balances' />
+    - `balances()` <a id='balances' />
 
         See
         [here](https://testnet.ixo.world/swagger/#/Bank/get_bank_balances__address_)
