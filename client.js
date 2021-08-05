@@ -223,10 +223,11 @@ const makeClient = (signer, {
                 '/cosmos/auth/v1beta1/accounts/'
                     + (await getSignerAccount('agent')).address),
 
-        balances: async accountType =>
+        balances: async (accountType, denom) =>
             await bcFetch(fmt(
-                '/bank/balances/%s',
+                '/cosmos/bank/v1beta1/balances/%s' + (denom ? '/%s' : ''),
                 (await getSignerAccount(accountType)).address,
+                denom || '',
             )),
 
         register: pubKey => {

@@ -360,10 +360,17 @@ Client methods:
         [here](https://testnet.ixo.world/swagger/#/Distribution/get_distribution_delegators__delegatorAddr__rewards)
         for the return value.
 
-    - `balances()` <a id='balances' />
+    - `balances(accountType, denom)` <a id='balances' />
+
+      - `accountType`: Either `secp` or `agent`.
+
+      - `denom`: Optional coin name. If provided, only the balance
+        for the given coin will be returned.
 
         See
-        [here](https://testnet.ixo.world/swagger/#/Bank/get_bank_balances__address_)
+        [here](https://testnet.ixo.world/swagger/#/Query/AllBalances)
+        or
+        [here](https://testnet.ixo.world/swagger/#/Query/Balance)
         for the return value.
 
     - `delegate(validatorAddress, amount)` <a id='staking.delegate' />
