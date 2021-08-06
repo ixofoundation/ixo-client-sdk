@@ -27,7 +27,7 @@ const makeClient = (signer, {
             signer[signerToUse].getAccounts().then(as => as[0])),
 
         getNodeInfo = memoize(() =>
-            bcFetch('/node_info').then(resp => resp.body.node_info)),
+            bcFetch('/node_info').then(body => body.node_info)),
 
         sign = async (signerToUse, signDoc) =>
             signer[signerToUse].signAmino(
@@ -44,7 +44,7 @@ const makeClient = (signer, {
             const
                 {address} = await getSignerAccount(signerToUse),
 
-                {body: {account: {account_number, sequence}}} =
+                {account: {account_number, sequence}} =
                     await bcFetch('/cosmos/auth/v1beta1/accounts/' + address),
 
                 signDoc = {
@@ -82,8 +82,7 @@ const makeClient = (signer, {
         bsFetch = makeFetcher(blocksyncUrl),
 
         listEntities = async type => {
-            const ents =
-                await bsFetch('/api/project/listProjects').then(r => r.body)
+            const ents = await bsFetch('/api/project/listProjects')
 
             if (!type)
                 return ents
@@ -92,7 +91,7 @@ const makeClient = (signer, {
         },
 
         getEntity = did =>
-            bsFetch('/api/project/getByProjectDid/' + did).then(r => r.body),
+            bsFetch('/api/project/getByProjectDid/' + did),
 
         getEntityHead = async projRecOrDid => {
             if (typeof projRecOrDid === 'object') {
@@ -243,7 +242,7 @@ const makeClient = (signer, {
             })
         },
 
-        getDidDoc: did => bsFetch('/api/did/getByDid/' + did).then(r => r.body),
+        getDidDoc: did => bsFetch('/api/did/getByDid/' + did),
 
         listEntities,
 
@@ -302,7 +301,7 @@ const makeClient = (signer, {
             })),
 
         getProjectFundAddress: async projDid =>
-            (await bcFetch('/projectAccounts/' + projDid)).body[projDid],
+            (await bcFetch('/projectAccounts/' + projDid))[projDid],
 
         listAgents: projRecOrDid =>
             cnRpc(projRecOrDid, projectDid => ({
@@ -503,6 +502,7 @@ const assertSignerIsValid = signer => {
 const makeFetcher = (urlPrefix = '') =>
     async (path, {
         urlParams,
+        fullResponse = false,
         dryRun = false,
         ...fetchOpts
     } = {}) => {
@@ -543,11 +543,15 @@ const makeFetcher = (urlPrefix = '') =>
             body: body,
         }, {depth: 10}))
 
-        return Promise[resp.ok ? 'resolve' : 'reject']({
-            status: resp.status,
-            headers: resp.headers,
-            body,
-        })
+        return Promise[resp.ok ? 'resolve' : 'reject'](
+            fullResponse
+                ? {
+                    status: resp.status,
+                    headers: resp.headers,
+                    body,
+                }
+                : body,
+        )
     }
 
 const generateTxId = () => Math.floor(Math.random() * 1000000 + 1)
