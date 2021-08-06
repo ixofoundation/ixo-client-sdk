@@ -500,44 +500,55 @@ const assertSignerIsValid = signer => {
         throw new Error('Invalid signer')
 }
 
-const makeFetcher = (urlPrefix = '') => async (path, opts = {}) => {
-    const
-        urlParams = new URLSearchParams(opts.urlParams).toString(),
-        url = urlPrefix + path + (urlParams ? '?' + urlParams : ''),
-        rawBody = opts.body
+const makeFetcher = (urlPrefix = '') =>
+    async (path, {
+        urlParams,
+        dryRun = false,
+        ...fetchOpts
+    } = {}) => {
+        const
+            urlParamsStr = new URLSearchParams(urlParams).toString(),
+            url = urlPrefix + path + (urlParamsStr ? '?' + urlParamsStr : ''),
+            rawBody = fetchOpts.body
 
-    opts = {
-        ...opts,
-        body: opts.body && sortedJsonStringify(opts.body),
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            ...opts.headers,
-        },
+        fetchOpts = {
+            ...fetchOpts,
+            body: fetchOpts.body && sortedJsonStringify(fetchOpts.body),
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                ...fetchOpts.headers,
+            },
+        }
+
+        if (dryRun)
+            return {url, ...fetchOpts}
+
+        debug(
+            '> Request',
+            inspect({url, ...fetchOpts, body: rawBody}, {depth: 10}),
+        )
+
+        const
+            resp = await fetch(url, fetchOpts),
+
+            isJson =
+                resp.headers.get('content-type').startsWith('application/json'),
+
+            body = await resp[isJson ? 'json' : 'text']()
+
+        debug('< Response', inspect({
+            status: resp.status,
+            headers: Object.fromEntries(resp.headers.entries()),
+            body: body,
+        }, {depth: 10}))
+
+        return Promise[resp.ok ? 'resolve' : 'reject']({
+            status: resp.status,
+            headers: resp.headers,
+            body,
+        })
     }
-
-    if (opts.dryRun)
-        return {url, ...opts}
-
-    debug('> Request', inspect({url, ...opts, body: rawBody}, {depth: 10}))
-
-    const
-        resp = await fetch(url, opts),
-        isJson =resp.headers.get('content-type').startsWith('application/json'),
-        body = await resp[isJson ? 'json' : 'text']()
-
-    debug('< Response', inspect({
-        status: resp.status,
-        headers: Object.fromEntries(resp.headers.entries()),
-        body: body,
-    }, {depth: 10}))
-
-    return Promise[resp.ok ? 'resolve' : 'reject']({
-        status: resp.status,
-        headers: resp.headers,
-        body,
-    })
-}
 
 const generateTxId = () => Math.floor(Math.random() * 1000000 + 1)
 
