@@ -148,7 +148,7 @@ const makeClient = (signer, {
 
                 path = isPublic ? '/api/public' : '/api/request'
 
-            const resp = await cnFetch(serviceEndpoint + path, {
+            const respBody = await cnFetch(serviceEndpoint + path, {
                 method: 'POST',
                 body: message,
                 ...fetchOpts,
@@ -157,10 +157,10 @@ const makeClient = (signer, {
             if (fetchOpts.dryRun)
                 return resp
 
-            if (resp.body.error)
-                throw resp.body.error
+            if (respBody.error)
+                throw respBody.error
 
-            return then(resp.body.result)
+            return then(respBody.result)
         },
 
         getEntityFile = (target, key) =>
