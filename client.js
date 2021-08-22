@@ -139,7 +139,7 @@ const makeClient = (signer, {
                         ? makePublicRpcMsg(method, data)
 
                         : makeRpcMsg(method, tplName, data, {
-                            type: 'ed25519-sha-256',
+                            type: (await getSignerAccount('agent')).algo,
                             created: (new Date()).toISOString(),
                             creator: signer.agent.did,
                             signatureValue:
