@@ -69,7 +69,7 @@ const makeAgentWallet = (
     async getAccounts() {
         return [
             {
-                algo: 'ed25519',
+                algo: 'ed25519-sha-256',
                 pubkey: Uint8Array.from(base58.decode(didDoc.verifyKey)),
                 address: Bech32.encode(
                     'ixo',
