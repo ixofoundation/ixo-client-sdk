@@ -301,7 +301,7 @@ const makeClient = (signer, {
             })),
 
         getProjectFundAddress: async projDid =>
-            (await bcFetch('/projectAccounts/' + projDid))[projDid],
+            (await bcFetch('/projectAccounts/' + projDid)).map[projDid],
 
         listAgents: projRecOrDid =>
             cnRpc(projRecOrDid, projectDid => ({
