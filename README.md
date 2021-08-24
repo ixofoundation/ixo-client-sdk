@@ -81,7 +81,7 @@ Client methods:
 - [`getProjectFundAddress`](#getProjectFundAddress)
 - [`listAgents`](#listAgents)
 - [`createAgent`](#createAgent)
-- [`updateAgentStatus`](#updateAgentStatus)
+- [`updateAgent`](#updateAgent)
 - [`listClaims`](#listClaims)
 - [`createClaim`](#createClaim)
 - [`evaluateClaim`](#evaluateClaim)
@@ -244,20 +244,20 @@ Client methods:
       - `"IA"` for investor
 
     **Note**: The new agent will need to be approved before they
-    can start their activity. See `updateAgentStatus` below:
+    can start their activity. See `updateAgent` below:
 
-- `updateAgentStatus(projectRecordOrDid, agentDid, updates)` <a id='updateAgentStatus' />
+- `updateAgent(projectRecordOrDid, agentDid, updates)` <a id='updateAgent' />
 
   - `updates`: An object with the following properties:
 
-    - `status`: Any one of the following:
+    - `status` (Required): Any one of the following:
 
       - `0` for pending
       - `1` for approved
       - `2` for revoked
       - `3` for invited
 
-    - `role`: See the `role` property under `createAgent`
+    - `role` (Required): See the `role` property under `createAgent`
 
     - `version`: Optional
 
