@@ -9,9 +9,9 @@ const
 
 
 const
-    defaultBlockchainUrl = 'https://testnet.ixo.world',
-    defaultBlocksyncUrl = 'https://block-sync-pandora.ixo.world',
-    defaultCellnodeUrl = 'https://pds-pandora.ixo.world'
+    defaultBlockchainUrl = 'https://testnet.ixo.world/rest',
+    defaultBlocksyncUrl = 'https://blocksync-pandora.ixo.world',
+    defaultCellnodeUrl = 'https://cellnode-pandora.ixo.world'
 
 
 const makeClient = (signer, {
