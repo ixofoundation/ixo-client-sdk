@@ -7,7 +7,7 @@ const
     {toBase64, Bech32} = require('@cosmjs/encoding')
 
 
-const makeWallet = async src => {
+const makeWallet = async (src, didPrefix = 'did:ixo:') => {
     let secp, agent
 
     if (typeof src === 'object') {
@@ -18,9 +18,10 @@ const makeWallet = async src => {
             src
                 ?  Secp256k1HdWallet.fromMnemonic(src, {prefix: 'ixo'})
                 :  Secp256k1HdWallet.generate(12, {prefix: 'ixo'})
+                // See note [1]
         )
 
-        agent = await makeAgentWallet(secp.mnemonic)
+        agent = await makeAgentWallet(secp.mnemonic, undefined, didPrefix)
     }
 
     const toJSON = () => toSerializableWallet({secp, agent})
@@ -39,6 +40,7 @@ const toSerializableWallet = w => ({
     },
     agent: {
         mnemonic: w.agent.mnemonic,
+        didPrefix: w.agent.didPrefix,
         didDoc: w.agent.didDoc,
     },
 })
@@ -54,17 +56,19 @@ const fromSerializableWallet = s => ({
         },
     ),
 
-    agent: makeAgentWallet(s.agent.mnemonic, s.agent.didDoc),
+    agent: makeAgentWallet(s.agent.mnemonic, s.agent.didDoc, s.agent.didPrefix),
 })
 
 /* @returns OfflineAminoSigner: https://github.com/cosmos/cosmjs/blob/98e91ae5fe699733497befef95204923c93a7373/packages/amino/src/signer.ts#L22-L38 */// eslint-disable-line max-len
 const makeAgentWallet = (
     mnemonic,
     didDoc = sovrin.fromSeed(sha256(mnemonic).slice(0, 32)),
+    didPrefix = 'did:ixo:',
 ) => ({
     mnemonic,
     didDoc,
-    did: 'did:ixo:' + didDoc.did,
+    didPrefix,
+    did: didPrefix + didDoc.did,
 
     async getAccounts() {
         return [
@@ -115,3 +119,11 @@ const makeAgentWallet = (
 
 
 module.exports = makeWallet
+
+
+// Notes
+//
+// [1]: The prefix parameters here are not to be confused with the "didPrefix'
+//      parameter of this "makeWallet" function. The prefixes used in the
+//      Secp256k1HdWallet constructor functions are prefixes for cosmos wallet
+//      addresses while the did prefix is the prefix of the did address.
