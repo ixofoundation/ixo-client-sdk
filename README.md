@@ -30,7 +30,7 @@ details.
 
 ## Wallet API <a id='wallet-api' />
 
-`makeWallet(source)`: Create a new wallet <a id='makeWallet' />
+`makeWallet(source, didPrefix = 'did:ixo:')`: Create a new wallet <a id='makeWallet' />
 
 - `source`: Either a mnemonic string or a plain object
   representing a wallet state (possibly obtained via `toJSON()`
@@ -39,6 +39,14 @@ details.
   If empty, a brand new wallet is generated. If a mnemonic string,
   recovers a wallet based on the mnemonic. If a state object,
   revives the wallet using that state.
+
+- `didPrefix`: A DID prefix. Optional, defaults to `did:ixo:`.
+
+  If the `source` is a mnemonic which means that you are importing
+  a wallet from elsewhere, you may need to provide the `didPrefix`
+  as well to obtain the exact same wallet. If the DID prefix of
+  the wallet is different from `did:ixo:` then it must be provided
+  here.
 
 `makeWallet` returns a wallet object with the following
 properties:
