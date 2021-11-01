@@ -75,6 +75,7 @@ Client methods:
 - [`getTemplate`](#getTemplate)
 - [`getCell`](#getCell)
 - [`createProject`](#createProject)
+- [`updateProject`](#updateProject)
 - [`createEntityFile`](#createEntityFile)
 - [`getEntityFile`](#getEntityFile)
 - [`updateProjectStatus`](#updateProjectStatus)
@@ -180,6 +181,18 @@ Client methods:
     - `projectData`: To be documented; for now please see
       [here](https://github.com/ixofoundation/ixo-apimodule/blob/master/src/common/dummyData.ts#L3-L207)
       for an example
+
+    - `cellnodeURL`: URL of the cell node where various project
+      data will be kept. Optional, defaults to the URL of ixo's
+      shared cell node
+
+- `updateProject(projectDocUpdates, cellnodeURL)`: Update an existing project <a id='updateProject' />
+
+    - `projectDocUpdates`: Updates to be made to the project
+      document: A subset of the `projectData` argument of the
+      `createProject` method above that satisfies the rules
+      described in the following link:
+      https://github.com/ixofoundation/ixo-blockchain/pull/230#issue-902602327
 
     - `cellnodeURL`: URL of the cell node where various project
       data will be kept. Optional, defaults to the URL of ixo's

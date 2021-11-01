@@ -279,6 +279,13 @@ const makeClient = (signer, {
                 data: projectData,
             })),
 
+        updateProject: (projectDocUpdates, cnUrl = defaultCellnodeUrl) =>
+            cnRpc(cnUrl, () => ({
+                method: 'updateProjectDoc',
+                tplName: 'project_doc',
+                data: projectDocUpdates,
+            })),
+
         createEntityFile: (target, dataUrl) => {
             const [, contentType, data] =
                 dataUrl.match('^data:([^;]+);base64,(.+)$')
