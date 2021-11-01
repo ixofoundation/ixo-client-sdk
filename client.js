@@ -467,7 +467,7 @@ const makeClient = (signer, {
                 signAndBroadcast('agent', {
                     type: 'bonds/MsgBuy',
                     value: {
-                        buyer_did: 'did:ixo:' + signer.agent.did,
+                        buyer_did: signer.agent.did,
                         bond_did: bondDid,
                         amount: {amount: String(amount), denom: bondToken},
                         max_prices: [
@@ -480,7 +480,7 @@ const makeClient = (signer, {
                 signAndBroadcast('agent', {
                     type: 'bonds/MsgSell',
                     value: {
-                        seller_did: 'did:ixo:' + signer.agent.did,
+                        seller_did: signer.agent.did,
                         bond_did: bondDid,
                         amount: {amount: String(amount), denom: bondToken},
                     },
