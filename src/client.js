@@ -9,13 +9,13 @@ const memoize = require('lodash.memoize');
 const env = require('dotenv').config();
 
 
-const defaultBlockchainUrl = 'https://testnet.ixo.world/rest';
-const defaultBlocksyncUrl = 'https://blocksync-pandora.ixo.world';
-const defaultCellnodeUrl = 'https://cellnode-pandora.ixo.world';
+let defaultBlockchainUrl = 'https://testnet.ixo.world/rest';
+let defaultBlocksyncUrl = 'https://blocksync-pandora.ixo.world';
+let defaultCellnodeUrl = 'https://cellnode-pandora.ixo.world';
 
-const GlobalBlockchainUrl = process.env.BLOCKCHAINURL;
-const GlobalBlocksyncUrl = process.env.BLOCKSYNCURL;
-const GlobalCellnodeUrl = process.env.CELLNODEURL;
+let GlobalBlockchainUrl = process.env.BLOCKCHAINURL;
+let GlobalBlocksyncUrl = process.env.BLOCKSYNCURL;
+let GlobalCellnodeUrl = process.env.CELLNODEURL;
 
 
 

@@ -14,7 +14,6 @@
         "linebreak-style": [2, "unix"],
         "quotes": [2, "single"],
         "semi": [2, "never"],
-        "no-console": 0,
         "comma-dangle": [2, "always-multiline"],
         "no-unused-vars": 1,
         "object-curly-spacing": [2, "never"],
