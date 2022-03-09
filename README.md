@@ -4,8 +4,9 @@ A complete package of client software for developing client
 applications which connect to the [ixo](https://ixo.world/)
 software stack and build on the Internet of Impact.
 
-
 ## Usage Example
+
+Before use locally a env file must be provided, a example file in the directory.
 
 ```js
 const {makeWallet, makeClient} = require('@ixo/client-sdk')
