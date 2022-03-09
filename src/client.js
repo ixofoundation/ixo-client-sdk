@@ -1,24 +1,30 @@
-const
-    {format: fmt, inspect} = require('util'),
-    debug = require('debug')('ixo-client-sdk'),
-    fetch = require('isomorphic-unfetch'),
-    {coins} = require('@cosmjs/amino'),
-    {sortedJsonStringify} = require('@cosmjs/amino/build/signdoc'),
-    {fromBase64} = require('@cosmjs/encoding'),
-    memoize = require('lodash.memoize')
+
+const { format: fmt, inspect } = require('util');
+const debug = require('debug')('ixo-client-sdk');
+const fetch = require('isomorphic-unfetch');
+const { coins } = require('@cosmjs/amino');
+const { sortedJsonStringify } = require('@cosmjs/amino/build/signdoc');
+const { fromBase64 } = require('@cosmjs/encoding');
+const memoize = require('lodash.memoize');
+const env = require('dotenv').config();
 
 
-const
-    defaultBlockchainUrl = 'https://testnet.ixo.world/rest',
-    defaultBlocksyncUrl = 'https://blocksync-pandora.ixo.world',
-    defaultCellnodeUrl = 'https://cellnode-pandora.ixo.world'
+const defaultBlockchainUrl = 'https://testnet.ixo.world/rest';
+const defaultBlocksyncUrl = 'https://blocksync-pandora.ixo.world';
+const defaultCellnodeUrl = 'https://cellnode-pandora.ixo.world';
+
+const GlobalBlockchainUrl = process.env.BLOCKCHAINURL;
+const GlobalBlocksyncUrl = process.env.BLOCKSYNCURL;
+const GlobalCellnodeUrl = process.env.CELLNODEURL;
 
 
-const makeClient = (signer, {
-    blockchainUrl = defaultBlockchainUrl,
-    blocksyncUrl = defaultBlocksyncUrl,
-    dashifyUrls = false,
-} = {}) => {
+
+const makeClient = (signer, {blockchainUrl,blocksyncUrl ,dashifyUrls = false,} = {}) => {
+
+    GlobalBlockchainUrl.length > 10 ? blockchainUrl = GlobalBlockchainUrl : blockchainUrl = defaultBlockchainUrl; 
+    GlobalBlocksyncUrl.length > 10 ? blocksyncUrl = GlobalBlocksyncUrl : blocksyncUrl = defaultBlocksyncUrl; 
+    GlobalCellnodeUrl.length > 10 ? defaultCellnodeUrl = GlobalCellnodeUrl : defaultCellnodeUrl = defaultCellnodeUrl;
+
     if (signer)
         assertSignerIsValid(signer)
 
@@ -38,13 +44,13 @@ const makeClient = (signer, {
         signAndBroadcast = async (
             signerToUse,
             msg,
-            fee = {amount: coins(5000, 'uixo'), gas: '200000'},
+            fee = { amount: coins(5000, 'uixo'), gas: '200000' },
             memo = '',
         ) => {
             const
-                {address} = await getSignerAccount(signerToUse),
+                { address } = await getSignerAccount(signerToUse),
 
-                {account: {account_number, sequence}} =
+                { account: { account_number, sequence } } =
                     await bcFetch('/cosmos/auth/v1beta1/accounts/' + address),
 
                 signDoc = {
@@ -56,7 +62,7 @@ const makeClient = (signer, {
                     sequence,
                 },
 
-                {signature} = await sign(signerToUse, signDoc),
+                { signature } = await sign(signerToUse, signDoc),
 
                 txResp = await bcFetch('/txs', {
                     method: 'POST',
@@ -95,7 +101,7 @@ const makeClient = (signer, {
 
         getEntityHead = async projRecOrDid => {
             if (typeof projRecOrDid === 'object') {
-                const {projectDid} = projRecOrDid
+                const { projectDid } = projRecOrDid
                 let serviceEndpoint
 
                 try {
@@ -113,7 +119,7 @@ const makeClient = (signer, {
                     /* throw new Error('Project doesn\'t have an associated Cell Node record!') */// eslint-disable-line max-len
                 }
 
-                return {projectDid, serviceEndpoint}
+                return { projectDid, serviceEndpoint }
             }
 
             return getEntityHead(await getEntity(projRecOrDid))
@@ -125,13 +131,13 @@ const makeClient = (signer, {
             if (!signer)
                 throw new Error('The client needs to be initialized with a wallet / signer in order for this method to be used') // eslint-disable-line max-len
 
-            const {projectDid, serviceEndpoint}
+            const { projectDid, serviceEndpoint }
                 = typeof target === 'string' && target.startsWith('http')
-                    ? {projectDid: null, serviceEndpoint: target}
+                    ? { projectDid: null, serviceEndpoint: target }
                     : (await getEntityHead(target))
 
             const
-                {method, tplName, data, isPublic = false, then = x => x} =
+                { method, tplName, data, isPublic = false, then = x => x } =
                     dataCb(projectDid, serviceEndpoint),
 
                 message =
@@ -166,7 +172,7 @@ const makeClient = (signer, {
         getEntityFile = (target, key) =>
             cnRpc(target, () => ({
                 method: 'fetchPublic',
-                data: {key},
+                data: { key },
                 isPublic: true,
             })),
 
@@ -192,7 +198,7 @@ const makeClient = (signer, {
 
             if (!tplDoc.data.page.content) {
                 const
-                    {data: rawTplContent} =
+                    { data: rawTplContent } =
                         await getEntityFile(tplDoc, tplDoc.data.page.cid),
 
                     decodedTplContent =
@@ -215,12 +221,12 @@ const makeClient = (signer, {
         getSecpAccount: async () =>
             await bcFetch(
                 '/cosmos/auth/v1beta1/accounts/'
-                    + (await getSignerAccount('secp')).address),
+                + (await getSignerAccount('secp')).address),
 
         getAgentAccount: async () =>
             await bcFetch(
                 '/cosmos/auth/v1beta1/accounts/'
-                    + (await getSignerAccount('agent')).address),
+                + (await getSignerAccount('agent')).address),
 
         balances: async (accountType, denom) =>
             await bcFetch(fmt(
@@ -273,6 +279,8 @@ const makeClient = (signer, {
         getCell: getEntity,
 
         createProject: (projectData, cnUrl = defaultCellnodeUrl) =>
+
+        
             cnRpc(cnUrl, () => ({
                 method: 'createProject',
                 tplName: 'create_project',
@@ -292,7 +300,7 @@ const makeClient = (signer, {
 
             return cnRpc(target, (_, serviceEndpoint) => ({
                 method: 'createPublic',
-                data: {data, contentType},
+                data: { data, contentType },
                 isPublic: true,
                 then: data => serviceEndpoint + '/public/' + data,
             }))
@@ -304,7 +312,7 @@ const makeClient = (signer, {
             cnRpc(projRecOrDid, projectDid => ({
                 method: 'updateProjectStatus',
                 tplName: 'project_status',
-                data: {projectDid, status},
+                data: { projectDid, status },
             })),
 
         getProjectFundAddress: async projDid =>
@@ -314,31 +322,31 @@ const makeClient = (signer, {
             cnRpc(projRecOrDid, projectDid => ({
                 method: 'listAgents',
                 tplName: 'list_agent',
-                data: {projectDid},
+                data: { projectDid },
             })),
 
-        createAgent: (projRecOrDid, {did, role, email, name}) =>
+        createAgent: (projRecOrDid, { did, role, email, name }) =>
             cnRpc(projRecOrDid, projectDid => ({
                 method: 'createAgent',
                 tplName: 'create_agent',
-                data: {projectDid, agentDid: did, role, email, name},
+                data: { projectDid, agentDid: did, role, email, name },
             })),
 
-        updateAgent: (projRecOrDid, agentDid, {status, role, version}) =>
+        updateAgent: (projRecOrDid, agentDid, { status, role, version }) =>
             cnRpc(projRecOrDid, projectDid => ({
                 method: 'updateAgentStatus',
                 tplName: 'agent_status',
-                data: {projectDid, agentDid, status, role, version},
+                data: { projectDid, agentDid, status, role, version },
             })),
 
         listClaims: (projRecOrDid, tplId) =>
             cnRpc(projRecOrDid, projectDid => ({
                 method: tplId ? 'listClaimsByTemplateId' : 'listClaims',
                 tplName: 'list_claim',
-                data: {projectDid, claimTemplateId: tplId},
+                data: { projectDid, claimTemplateId: tplId },
             })),
 
-        createClaim: async (projRecOrDid, tplRecOrDid, claimItems, fetchOpts)=>{
+        createClaim: async (projRecOrDid, tplRecOrDid, claimItems, fetchOpts) => {
             const tplRec = await getTemplate(tplRecOrDid)
 
             return await cnRpc(projRecOrDid, projectDid => ({
@@ -349,7 +357,7 @@ const makeClient = (signer, {
                     claimTemplateId: tplRec.projectDid,
                     type: tplRec.data.page.content.claimInfo.type,
                     issuerId: signer.agent.did,
-                    claimSubject: {id: projectDid},
+                    claimSubject: { id: projectDid },
                     items: claimItems,
                     projectDid,
                     dateTime: (new Date()).toISOString(),
@@ -363,14 +371,14 @@ const makeClient = (signer, {
             cnRpc(projRecOrDid, projectDid => ({
                 method: 'evaluateClaim',
                 tplName: 'evaluate_claim',
-                data: {projectDid, claimId, status},
+                data: { projectDid, claimId, status },
             })),
 
         sendTokens: async (to, amount, denom = 'uixo') =>
             await signAndBroadcast('secp', {
                 type: 'cosmos-sdk/MsgSend',
                 value: {
-                    amount: [{amount: String(amount), denom}],
+                    amount: [{ amount: String(amount), denom }],
                     from_address: (await getSignerAccount('secp')).address,
                     to_address: to,
                 },
@@ -378,7 +386,7 @@ const makeClient = (signer, {
 
         staking: {
             listValidators: urlParams =>
-                bcFetch('/staking/validators', {urlParams}),
+                bcFetch('/staking/validators', { urlParams }),
 
             getValidator: validatorAddr =>
                 bcFetch('/staking/validators/' + validatorAddr),
@@ -427,7 +435,7 @@ const makeClient = (signer, {
                 await signAndBroadcast('secp', {
                     type: 'cosmos-sdk/MsgDelegate',
                     value: {
-                        amount: {denom: 'uixo', amount: String(amount)},
+                        amount: { denom: 'uixo', amount: String(amount) },
                         delegator_address:
                             (await getSignerAccount('secp')).address,
                         validator_address: validatorAddr,
@@ -438,7 +446,7 @@ const makeClient = (signer, {
                 await signAndBroadcast('secp', {
                     type: 'cosmos-sdk/MsgUndelegate',
                     value: {
-                        amount: {denom: 'uixo', amount: String(amount)},
+                        amount: { denom: 'uixo', amount: String(amount) },
                         delegator_address:
                             (await getSignerAccount('secp')).address,
                         validator_address: validatorAddr,
@@ -449,7 +457,7 @@ const makeClient = (signer, {
                 await signAndBroadcast('secp', {
                     type: 'cosmos-sdk/MsgBeginRedelegate',
                     value: {
-                        amount: {denom: 'uixo', amount: String(amount)},
+                        amount: { denom: 'uixo', amount: String(amount) },
                         delegator_address:
                             (await getSignerAccount('secp')).address,
                         validator_src_address: validatorSrcAddr,
@@ -463,26 +471,26 @@ const makeClient = (signer, {
 
             list: () => bcFetch('/bonds_detailed'),
 
-            buy: ({bondDid, bondToken, reserveToken, amount, maxPrice}) =>
+            buy: ({ bondDid, bondToken, reserveToken, amount, maxPrice }) =>
                 signAndBroadcast('agent', {
                     type: 'bonds/MsgBuy',
                     value: {
                         buyer_did: signer.agent.did,
                         bond_did: bondDid,
-                        amount: {amount: String(amount), denom: bondToken},
+                        amount: { amount: String(amount), denom: bondToken },
                         max_prices: [
-                            {amount: String(maxPrice), denom: reserveToken},
+                            { amount: String(maxPrice), denom: reserveToken },
                         ],
                     },
                 }),
 
-            sell: ({bondDid, bondToken, amount}) =>
+            sell: ({ bondDid, bondToken, amount }) =>
                 signAndBroadcast('agent', {
                     type: 'bonds/MsgSell',
                     value: {
                         seller_did: signer.agent.did,
                         bond_did: bondDid,
-                        amount: {amount: String(amount), denom: bondToken},
+                        amount: { amount: String(amount), denom: bondToken },
                     },
                 }),
         },
@@ -529,11 +537,11 @@ const makeFetcher = (urlPrefix = '') =>
         }
 
         if (dryRun)
-            return {url, ...fetchOpts}
+            return { url, ...fetchOpts }
 
         debug(
             '> Request',
-            inspect({url, ...fetchOpts, body: rawBody}, {depth: 10}),
+            inspect({ url, ...fetchOpts, body: rawBody }, { depth: 10 }),
         )
 
         const
@@ -548,7 +556,7 @@ const makeFetcher = (urlPrefix = '') =>
             status: resp.status,
             headers: Object.fromEntries(resp.headers.entries()),
             body: body,
-        }, {depth: 10}))
+        }, { depth: 10 }))
 
         return Promise[resp.ok ? 'resolve' : 'reject'](
             fullResponse
@@ -577,7 +585,7 @@ const makeRpcMsg = (method, templateName, data, signature) => ({
     params: {
         payload: {
             data: data ? data : {},
-            template: templateName ? {name: templateName} : undefined,
+            template: templateName ? { name: templateName } : undefined,
         },
         signature,
     },

@@ -1,10 +1,13 @@
 {
   "name": "@ixo/client-sdk",
-  "version": "1.11.1",
-  "description": "One ixo client to rule them all",
+  "version": "1.12.2",
+  "description": "One ixo client to rule them all, One ixo client to find, One ixo client to bring them all, and in impact bind them",
   "main": "index.js",
+  "scripts": {
+    "build": "esbuild src/index.js --bundle --outfile=dist/bundle.js"
+  },
   "license": "ISC",
-  "author": "gwn <dev@gwn.wtf>",
+  "author": "gwn <dev@gwn.wtf>, Andrew Margetts <andrew@northroom.co.za>",
   "repository": {
     "type": "git",
     "url": "https://github.com/ixofoundation/ixo-client-sdk"
@@ -17,6 +20,7 @@
     "debug": "^4.3.1",
     "isomorphic-unfetch": "^3.1.0",
     "lodash.memoize": "^4.1.2",
+    "sovrin-did": "^1.4.0",
     "sovrin-did": "^1.4.0"
   },
   "devDependencies": {

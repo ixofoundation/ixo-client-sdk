@@ -1,32 +1,32 @@
 const
     base58 = require('bs58'),
     sovrin = require('sovrin-did'),
-    {Secp256k1HdWallet, serializeSignDoc} = require('@cosmjs/amino'),
-    {EnglishMnemonic,
-        pathToString, stringToPath, sha256} = require('@cosmjs/crypto'),
-    {toBase64, Bech32} = require('@cosmjs/encoding')
+    { Secp256k1HdWallet, serializeSignDoc } = require('@cosmjs/amino'),
+    { EnglishMnemonic,
+        pathToString, stringToPath, sha256 } = require('@cosmjs/crypto'),
+    { toBase64, Bech32 } = require('@cosmjs/encoding')
 
 
 const makeWallet = async (src, didPrefix = 'did:ixo:') => {
     let secp, agent
 
     if (typeof src === 'object') {
-        ({secp, agent} = fromSerializableWallet(src))
+        ({ secp, agent } = fromSerializableWallet(src))
 
     } else {
         secp = await (
             src
-                ?  Secp256k1HdWallet.fromMnemonic(src, {prefix: 'ixo'})
-                :  Secp256k1HdWallet.generate(12, {prefix: 'ixo'})
-                // See note [1]
+                ? Secp256k1HdWallet.fromMnemonic(src, { prefix: 'ixo' })
+                : Secp256k1HdWallet.generate(12, { prefix: 'ixo' })
+            // See note [1]
         )
 
         agent = await makeAgentWallet(secp.mnemonic, undefined, didPrefix)
     }
 
-    const toJSON = () => toSerializableWallet({secp, agent})
+    const toJSON = () => toSerializableWallet({ secp, agent })
 
-    return {secp, agent, toJSON}
+    return { secp, agent, toJSON }
 }
 
 const toSerializableWallet = w => ({
@@ -86,7 +86,7 @@ const makeAgentWallet = (
     async signAmino(signerAddress, signDoc) {
         const account =
             (await this.getAccounts())
-                .find(({address}) => address === signerAddress)
+                .find(({ address }) => address === signerAddress)
 
         if (!account)
             throw new Error(`Address ${signerAddress} not found in wallet`)
