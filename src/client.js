@@ -7,7 +7,7 @@ const { sortedJsonStringify } = require('@cosmjs/amino/build/signdoc');
 const { fromBase64 } = require('@cosmjs/encoding');
 const memoize = require('lodash.memoize');
 const env = require('dotenv').config();
-
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
 let defaultBlockchainUrl = 'https://testnet.ixo.world/rest';
 let defaultBlocksyncUrl = 'https://blocksync-pandora.ixo.world';
@@ -348,7 +348,7 @@ const makeClient = (signer, {blockchainUrl,blocksyncUrl ,dashifyUrls = false,} =
 
         createClaim: async (projRecOrDid, tplRecOrDid, claimItems, fetchOpts) => {
             const tplRec = await getTemplate(tplRecOrDid)
-
+            await delay(10000);
             return await cnRpc(projRecOrDid, projectDid => ({
                 method: 'submitClaim',
                 tplName: 'submit_claim',
