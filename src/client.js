@@ -6,7 +6,9 @@ const { coins } = require('@cosmjs/amino');
 const { sortedJsonStringify } = require('@cosmjs/amino/build/signdoc');
 const { fromBase64 } = require('@cosmjs/encoding');
 const memoize = require('lodash.memoize');
+const protobuf = require('protobufjs');
 const env = require('dotenv').config();
+
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
 let defaultBlockchainUrl = 'https://testnet.ixo.world/rest';
