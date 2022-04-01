@@ -2,17 +2,47 @@
   "name": "@ixo/client-sdk",
   "version": "1.12.2",
   "description": "One ixo client to rule them all, One ixo client to find, One ixo client to bring them all, and in impact bind them",
-  "main": "index.js",
-  "scripts": {
-    "build": "esbuild src/index.js --bundle --platform=node --format=esm --outfile=dist/bundle.js"
-  },
-  "license": "ISC",
-  "author": "gwn <dev@gwn.wtf>, Andrew Margetts <andrew@northroom.co.za>",
+  "umd:name": "@ixo/client-sdk",
   "repository": {
     "type": "git",
     "url": "https://github.com/ixofoundation/ixo-client-sdk"
   },
-  "dependencies": {
+  "unpkg": "dist/index.min.js",
+  "module": "dist/index.mjs",
+  "main": "dist/index.js",
+  "types": "types/index.d.ts",
+  "license": "MIT",
+  "author": {
+    "name": "TODO_YOUR_NAME",
+    "email": "YOUR_EMAIL@TODO.com",
+    "url": "https://TODO_WEBSITE.com"
+  },
+  "files": [
+    "dist",
+    "types"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "engines": {
+    "node": ">=12"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "prepublishOnly": "npm run build",
+    "types": "tsc --noEmit",
+    "test": "uvu -r tsm test"
+  },
+  "keywords": [
+    "TODO",
+    "module",
+    "keywords"
+  ],
+  "devDependencies": {
     "@cosmjs/amino": "^0.25.5",
     "@cosmjs/crypto": "^0.25.5",
     "@cosmjs/encoding": "^0.25.5",
@@ -20,9 +50,17 @@
     "debug": "^4.3.1",
     "dotenv": "^16.0.0",
     "esbuild": "^0.14.25",
+    "google-protobuf": "*",
     "isomorphic-unfetch": "^3.1.0",
     "lodash.memoize": "^4.1.2",
-    "sovrin-did": "^1.4.0"
+    "sovrin-did": "^1.4.0",
+    "@rollup/plugin-node-resolve": "13.1.3",
+    "rollup": "2.66.1",
+    "rollup-plugin-terser": "7.0.2",
+    "rollup-plugin-typescript2": "0.27.1",
+    "tsm": "2.2.1",
+    "typescript": "4.5.5",
+    "uvu": "0.5.3"
   },
   "devDependencies": {
     "eslint": "^7.29.0"
