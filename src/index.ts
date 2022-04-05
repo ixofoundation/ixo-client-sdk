@@ -15,3 +15,6 @@ export function average(...nums: number[]): number {
 	for (; i < len; i++) total += nums[i];
 	return total / len;
 }
+
+export * from "./client"
+export * from "./wallet"

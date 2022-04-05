@@ -1,125 +1,122 @@
-const
-    base58 = require('bs58'),
-    sovrin = require('sovrin-did'),
-    { Secp256k1HdWallet, serializeSignDoc } = require('@cosmjs/amino'),
-    { EnglishMnemonic,
-        pathToString, stringToPath, sha256 } = require('@cosmjs/crypto'),
-    { toBase64, Bech32 } = require('@cosmjs/encoding')
+const base58 = require("bs58"),
+  sovrin = require("sovrin-did"),
+  { Secp256k1HdWallet, serializeSignDoc } = require("@cosmjs/amino"),
+  {
+    EnglishMnemonic,
+    pathToString,
+    stringToPath,
+    sha256,
+  } = require("@cosmjs/crypto"),
+  { toBase64, Bech32 } = require("@cosmjs/encoding");
 
+export async function makeWallet(src: any, didPrefix = "did:ixo:") {
+  let secp: any, agent: any;
 
-const makeWallet = async (src, didPrefix = 'did:ixo:') => {
-    let secp, agent
+  if (typeof src === "object") {
+    ({ secp, agent } = fromSerializableWallet(src));
+  } else {
+    secp = await (src
+      ? Secp256k1HdWallet.fromMnemonic(src, { prefix: "ixo" })
+      : Secp256k1HdWallet.generate(12, { prefix: "ixo" }));
+    // See note [1]
 
-    if (typeof src === 'object') {
-        ({ secp, agent } = fromSerializableWallet(src))
+    agent = await makeAgentWallet(secp.mnemonic, undefined, didPrefix);
+  }
 
-    } else {
-        secp = await (
-            src
-                ? Secp256k1HdWallet.fromMnemonic(src, { prefix: 'ixo' })
-                : Secp256k1HdWallet.generate(12, { prefix: 'ixo' })
-            // See note [1]
-        )
+  const toJSON = () => toSerializableWallet({ secp, agent });
 
-        agent = await makeAgentWallet(secp.mnemonic, undefined, didPrefix)
-    }
-
-    const toJSON = () => toSerializableWallet({ secp, agent })
-
-    return { secp, agent, toJSON }
+  return { secp, agent, toJSON };
 }
 
-const toSerializableWallet = w => ({
+export function toSerializableWallet(w: { secp: any; agent: any }): any {
+  return {
     secp: {
-        mnemonic: w.secp.mnemonic,
-        seed: base58.encode(w.secp.seed),
-        accounts: w.secp.accounts.map(a => ({
-            ...a,
-            hdPath: pathToString(a.hdPath),
-        })),
+      mnemonic: w.secp.mnemonic,
+      seed: base58.encode(w.secp.seed),
+      accounts: w.secp.accounts.map((a: { hdPath: any }) => ({
+        ...a,
+        hdPath: pathToString(a.hdPath),
+      })),
     },
     agent: {
-        mnemonic: w.agent.mnemonic,
-        didPrefix: w.agent.didPrefix,
-        didDoc: w.agent.didDoc,
+      mnemonic: w.agent.mnemonic,
+      didPrefix: w.agent.didPrefix,
+      didDoc: w.agent.didDoc,
     },
-})
+  };
+}
 
-const fromSerializableWallet = s => ({
+export function fromSerializableWallet(s: any) {
+  return {
     secp: new Secp256k1HdWallet(
-        s.secp.mnemonic && new EnglishMnemonic(s.secp.mnemonic),
+      s.secp.mnemonic && new EnglishMnemonic(s.secp.mnemonic),
 
-        {
-            seed: Uint8Array.from(base58.decode(s.secp.seed)),
-            prefix: s.secp.accounts[0].prefix,
-            hdPaths: s.secp.accounts.map(a => stringToPath(a.hdPath)),
-        },
+      {
+        seed: Uint8Array.from(base58.decode(s.secp.seed)),
+        prefix: s.secp.accounts[0].prefix,
+        hdPaths: s.secp.accounts.map((a: { hdPath: any }) =>
+          stringToPath(a.hdPath)
+        ),
+      }
     ),
 
     agent: makeAgentWallet(s.agent.mnemonic, s.agent.didDoc, s.agent.didPrefix),
-})
+  };
+}
 
-/* @returns OfflineAminoSigner: https://github.com/cosmos/cosmjs/blob/98e91ae5fe699733497befef95204923c93a7373/packages/amino/src/signer.ts#L22-L38 */// eslint-disable-line max-len
-const makeAgentWallet = (
-    mnemonic,
-    didDoc = sovrin.fromSeed(sha256(mnemonic).slice(0, 32)),
-    didPrefix = 'did:ixo:',
-) => ({
-    mnemonic,
-    didDoc,
-    didPrefix,
-    did: didPrefix + didDoc.did,
+/* @returns OfflineAminoSigner: https://github.com/cosmos/cosmjs/blob/98e91ae5fe699733497befef95204923c93a7373/packages/amino/src/signer.ts#L22-L38 */ // eslint-disable-line max-len
 
-    async getAccounts() {
-        return [
-            {
-                algo: 'ed25519-sha-256',
-                pubkey: Uint8Array.from(base58.decode(didDoc.verifyKey)),
-                address: Bech32.encode(
-                    'ixo',
-                    sha256(base58.decode(didDoc.verifyKey)).slice(0, 20),
-                ),
-            },
-        ]
-    },
+export function makeAgentWallet(
+  mnemonic: any,
+  didDoc = sovrin.fromSeed(sha256(mnemonic).slice(0, 32)),
+  didPrefix = "did:ixo:"
+): any {
+  //   did: didPrefix + didDoc.did,
 
-    async signAmino(signerAddress, signDoc) {
-        const account =
-            (await this.getAccounts())
-                .find(({ address }) => address === signerAddress)
+  async function getAccounts() {
+    return [
+      {
+        algo: "ed25519-sha-256",
+        pubkey: Uint8Array.from(base58.decode(didDoc.verifyKey)),
+        address: Bech32.encode(
+          "ixo",
+          sha256(base58.decode(didDoc.verifyKey)).slice(0, 20)
+        ),
+      },
+    ];
+  }
 
-        if (!account)
-            throw new Error(`Address ${signerAddress} not found in wallet`)
+  async function signAmino(signerAddress: any, signDoc: any) {
+    const account = (await getAccounts()).find(
+      ({ address }) => address === signerAddress
+    );
 
-        const
-            fullSignature =
-                sovrin.signMessage(
-                    serializeSignDoc(signDoc),
-                    didDoc.secret.signKey,
-                    didDoc.verifyKey,
-                ),
+    if (!account)
+      throw new Error(`Address ${signerAddress} not found in wallet`);
 
-            signatureBase64 =
-                toBase64(fullSignature.slice(0, 64))
+    const fullSignature = sovrin.signMessage(
+        serializeSignDoc(signDoc),
+        didDoc.secret.signKey,
+        didDoc.verifyKey
+      ),
+      signatureBase64 = toBase64(fullSignature.slice(0, 64));
 
-        return {
-            signed: signDoc,
+    return {
+      signed: signDoc,
 
-            signature: {
-                signature: signatureBase64,
+      signature: {
+        signature: signatureBase64,
 
-                pub_key: {
-                    type: 'tendermint/PubKeyEd25519',
-                    value: base58.decode(didDoc.verifyKey).toString('base64'),
-                },
-            },
-        }
-    },
-})
+        pub_key: {
+          type: "tendermint/PubKeyEd25519",
+          value: base58.decode(didDoc.verifyKey).toString("base64"),
+        },
+      },
+    };
+  }
+}
 
-
-module.exports = makeWallet
-
+module.exports = makeWallet;
 
 // Notes
 //
