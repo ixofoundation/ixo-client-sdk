@@ -165,7 +165,7 @@ export function makeClient(
       if (!signer)
         throw new Error(
           "The client needs to be initialized with a wallet / signer in order for this method to be used"
-        ); // eslint-disable-line max-len
+        );
 
       const { projectDid, serviceEndpoint } =
         typeof target === "string" && target.startsWith("http")
@@ -195,7 +195,7 @@ export function makeClient(
         ...fetchOpts,
       });
 
-      if (fetchOpts.dryRun) return resp;
+      if (fetchOpts.dryRun) return respBody;
 
       if (respBody.error) throw respBody.error;
 
@@ -533,10 +533,82 @@ export function makeClient(
 }
 
 export async function getTemplate(tplRecOrDid: string): Promise<any> {
+
+ const getEntityHead = async (projRecOrDid: any): Promise<any> => {
+    if (typeof projRecOrDid === "object") {
+      const { projectDid } = projRecOrDid;
+      let serviceEndpoint;
+
+      try {
+        serviceEndpoint = projRecOrDid.data.nodes.items
+          .find((i: { [x: string]: string }) => i["@type"] === "CellNode")
+          .serviceEndpoint.replace(/\/$/, "");
+
+        if (dashifyUrls) serviceEndpoint = dashifyUrl(serviceEndpoint);
+      } catch (e) {
+        serviceEndpoint = defaultCellnodeUrl;
+        /* throw new Error('Project doesn\'t have an associated Cell Node record!') */
+      }
+
+      return { projectDid, serviceEndpoint };
+    }
+
+    return getEntityHead(await getEntity(projRecOrDid));
+  }
+
+ const cnRpc = async (target: string, dataCb: any, fetchOpts?: any) => {
+    if (!signer)
+      throw new Error(
+        "The client needs to be initialized with a wallet / signer in order for this method to be used"
+      );
+
+    const { projectDid, serviceEndpoint } =
+      typeof target === "string" && target.startsWith("http")
+        ? { projectDid: null, serviceEndpoint: target }
+        : await getEntityHead(target);
+
+    const {
+        method,
+        tplName,
+        data,
+        isPublic = false,
+        then = (x: any) => x,
+      } = dataCb(projectDid, serviceEndpoint),
+      message = isPublic
+        ? makePublicRpcMsg(method, data)
+        : makeRpcMsg(method, tplName, data, {
+            type: (await getSignerAccount("agent")).algo,
+            created: new Date().toISOString(),
+            creator: signer.agent.did,
+            signatureValue: (await sign("agent", data)).signature.signature,
+          }),
+      path = isPublic ? "/api/public" : "/api/request";
+
+   
+    const respBody = await makeFetcher(serviceEndpoint + path, {
+      method: "POST",
+      body: message,
+      ...fetchOpts,
+    });
+
+    if (fetchOpts.dryRun) return respBody;
+
+    if (respBody.error) throw respBody.error;
+
+    return then(respBody.result);
+ },
+   
+  getEntityFile = (target: string, key: any) =>
+    cnRpc(target, () => ({
+      method: "fetchPublic",
+      data: { key },
+      isPublic: true,
+    }))
+
   const tplDoc =
     typeof tplRecOrDid === "object"
       ? tplRecOrDid
-      : await getEntity(tplRecOrDid);
+      : await makeFetcher("/api/project/getByProjectDid/" + tplRecOrDid);
 
   if (!tplDoc.data.page.content) {
     const { data: rawTplContent } = await getEntityFile(
@@ -574,9 +646,10 @@ export function assertSignerIsValid(signer: any): void {
 }
 
 //todo
-export function makeFetcher(urlPrefix?: string): any {async (
+export function makeFetcher(urlPrefix?: string): any {
+  async (
     path: any,
-    { urlParams, fullResponse = false, dryRun = false, ...fetchOpts }
+    { urlParams = {}, fullResponse = false, dryRun = false, ...fetchOpts }
   ) => {
     const urlParamsStr = new URLSearchParams(urlParams).toString(),
       url = urlPrefix + path + (urlParamsStr ? "?" + urlParamsStr : ""),
@@ -630,6 +703,7 @@ export function makeFetcher(urlPrefix?: string): any {async (
 export function generateTxId(): number {
   return Math.floor(Math.random() * 1000000 + 1);
 }
+
 //todo
 export function makePublicRpcMsg(method: any, params: any) {
   return {
@@ -639,6 +713,7 @@ export function makePublicRpcMsg(method: any, params: any) {
     params,
   };
 }
+
 export function makeRpcMsg(
   method?: any,
   templateName?: string,
@@ -666,5 +741,3 @@ export function dashifyUrl(urlStr: string): string {
   );
   return urlStr;
 }
-
-module.exports = makeClient;

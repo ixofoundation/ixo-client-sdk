@@ -1,13 +1,13 @@
-const base58 = require("bs58"),
-  sovrin = require("sovrin-did"),
-  { Secp256k1HdWallet, serializeSignDoc } = require("@cosmjs/amino"),
-  {
-    EnglishMnemonic,
-    pathToString,
-    stringToPath,
-    sha256,
-  } = require("@cosmjs/crypto"),
-  { toBase64, Bech32 } = require("@cosmjs/encoding");
+const base58 = require("bs58");
+const sovrin = require("sovrin-did");
+const { Secp256k1HdWallet, serializeSignDoc } = require("@cosmjs/amino");
+const {
+  EnglishMnemonic,
+  pathToString,
+  stringToPath,
+  sha256,
+} = require("@cosmjs/crypto");
+const { toBase64, Bech32 } = require("@cosmjs/encoding");
 
 export async function makeWallet(src: any, didPrefix = "did:ixo:") {
   let secp: any, agent: any;
@@ -70,53 +70,56 @@ export function makeAgentWallet(
   mnemonic: any,
   didDoc = sovrin.fromSeed(sha256(mnemonic).slice(0, 32)),
   didPrefix = "did:ixo:"
-): any {
-  //   did: didPrefix + didDoc.did,
+) {
+  return {
+    mnemonic,
+    didDoc,
+    didPrefix,
+    did: didPrefix + didDoc.did,
 
-  async function getAccounts() {
-    return [
-      {
-        algo: "ed25519-sha-256",
-        pubkey: Uint8Array.from(base58.decode(didDoc.verifyKey)),
-        address: Bech32.encode(
-          "ixo",
-          sha256(base58.decode(didDoc.verifyKey)).slice(0, 20)
-        ),
-      },
-    ];
-  }
-
-  async function signAmino(signerAddress: any, signDoc: any) {
-    const account = (await getAccounts()).find(
-      ({ address }) => address === signerAddress
-    );
-
-    if (!account)
-      throw new Error(`Address ${signerAddress} not found in wallet`);
-
-    const fullSignature = sovrin.signMessage(
-        serializeSignDoc(signDoc),
-        didDoc.secret.signKey,
-        didDoc.verifyKey
-      ),
-      signatureBase64 = toBase64(fullSignature.slice(0, 64));
-
-    return {
-      signed: signDoc,
-
-      signature: {
-        signature: signatureBase64,
-
-        pub_key: {
-          type: "tendermint/PubKeyEd25519",
-          value: base58.decode(didDoc.verifyKey).toString("base64"),
+    async getAccounts() {
+      return [
+        {
+          algo: "ed25519-sha-256",
+          pubkey: Uint8Array.from(base58.decode(didDoc.verifyKey)),
+          address: Bech32.encode(
+            "ixo",
+            sha256(base58.decode(didDoc.verifyKey)).slice(0, 20)
+          ),
         },
-      },
-    };
-  }
-}
+      ];
+    },
 
-module.exports = makeWallet;
+    async signAmino(signerAddress: any, signDoc: any) {
+      const account = (await this.getAccounts()).find(
+        ({ address }) => address === signerAddress
+      );
+
+      if (!account)
+        throw new Error(`Address ${signerAddress} not found in wallet`);
+
+      const fullSignature = sovrin.signMessage(
+          serializeSignDoc(signDoc),
+          didDoc.secret.signKey,
+          didDoc.verifyKey
+        ),
+        signatureBase64 = toBase64(fullSignature.slice(0, 64));
+
+      return {
+        signed: signDoc,
+
+        signature: {
+          signature: signatureBase64,
+
+          pub_key: {
+            type: "tendermint/PubKeyEd25519",
+            value: base58.decode(didDoc.verifyKey).toString("base64"),
+          },
+        },
+      };
+    },
+  };
+}
 
 // Notes
 //
