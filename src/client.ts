@@ -6,6 +6,16 @@ const { sortedJsonStringify } = require("@cosmjs/amino/build/signdoc");
 const { fromBase64 } = require("@cosmjs/encoding");
 const memoize = require("lodash.memoize");
 const env = require("dotenv").config();
+const base58 = require("bs58");
+const sovrin = require("sovrin-did");
+const { Secp256k1HdWallet, serializeSignDoc } = require("@cosmjs/amino");
+const {
+  EnglishMnemonic,
+  pathToString,
+  stringToPath,
+  sha256,
+} = require("@cosmjs/crypto");
+const { toBase64, Bech32 } = require("@cosmjs/encoding");
 
 let defaultCellnodeUrl = "https://cellnode-pandora.ixo.world";
 
@@ -22,9 +32,14 @@ let GlobalCellnodeUrl =
     ? process.env.CELLNODEURL
     : "https://cellnode-pandora.ixo.world";
 
+let GlobaldashifyUrls =
+  process.env.GlobaldashifyUrls != null ? process.env.GlobaldashifyUrls : false;
+
+let GlobalSigner: any = null;
+
 export function makeClient(
-  signer: any,
-  { blockchainUrl = "", blocksyncUrl = "", dashifyUrls = false }
+  signer = GlobalSigner,
+  { blockchainUrl = "", blocksyncUrl = "" }
 ) {
   blockchainUrl = GlobalBlockchainUrl;
   blocksyncUrl = GlobalBlocksyncUrl;
@@ -149,7 +164,7 @@ export function makeClient(
             .find((i: { [x: string]: string }) => i["@type"] === "CellNode")
             .serviceEndpoint.replace(/\/$/, "");
 
-          if (dashifyUrls) serviceEndpoint = dashifyUrl(serviceEndpoint);
+          if (GlobaldashifyUrls) serviceEndpoint = dashifyUrl(serviceEndpoint);
         } catch (e) {
           serviceEndpoint = defaultCellnodeUrl;
           /* throw new Error('Project doesn\'t have an associated Cell Node record!') */
@@ -269,7 +284,7 @@ export function makeClient(
     listProjects: async () => {
       const projRecs = await listEntities("Project");
 
-      if (dashifyUrls) projRecs.forEach(dashifyProjUrls);
+      if (GlobaldashifyUrls) projRecs.forEach(dashifyProjUrls);
 
       return projRecs;
     },
@@ -281,7 +296,7 @@ export function makeClient(
     getProject: async (projDid: string) => {
       const projRec = await getEntity(projDid);
 
-      if (dashifyUrls) dashifyProjUrls(projRec);
+      if (GlobaldashifyUrls) dashifyProjUrls(projRec);
 
       return projRec;
     },
@@ -533,8 +548,7 @@ export function makeClient(
 }
 
 export async function getTemplate(tplRecOrDid: string): Promise<any> {
-
- const getEntityHead = async (projRecOrDid: any): Promise<any> => {
+  const getEntityHead = async (projRecOrDid: any): Promise<any> => {
     if (typeof projRecOrDid === "object") {
       const { projectDid } = projRecOrDid;
       let serviceEndpoint;
@@ -544,7 +558,7 @@ export async function getTemplate(tplRecOrDid: string): Promise<any> {
           .find((i: { [x: string]: string }) => i["@type"] === "CellNode")
           .serviceEndpoint.replace(/\/$/, "");
 
-        if (dashifyUrls) serviceEndpoint = dashifyUrl(serviceEndpoint);
+        if (GlobaldashifyUrls) serviceEndpoint = dashifyUrl(serviceEndpoint);
       } catch (e) {
         serviceEndpoint = defaultCellnodeUrl;
         /* throw new Error('Project doesn\'t have an associated Cell Node record!') */
@@ -553,57 +567,79 @@ export async function getTemplate(tplRecOrDid: string): Promise<any> {
       return { projectDid, serviceEndpoint };
     }
 
-    return getEntityHead(await getEntity(projRecOrDid));
-  }
+    return getEntityHead(
+      await makeFetcher("/api/project/getByProjectDid/" + projRecOrDid)
+    );
+  };
 
- const cnRpc = async (target: string, dataCb: any, fetchOpts?: any) => {
-    if (!signer)
-      throw new Error(
-        "The client needs to be initialized with a wallet / signer in order for this method to be used"
+  const cnFetch = makeFetcher();
+
+  const cnRpc = async (target: string, dataCb: any, fetchOpts?: any) => {
+      const getSignerAccount = memoize((signerToUse: string | number) =>
+        GlobalSigner[signerToUse].getAccounts().then((as: any[]) => as[0])
       );
 
-    const { projectDid, serviceEndpoint } =
-      typeof target === "string" && target.startsWith("http")
-        ? { projectDid: null, serviceEndpoint: target }
-        : await getEntityHead(target);
+      const sign = async (
+        signerToUse: string,
+        signDoc: {
+          account_number: any;
+          chain_id: any;
+          fee: { amount: any; gas: string };
+          memo: string;
+          msgs: any[];
+          sequence: any;
+        }
+      ) =>
+        GlobalSigner[signerToUse].signAmino(
+          (await getSignerAccount(signerToUse)).address,
+          signDoc
+        );
 
-    const {
-        method,
-        tplName,
-        data,
-        isPublic = false,
-        then = (x: any) => x,
-      } = dataCb(projectDid, serviceEndpoint),
-      message = isPublic
-        ? makePublicRpcMsg(method, data)
-        : makeRpcMsg(method, tplName, data, {
-            type: (await getSignerAccount("agent")).algo,
-            created: new Date().toISOString(),
-            creator: signer.agent.did,
-            signatureValue: (await sign("agent", data)).signature.signature,
-          }),
-      path = isPublic ? "/api/public" : "/api/request";
+      if (!GlobalSigner)
+        throw new Error(
+          "The client needs to be initialized with a wallet / signer in order for this method to be used"
+        );
 
-   
-    const respBody = await makeFetcher(serviceEndpoint + path, {
-      method: "POST",
-      body: message,
-      ...fetchOpts,
-    });
+      const { projectDid, serviceEndpoint } =
+        typeof target === "string" && target.startsWith("http")
+          ? { projectDid: null, serviceEndpoint: target }
+          : await getEntityHead(target);
 
-    if (fetchOpts.dryRun) return respBody;
+      const {
+          method,
+          tplName,
+          data,
+          isPublic = false,
+          then = (x: any) => x,
+        } = dataCb(projectDid, serviceEndpoint),
+        message = isPublic
+          ? makePublicRpcMsg(method, data)
+          : makeRpcMsg(method, tplName, data, {
+              type: (await getSignerAccount("agent")).algo,
+              created: new Date().toISOString(),
+              creator: GlobalSigner.agent.did,
+              signatureValue: (await sign("agent", data)).signature.signature,
+            }),
+        path = isPublic ? "/api/public" : "/api/request";
 
-    if (respBody.error) throw respBody.error;
+      const respBody = await cnFetch(serviceEndpoint + path, {
+        method: "POST",
+        body: message,
+        ...fetchOpts,
+      });
 
-    return then(respBody.result);
- },
-   
-  getEntityFile = (target: string, key: any) =>
-    cnRpc(target, () => ({
-      method: "fetchPublic",
-      data: { key },
-      isPublic: true,
-    }))
+      if (fetchOpts.dryRun) return respBody;
+
+      if (respBody.error) throw respBody.error;
+
+      return then(respBody.result);
+    },
+    getEntityFile = (target: string, key: any) =>
+      cnRpc(target, () => ({
+        method: "fetchPublic",
+        data: { key },
+        isPublic: true,
+      }));
 
   const tplDoc =
     typeof tplRecOrDid === "object"
@@ -741,3 +777,124 @@ export function dashifyUrl(urlStr: string): string {
   );
   return urlStr;
 }
+
+//wallet
+
+export async function makeWallet(src: any, didPrefix = "did:ixo:") {
+  let secp: any, agent: any;
+
+  if (typeof src === "object") {
+    ({ secp, agent } = fromSerializableWallet(src));
+  } else {
+    secp = await (src
+      ? Secp256k1HdWallet.fromMnemonic(src, { prefix: "ixo" })
+      : Secp256k1HdWallet.generate(12, { prefix: "ixo" }));
+    // See note [1]
+
+    agent = await makeAgentWallet(secp.mnemonic, undefined, didPrefix);
+  }
+
+  const toJSON = () => toSerializableWallet({ secp, agent });
+  GlobalSigner = { secp, agent, toJSON };
+  return { secp, agent, toJSON };
+}
+
+export function toSerializableWallet(w: { secp: any; agent: any }): any {
+  return {
+    secp: {
+      mnemonic: w.secp.mnemonic,
+      seed: base58.encode(w.secp.seed),
+      accounts: w.secp.accounts.map((a: { hdPath: any }) => ({
+        ...a,
+        hdPath: pathToString(a.hdPath),
+      })),
+    },
+    agent: {
+      mnemonic: w.agent.mnemonic,
+      didPrefix: w.agent.didPrefix,
+      didDoc: w.agent.didDoc,
+    },
+  };
+}
+
+export function fromSerializableWallet(s: any) {
+  return {
+    secp: new Secp256k1HdWallet(
+      s.secp.mnemonic && new EnglishMnemonic(s.secp.mnemonic),
+
+      {
+        seed: Uint8Array.from(base58.decode(s.secp.seed)),
+        prefix: s.secp.accounts[0].prefix,
+        hdPaths: s.secp.accounts.map((a: { hdPath: any }) =>
+          stringToPath(a.hdPath)
+        ),
+      }
+    ),
+
+    agent: makeAgentWallet(s.agent.mnemonic, s.agent.didDoc, s.agent.didPrefix),
+  };
+}
+
+/* @returns OfflineAminoSigner: https://github.com/cosmos/cosmjs/blob/98e91ae5fe699733497befef95204923c93a7373/packages/amino/src/signer.ts#L22-L38 */ // eslint-disable-line max-len
+
+export function makeAgentWallet(
+  mnemonic: any,
+  didDoc = sovrin.fromSeed(sha256(mnemonic).slice(0, 32)),
+  didPrefix = "did:ixo:"
+) {
+  return {
+    mnemonic,
+    didDoc,
+    didPrefix,
+    did: didPrefix + didDoc.did,
+
+    async getAccounts() {
+      return [
+        {
+          algo: "ed25519-sha-256",
+          pubkey: Uint8Array.from(base58.decode(didDoc.verifyKey)),
+          address: Bech32.encode(
+            "ixo",
+            sha256(base58.decode(didDoc.verifyKey)).slice(0, 20)
+          ),
+        },
+      ];
+    },
+
+    async signAmino(signerAddress: any, signDoc: any) {
+      const account = (await this.getAccounts()).find(
+        ({ address }) => address === signerAddress
+      );
+
+      if (!account)
+        throw new Error(`Address ${signerAddress} not found in wallet`);
+
+      const fullSignature = sovrin.signMessage(
+          serializeSignDoc(signDoc),
+          didDoc.secret.signKey,
+          didDoc.verifyKey
+        ),
+        signatureBase64 = toBase64(fullSignature.slice(0, 64));
+
+      return {
+        signed: signDoc,
+
+        signature: {
+          signature: signatureBase64,
+
+          pub_key: {
+            type: "tendermint/PubKeyEd25519",
+            value: base58.decode(didDoc.verifyKey).toString("base64"),
+          },
+        },
+      };
+    },
+  };
+}
+
+// Notes
+//
+// [1]: The prefix parameters here are not to be confused with the "didPrefix'
+//      parameter of this "makeWallet" function. The prefixes used in the
+//      Secp256k1HdWallet constructor functions are prefixes for cosmos wallet
+//      addresses while the did prefix is the prefix of the did address.
