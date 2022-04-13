@@ -158,7 +158,6 @@ export function makeClient(
       if (typeof projRecOrDid === "object") {
         const { projectDid } = projRecOrDid;
         let serviceEndpoint;
-
         try {
           serviceEndpoint = projRecOrDid.data.nodes.items
             .find((i: { [x: string]: string }) => i["@type"] === "CellNode")
@@ -681,7 +680,6 @@ export function assertSignerIsValid(signer: any): void {
     throw new Error("Invalid signer");
 }
 
-//todo
 export function makeFetcher(urlPrefix?: string): any {
   async (
     path: any,
@@ -740,7 +738,6 @@ export function generateTxId(): number {
   return Math.floor(Math.random() * 1000000 + 1);
 }
 
-//todo
 export function makePublicRpcMsg(method: any, params: any) {
   return {
     jsonrpc: "2.0",
@@ -751,9 +748,9 @@ export function makePublicRpcMsg(method: any, params: any) {
 }
 
 export function makeRpcMsg(
-  method?: any,
-  templateName?: string,
-  data?: any,
+  method: any,
+  templateName: string,
+  data: any,
   signature?: any
 ): any {
   return {
@@ -779,7 +776,6 @@ export function dashifyUrl(urlStr: string): string {
 }
 
 //wallet
-
 export async function makeWallet(src: any, didPrefix = "did:ixo:") {
   let secp: any, agent: any;
 
@@ -790,7 +786,6 @@ export async function makeWallet(src: any, didPrefix = "did:ixo:") {
       ? Secp256k1HdWallet.fromMnemonic(src, { prefix: "ixo" })
       : Secp256k1HdWallet.generate(12, { prefix: "ixo" }));
     // See note [1]
-
     agent = await makeAgentWallet(secp.mnemonic, undefined, didPrefix);
   }
 
