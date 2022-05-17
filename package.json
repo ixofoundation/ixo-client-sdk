@@ -50,6 +50,7 @@
     "eslint": "^7.29.0"
   },
   "dependencies": {
+    "apisauce": "^2.1.5",
     "dotenv": "^16.0.0",
     "google-protobuf": "*",
     "grpc": "^1.24.11",
