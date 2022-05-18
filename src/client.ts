@@ -1,5 +1,4 @@
-const { format: fmt, inspect } = require('util');
-const debug = require('debug')('ixo-client-sdk');
+const { format: fmt } = require('util');
 const { coins } = require('@cosmjs/amino');
 const { sortedJsonStringify } = require('@cosmjs/amino/build/signdoc');
 const { fromBase64 } = require('@cosmjs/encoding');
@@ -36,6 +35,10 @@ let GlobalSigner: any = null;
 // GLOBAL API HANDLERS
 const blockChainFetchAPI = create({
   baseURL: GlobalBlockchainUrl,
+  headers: { Accept: 'application/json' },
+});
+const cnFetchAPI = create({
+  baseURL: '',
   headers: { Accept: 'application/json' },
 });
 const blockSyncFetchAPI = create({
@@ -190,7 +193,6 @@ export function makeClient(
 
       return getEntityHead(await getEntity(projRecOrDid));
     },
-    cnFetch = makeFetcher(),
     cnRpc = async (target: string, dataCb: any, fetchOpts?: any) => {
       if (!signer)
         throw new Error(
@@ -583,11 +585,9 @@ export async function getTemplate(tplRecOrDid: string): Promise<any> {
     }
 
     return getEntityHead(
-      await makeFetcher('/api/project/getByProjectDid/' + projRecOrDid)
+      await makeFetcherGet('/api/project/getByProjectDid/' + projRecOrDid)
     );
   };
-
-  const cnFetch = makeFetcher();
 
   const cnRpc = async (target: string, dataCb: any, fetchOpts?: any) => {
       const getSignerAccount = memoize((signerToUse: string | number) =>
@@ -659,7 +659,7 @@ export async function getTemplate(tplRecOrDid: string): Promise<any> {
   const tplDoc =
     typeof tplRecOrDid === 'object'
       ? tplRecOrDid
-      : await makeFetcher('/api/project/getByProjectDid/' + tplRecOrDid);
+      : await makeFetcherGet('/api/project/getByProjectDid/' + tplRecOrDid);
 
   if (!tplDoc.data.page.content) {
     const { data: rawTplContent } = await getEntityFile(
@@ -694,6 +694,47 @@ export function assertSignerIsValid(signer: any): void {
     typeof signer.agent.did !== 'string'
   )
     throw new Error('Invalid signer');
+}
+
+export async function cnFetch(
+  url: string,
+  { ...options },
+  urlParams?: any,
+  fullResponse: boolean = false
+): Promise<any> {
+  const urlParamsStr = new URLSearchParams(urlParams).toString();
+  const modifiedUrl = url + (urlParamsStr ? '?' + urlParamsStr : '');
+  // used for debug
+  // const rawBody = options ? options.body : undefined;
+
+  const fetchOps = {
+    ...options,
+    body: options?.body && sortedJsonStringify(options?.body),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      ...options?.headers,
+    },
+  };
+
+  const resp = await cnFetchAPI.post(modifiedUrl, fetchOps.body);
+
+  if (!resp.headers) {
+    throw new Error('Response is undefined');
+  }
+  if (resp.problem) {
+    throw new Error(resp.problem);
+  }
+  const body = resp.data;
+  return Promise[resp.ok ? 'resolve' : 'reject'](
+    fullResponse
+      ? {
+          status: resp.status,
+          headers: resp.headers,
+          body,
+        }
+      : body
+  );
 }
 
 export async function bcFetchGet(
@@ -838,58 +879,86 @@ export async function bsFetchPost(
   );
 }
 
-//todo
-export function makeFetcher(urlPrefix?: string): any {
-  async (
-    path: any,
-    { urlParams = {}, fullResponse = false, dryRun = false, ...fetchOpts }
-  ) => {
-    const urlParamsStr = new URLSearchParams(urlParams).toString(),
-      url = urlPrefix + path + (urlParamsStr ? '?' + urlParamsStr : ''),
-      rawBody = fetchOpts.body;
+export async function makeFetcherGet(
+  url: string,
+  urlParams?: any,
+  fullResponse: boolean = false
+): Promise<any> {
+  const urlParamsStr = new URLSearchParams(urlParams).toString();
+  const modifiedUrl = url + (urlParamsStr ? '?' + urlParamsStr : '');
+  // used for debug
+  // const rawBody = options ? options.body : undefined;
 
-    fetchOpts = {
-      ...fetchOpts,
-      body: fetchOpts.body && sortedJsonStringify(fetchOpts.body),
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        ...fetchOpts.headers,
-      },
-    };
-    const blockChainFetchAPI = create({
-      baseURL: urlPrefix,
-      headers: { Accept: 'application/json' },
-    });
+  const resp = await cnFetchAPI.get(modifiedUrl);
 
-    if (dryRun) return { url, ...fetchOpts };
-
-    debug(
-      '> Request',
-      inspect({ url, ...fetchOpts, body: rawBody }, { depth: 10 })
-    );
-    const resp = await blockChainFetchAPI.get(url, fetchOpts);
-    // const resp = await fetch(url, fetchOpts);
-    if (!resp.headers) {
-      throw new Error('Response is undefined');
-    }
-
-    // old way to check if resp is json or text and handle accordingly
-    //const isJson = resp.headers['Content-Type'].startsWith('application/json');
-    // const body = resp.data[isJson ? 'json' : 'text']();
-    const body = resp.data;
-
-    return Promise[resp.ok ? 'resolve' : 'reject'](
-      fullResponse
-        ? {
-            status: resp.status,
-            headers: resp.headers,
-            body,
-          }
-        : body
-    );
-  };
+  if (!resp.headers) {
+    throw new Error('Response is undefined');
+  }
+  const body = resp.data;
+  return Promise[resp.ok ? 'resolve' : 'reject'](
+    fullResponse
+      ? {
+          status: resp.status,
+          headers: resp.headers,
+          body,
+        }
+      : body
+  );
 }
+
+// const makeFetcher =
+//   (urlPrefix = '') =>
+//   async (
+//     path: string,
+//     { urlParams, fullResponse = false, dryRun = false, ...fetchOpts }
+//   ) => {
+//     const urlParamsStr = new URLSearchParams(urlParams).toString(),
+//       url = urlPrefix + path + (urlParamsStr ? '?' + urlParamsStr : ''),
+//       rawBody = fetchOpts.body;
+
+//     fetchOpts = {
+//       ...fetchOpts,
+//       body: fetchOpts.body && sortedJsonStringify(fetchOpts.body),
+//       headers: {
+//         'Accept': 'application/json',
+//         'Content-Type': 'application/json',
+//         ...fetchOpts.headers,
+//       },
+//     };
+
+//     if (dryRun) return { url, ...fetchOpts };
+
+//     debug(
+//       '> Request',
+//       inspect({ url, ...fetchOpts, body: rawBody }, { depth: 10 })
+//     );
+
+//     const resp = await fetch(url, fetchOpts),
+//       isJson = resp.headers.get('content-type').startsWith('application/json'),
+//       body = await resp[isJson ? 'json' : 'text']();
+
+//     debug(
+//       '< Response',
+//       inspect(
+//         {
+//           status: resp.status,
+//           headers: Object.fromEntries(resp.headers.entries()),
+//           body: body,
+//         },
+//         { depth: 10 }
+//       )
+//     );
+
+//     return Promise[resp.ok ? 'resolve' : 'reject'](
+//       fullResponse
+//         ? {
+//             status: resp.status,
+//             headers: resp.headers,
+//             body,
+//           }
+//         : body
+//     );
+//   };
 
 export function generateTxId(): number {
   return Math.floor(Math.random() * 1000000 + 1);

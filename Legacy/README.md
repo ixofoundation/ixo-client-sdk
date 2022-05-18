@@ -10,18 +10,17 @@ software stack and build on the Internet of Impact.
 ```js
 const {makeWallet, makeClient} = require('@ixo/client-sdk')
 
-const
-    wallet = await makeWallet(),
-    client = makeClient(wallet)
+const wallet = await makeWallet();
+const client = makeClient(wallet);
 
-await client.register()
+await client.register();
 
-await client.sendTokens('<target address>', 10)
+await client.sendTokens('<target address>', 10);
 
-const someProject = await client.getProject('<a valid project DID>')
+const someProject = await client.getProject('<a valid project DID>');
 
-const someClaims = await client.listClaims(someProject)
-console.log('Here are the claims', someClaims)
+const someClaims = await client.listClaims(someProject);
+console.log('Here are the claims', someClaims);
 ```
 
 See [wallet API](#wallet-api) and [client API](#client-api) for
