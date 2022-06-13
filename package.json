@@ -2,58 +2,95 @@
   "name": "@ixo/client-sdk",
   "version": "1.12.2",
   "description": "One ixo client to rule them all, One ixo client to find, One ixo client to bring them all, and in impact bind them",
+  "keywords": [
+    "typescript",
+    "library"
+  ],
   "umd:name": "@ixo/client-sdk",
+  "homepage": "https://github.com/ixofoundation/ixo-client-sdk",
+  "bugs": "https://github.com/ixofoundation/ixo-client-sdk/issues",
+  "author": "Northroom technologies <northroom@digital.co.za> (https://northroom.digital)",
   "repository": {
     "type": "git",
     "url": "https://github.com/ixofoundation/ixo-client-sdk"
   },
-  "unpkg": "dist/index.min.js",
-  "module": "dist/index.mjs",
-  "main": "dist/index.js",
-  "types": "types/index.d.ts",
+  "main": "./build/cjs/index.js",
+  "module": "./build/esm/index.js",
+  "types": "./build/index.d.ts",
   "license": "MIT",
-  "author": {
-    "name": "TODO_YOUR_NAME",
-    "email": "YOUR_EMAIL@TODO.com",
-    "url": "https://TODO_WEBSITE.com"
-  },
-  "files": [
-    "dist",
-    "types"
-  ],
-  "exports": {
-    ".": {
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
-    },
-    "./package.json": "./package.json"
-  },
   "engines": {
-    "node": ">=12"
+    "node": "> 14"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
-    "build": "rollup -c",
-    "prepublishOnly": "npm run build",
-    "types": "tsc --noEmit",
-    "test": "uvu -r tsm test",
-    "generateProtots": "protoc --plugin=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=. ./simple.proto"
-  },
-  "keywords": [
-    "TODO",
-    "module",
-    "keywords"
-  ],
-  "devDependencies": {
-    "@types/dotenv": "^8.2.0",
-    "@types/google-protobuf": "^3.15.5",
-    "@types/node": "^17.0.23",
-    "eslint": "^7.29.0"
+    "setup": "node -r ./esbuild-hook ./scripts/setup",
+    "build": "npm run clean && npm run type:dts && npm run build:main",
+    "build:main": "node -r ./esbuild-hook ./scripts/build",
+    "clean": "node -r ./esbuild-hook ./scripts/clean",
+    "type:dts": "tsc --emitDeclarationOnly",
+    "type:check": "tsc --noEmit",
+    "format": "prettier \"src/**/*.ts\" --write",
+    "format:check": "prettier \"src/**/*.ts\" --check",
+    "lint": "eslint src --ext .ts --fix",
+    "lint:check": "eslint src --ext .ts",
+    "test": "ava",
+    "test:coverage": "nyc ava && nyc report --reporter=html",
+    "test:setup": "node -r ./esbuild-hook ./scripts/testSetup",
+    "spell:check": "cspell \"{README.md,CODE_OF_CONDUCT.md,CONTRIBUTING.md,.github/*.md,src/**/*.ts}\"",
+    "cz": "cz",
+    "semantic-release": "semantic-release"
   },
   "dependencies": {
+    "@cosmjs/amino": "^0.28.4",
+    "@cosmjs/crypto": "^0.28.4",
+    "@cosmjs/encoding": "^0.28.4",
+    "@types/lodash.memoize": "^4.1.7",
     "apisauce": "^2.1.5",
+    "bs58": "4.0.1",
+    "debug": "4.3.1",
     "dotenv": "^16.0.0",
-    "google-protobuf": "*",
     "grpc": "^1.24.11",
-    "ts-proto": "^1.110.2"
+    "lodash.memoize": "4.1.2",
+    "sovrin-did": "1.4.0",
+    "ts-proto": "^1.110.2",
+    "tweetnacl": "^1.0.3"
+  },
+  "devDependencies": {
+    "@ryansonshine/commitizen": "^4.2.8",
+    "@ryansonshine/cz-conventional-changelog": "^3.3.4",
+    "@semantic-release/changelog": "^6.0.1",
+    "@semantic-release/commit-analyzer": "^9.0.2",
+    "@semantic-release/github": "^8.0.4",
+    "@semantic-release/npm": "^9.0.1",
+    "@semantic-release/release-notes-generator": "^10.0.3",
+    "@types/bs58": "^4.0.1",
+    "@types/node": "^17.0.42",
+    "@types/prompts": "^2.0.14",
+    "@typescript-eslint/eslint-plugin": "^5.27.1",
+    "@typescript-eslint/parser": "^5.27.1",
+    "ava": "^4.3.0",
+    "cspell": "^6.1.2",
+    "esbuild": "^0.14.43",
+    "eslint": "^8.17.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-import-resolver-typescript": "^2.7.1",
+    "eslint-plugin-eslint-comments": "^3.2.0",
+    "eslint-plugin-import": "^2.26.0",
+    "nyc": "^15.1.0",
+    "prettier": "^2.6.2",
+    "prompts": "^2.4.2",
+    "semantic-release": "^19.0.3",
+    "slugify": "^1.6.5",
+    "source-map-support": "^0.5.21",
+    "typescript": "^4.7.3"
+  },
+  "volta": {
+    "node": "16.15.1",
+    "npm": "8.11.0"
+  },
+  "overrides": {
+    "semver-regex": "3.1.4"
   }
 }

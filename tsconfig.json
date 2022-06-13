@@ -1,30 +1,19 @@
 {
-  "ts-node": {
-    "transpileOnly": true,
-    "compilerOptions": {
-      "module": "commonjs",
-      "sourceMap": true,
-    },
-    "include": [
-      "test/**/*"
-    ]
-  },
+  "include": ["./src/**/*.ts"],
+  "exclude": ["./src/**/__tests__"],
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
-    "declaration": true,
-    "declarationDir": "types",
+    "lib": ["es2020"],
+    "module": "commonjs",
+    "target": "es2020",
+
+    "rootDir": "./src",
+    "outDir": "build",
+
+    "strict": true,
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "moduleResolution": "node",
-    "strictNullChecks": true,
-    "noImplicitAny": true,
-    "strict": true
-  },
-  "include": [
-    "@types/**/*",
-    "src/**/*"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+    "declaration": true
+  }
 }

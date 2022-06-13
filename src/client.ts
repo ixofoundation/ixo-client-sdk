@@ -1,31 +1,32 @@
-const { format: fmt } = require('util');
-const { coins } = require('@cosmjs/amino');
-const { sortedJsonStringify } = require('@cosmjs/amino/build/signdoc');
-const { fromBase64 } = require('@cosmjs/encoding');
-const memoize = require('lodash.memoize');
-require('dotenv').config();
-const base58 = require('bs58');
-const sovrin = require('sovrin-did');
-const { Secp256k1HdWallet, serializeSignDoc } = require('@cosmjs/amino');
-const {
+import {
+  serializeSignDoc,
+  coins,
+  Secp256k1HdWallet,
+  Secp256k1Wallet,
+} from "@cosmjs/amino";
+import { sortedJsonStringify } from "@cosmjs/amino/build/signdoc";
+import {
   EnglishMnemonic,
   pathToString,
-  stringToPath,
   sha256,
-} = require('@cosmjs/crypto');
-const { toBase64, Bech32 } = require('@cosmjs/encoding');
-import { create } from 'apisauce';
+  stringToPath,
+} from "@cosmjs/crypto";
+import { fromBase64, toBase64, Bech32 } from "@cosmjs/encoding";
+import { create } from "apisauce";
+import base58 from "bs58";
+import memoize from "lodash.memoize";
+import { fromSeed, signMessage } from "./sovrin";
 
-let defaultCellnodeUrl = 'https://cellnode-pandora.ixo.world';
-
-let GlobalBlockchainUrl =
+const defaultCellnodeUrl = "https://cellnode-pandora.ixo.earth";
+const defaultBlockScan = "https://blockscan-pandora.ixo.earth";
+const GlobalBlockchainUrl =
   process.env.BLOCKCHAINURL != null
     ? process.env.BLOCKCHAINURL
-    : 'https://testnet.ixo.world/rest';
-let GlobalBlocksyncUrl =
+    : "https://testnet.ixo.earth/rest";
+const GlobalBlocksyncUrl =
   process.env.BLOCKSYNCURL != null
     ? process.env.BLOCKSYNCURL
-    : 'https://blocksync-pandora.ixo.world';
+    : "https://blocksync-pandora.ixo.earth";
 
 let GlobaldashifyUrls =
   process.env.GlobaldashifyUrls != null ? process.env.GlobaldashifyUrls : false;
@@ -35,22 +36,26 @@ let GlobalSigner: any = null;
 // GLOBAL API HANDLERS
 const blockChainFetchAPI = create({
   baseURL: GlobalBlockchainUrl,
-  headers: { Accept: 'application/json' },
+  headers: { Accept: "application/json" },
 });
 const cnFetchAPI = create({
-  baseURL: '',
-  headers: { Accept: 'application/json' },
+  baseURL: "",
+  headers: { Accept: "application/json" },
 });
 const blockSyncFetchAPI = create({
   baseURL: GlobalBlocksyncUrl,
-  headers: { Accept: 'application/json' },
+  headers: { Accept: "application/json" },
+});
+const blockScanFetchAPI = create({
+  baseURL: defaultBlockScan,
+  headers: { Accept: "application/json" },
 });
 
 export function makeClient(
   signer: any,
   blockchainUrl?: string,
   blocksyncUrl?: string,
-  dashifyUrls: boolean = false
+  dashifyUrls = false
 ) {
   GlobalSigner = signer;
 
@@ -66,227 +71,221 @@ export function makeClient(
   if (signer) assertSignerIsValid(signer);
 
   const getSignerAccount = memoize((signerToUse: string | number) =>
-      signer[signerToUse].getAccounts().then((as: any[]) => as[0])
-    ),
-    getNodeInfo = memoize(() =>
-      bcFetchGet('/node_info').then((body: any) => body.node_info)
-    ),
-    sign = async (
-      signerToUse: string,
-      signDoc: {
-        account_number: any;
-        chain_id: any;
-        fee: { amount: any; gas: string };
-        memo: string;
-        msgs: any[];
-        sequence: any;
-      }
-    ) =>
-      signer[signerToUse].signAmino(
-        (await getSignerAccount(signerToUse)).address,
-        signDoc
-      ),
-    signAndBroadcast = async (
-      signerToUse: string,
-      msg: {
-        type: string;
-        value:
-          | { did: any; pubKey: any }
-          | {
-              amount: { amount: string; denom: string }[];
-              from_address: any;
-              to_address: any;
-            }
-          | {
-              amount: { denom: string; amount: string };
-              delegator_address: any;
-              validator_address: any;
-            }
-          | {
-              amount: { denom: string; amount: string };
-              delegator_address: any;
-              validator_address: any;
-            }
-          | {
-              amount: { denom: string; amount: string };
-              delegator_address: any;
-              validator_src_address: any;
-              validator_dst_address: any;
-            }
-          | {
-              buyer_did: any;
-              bond_did: any;
-              amount: { amount: string; denom: any };
-              max_prices: { amount: string; denom: any }[];
-            }
-          | {
-              seller_did: any;
-              bond_did: any;
-              amount: { amount: string; denom: any };
-            };
-      },
-      fee = { amount: coins(5000, 'uixo'), gas: '200000' },
-      memo = ''
-    ) => {
-      const { address } = await getSignerAccount(signerToUse),
-        {
-          account: { account_number, sequence },
-        } = await bcFetchGet('/cosmos/auth/v1beta1/accounts/' + address),
-        signDoc = {
-          account_number,
-          chain_id: (await getNodeInfo()).network,
-          fee,
-          memo,
-          msgs: [msg],
-          sequence,
-        },
-        { signature } = await sign(signerToUse, signDoc),
-        txResp = await bcFetchPost('/txs', {
-          method: 'POST',
-          body: {
-            tx: {
-              msg: [msg],
-              fee,
-              signatures: [
-                {
-                  ...signature,
-                  account_number,
-                  sequence,
-                },
-              ],
-            },
-            mode: 'sync',
-          },
-        });
-
-      return txResp;
+    signer[signerToUse].getAccounts().then((as: any[]) => as[0])
+  );
+  const getNodeInfo = memoize(() =>
+    bcFetchGet("/node_info").then((body: any) => body.node_info)
+  );
+  const sign = async (
+    signerToUse: string,
+    signDoc: {
+      account_number: any;
+      chain_id: any;
+      fee: { amount: any; gas: string };
+      memo: string;
+      msgs: any[];
+      sequence: any;
+    }
+  ) =>
+    signer[signerToUse].signAmino(
+      (await getSignerAccount(signerToUse)).address,
+      signDoc
+    );
+  const signAndBroadcast = async (
+    signerToUse: string,
+    msg: {
+      type: string;
+      value:
+        | { did: any; pubKey: any }
+        | {
+            amount: { amount: string; denom: string }[];
+            from_address: any;
+            to_address: any;
+          }
+        | {
+            amount: { denom: string; amount: string };
+            delegator_address: any;
+            validator_address: any;
+          }
+        | {
+            amount: { denom: string; amount: string };
+            delegator_address: any;
+            validator_address: any;
+          }
+        | {
+            amount: { denom: string; amount: string };
+            delegator_address: any;
+            validator_src_address: any;
+            validator_dst_address: any;
+          }
+        | {
+            buyer_did: any;
+            bond_did: any;
+            amount: { amount: string; denom: any };
+            max_prices: { amount: string; denom: any }[];
+          }
+        | {
+            seller_did: any;
+            bond_did: any;
+            amount: { amount: string; denom: any };
+          };
     },
-    listEntities = async (type: string) => {
-      const ents = await bsFetchGet('/api/project/listProjects');
-
-      if (!type) return ents;
-
-      return ents.filter(
-        (e: { data: { [x: string]: string } }) => e.data['@type'] === type
-      );
-    },
-    getEntity = (did: string) =>
-      bsFetchGet('/api/project/getByProjectDid/' + did),
-    getEntityHead = async (projRecOrDid: any): Promise<any> => {
-      if (typeof projRecOrDid === 'object') {
-        const { projectDid } = projRecOrDid;
-        let serviceEndpoint;
-
-        try {
-          serviceEndpoint = projRecOrDid.data.nodes.items
-            .find((i: { [x: string]: string }) => i['@type'] === 'CellNode')
-            .serviceEndpoint.replace(/\/$/, '');
-
-          if (GlobaldashifyUrls) serviceEndpoint = dashifyUrl(serviceEndpoint);
-        } catch (e) {
-          serviceEndpoint = defaultCellnodeUrl;
-          /* throw new Error('Project doesn\'t have an associated Cell Node record!') */
-        }
-
-        return { projectDid, serviceEndpoint };
-      }
-
-      return getEntityHead(await getEntity(projRecOrDid));
-    },
-    cnRpc = async (target: string, dataCb: any, fetchOpts?: any) => {
-      if (!signer)
-        throw new Error(
-          'The client needs to be initialized with a wallet / signer in order for this method to be used'
-        );
-
-      const { projectDid, serviceEndpoint } =
-        typeof target === 'string' && target.startsWith('http')
-          ? { projectDid: null, serviceEndpoint: target }
-          : await getEntityHead(target);
-
-      const {
-          method,
-          tplName,
-          data,
-          isPublic = false,
-          then = (x: any) => x,
-        } = dataCb(projectDid, serviceEndpoint),
-        message = isPublic
-          ? makePublicRpcMsg(method, data)
-          : makeRpcMsg(method, tplName, data, {
-              type: (await getSignerAccount('agent')).algo,
-              created: new Date().toISOString(),
-              creator: signer.agent.did,
-              signatureValue: (await sign('agent', data)).signature.signature,
-            }),
-        path = isPublic ? '/api/public' : '/api/request';
-
-      const respBody = await cnFetch(serviceEndpoint + path, {
-        method: 'POST',
-        body: message,
-        ...fetchOpts,
-      });
-
-      if (fetchOpts.dryRun) return respBody;
-
-      if (respBody.error) throw respBody.error;
-
-      return then(respBody.result);
-    },
-    getEntityFile = (target: string, key: any) =>
-      cnRpc(target, () => ({
-        method: 'fetchPublic',
-        data: { key },
-        isPublic: true,
-      })),
-    dashifyProjUrls = (projRec: { data: { [x: string]: string } }) => {
-      ['logo', 'image']
-        .filter((propName) => projRec.data[propName])
-
-        .forEach(
-          (propName) =>
-            (projRec.data[propName] = dashifyUrl(projRec.data[propName]))
-        );
-
-      return projRec;
+    fee = { amount: coins(5000, "uixo"), gas: "200000" },
+    memo = ""
+  ) => {
+    const { address } = await getSignerAccount(signerToUse);
+    const {
+      account: { account_number, sequence },
+    } = await bcFetchGet("/cosmos/auth/v1beta1/accounts/" + address);
+    const signDoc = {
+      account_number,
+      chain_id: (await getNodeInfo()).network,
+      fee,
+      memo,
+      msgs: [msg],
+      sequence,
     };
+    const { signature } = await sign(signerToUse, signDoc);
+    const txResp = await bcFetchPost("/txs", {
+      method: "POST",
+      body: {
+        tx: {
+          msg: [msg],
+          fee,
+          signatures: [
+            {
+              ...signature,
+              account_number,
+              sequence,
+            },
+          ],
+        },
+        mode: "sync",
+      },
+    });
+
+    return txResp;
+  };
+  const listEntities = async (type: string) => {
+    const ents = await bsFetchGet("/api/project/listProjects");
+
+    if (!type) return ents;
+
+    return ents.filter((e: any) => e.data["@type"] === type);
+  };
+  const getEntity = (did: string) =>
+    bsFetchGet("/api/project/getByProjectDid/" + did);
+  const getEntityHead = async (projRecOrDid: any): Promise<any> => {
+    if (typeof projRecOrDid === "object") {
+      const { projectDid } = projRecOrDid;
+      let serviceEndpoint;
+      try {
+        serviceEndpoint = projRecOrDid.data.nodes.items
+          .find((i: { [x: string]: string }) => i["@type"] === "CellNode")
+          .serviceEndpoint.replace(/\/$/, "");
+
+        if (GlobaldashifyUrls) serviceEndpoint = dashifyUrl(serviceEndpoint);
+      } catch (e) {
+        serviceEndpoint = defaultCellnodeUrl;
+        /* throw new Error('Project doesn\'t have an associated Cell Node record!') */
+      }
+
+      return { projectDid, serviceEndpoint };
+    }
+
+    return getEntityHead(await getEntity(projRecOrDid));
+  };
+  const cnRpc = async (target: string, dataCb: any, fetchOpts?: any) => {
+    if (!signer)
+      throw new Error(
+        "The client needs to be initialized with a wallet / signer in order for this method to be used"
+      );
+
+    const { projectDid, serviceEndpoint } =
+      typeof target === "string" && target.startsWith("http")
+        ? { projectDid: null, serviceEndpoint: target }
+        : await getEntityHead(target);
+    const {
+      method,
+      tplName,
+      data,
+      isPublic = false,
+      then = (x: any) => x,
+    } = dataCb(projectDid, defaultCellnodeUrl);
+    const message = isPublic
+      ? makePublicRpcMsg(method, data)
+      : makeRpcMsg(method, tplName, data, {
+          type: (await getSignerAccount("agent")).algo,
+          created: new Date().toISOString(),
+          creator: signer.agent.did,
+          signatureValue: (await sign("agent", data)).signature.signature,
+        });
+    const path = isPublic ? "/api/public" : "/api/request";
+
+    const respBody = await cnFetch(defaultCellnodeUrl + path, {
+      method: "POST",
+      body: message,
+      ...fetchOpts,
+    });
+
+    if (fetchOpts.dryRun) return respBody;
+
+    if (respBody.error) throw respBody.error;
+
+    return then(respBody.result);
+  };
+  const getEntityFile = (target: string, key: any) =>
+    cnRpc(target, () => ({
+      method: "fetchPublic",
+      data: { key },
+      isPublic: true,
+    }));
+  const dashifyProjUrls = (projRec: { data: { [x: string]: string } }) => {
+    ["logo", "image"]
+      .filter((propName) => projRec.data[propName])
+
+      .forEach(
+        (propName) =>
+          (projRec.data[propName] = dashifyUrl(projRec.data[propName]))
+      );
+
+    return projRec;
+  };
 
   return {
     getSecpAccount: async () =>
       await bcFetchGet(
-        '/cosmos/auth/v1beta1/accounts/' +
+        "/cosmos/auth/v1beta1/accounts/" +
           (
-            await getSignerAccount('secp')
+            await getSignerAccount("secp")
           ).address
       ),
 
     getAgentAccount: async () =>
       await bcFetchGet(
-        '/cosmos/auth/v1beta1/accounts/' +
+        "/cosmos/auth/v1beta1/accounts/" +
           (
-            await getSignerAccount('agent')
+            await getSignerAccount("agent")
           ).address
       ),
 
-    balances: async (accountType: any, denom: any) =>
+    balances: async (accountType: any, denom?: any) =>
       await bcFetchGet(
-        fmt(
-          '/cosmos/bank/v1beta1/balances/%s' + (denom ? '/%s' : ''),
+        `/cosmos/bank/v1beta1/balances/${
           (
             await getSignerAccount(accountType)
-          ).address,
-          denom || ''
-        )
+          ).address
+        }` + (denom ? `/${denom}` : "")
       ),
 
     register: (pubKey?: any) => {
       if (!signer)
         throw new Error(
-          'The client needs to be initialized with a wallet / signer in order for this method to be used'
+          "The client needs to be initialized with a wallet / signer in order for this method to be used"
         );
 
-      return signAndBroadcast('agent', {
-        type: 'did/AddDid',
+      return signAndBroadcast("agent", {
+        type: "did/AddDid",
         value: {
           did: signer.agent.did,
           pubKey: signer.agent.didDoc.verifyKey || pubKey,
@@ -294,21 +293,21 @@ export function makeClient(
       });
     },
 
-    getDidDoc: (did: string) => bsFetchGet('/api/did/getByDid/' + did),
+    getDidDoc: (did: string) => bsFetchGet("/api/did/getByDid/" + did),
 
     listEntities,
 
     listProjects: async () => {
-      const projRecs = await listEntities('Project');
+      const projRecs = await listEntities("Project");
 
       if (GlobaldashifyUrls) projRecs.forEach(dashifyProjUrls);
 
       return projRecs;
     },
 
-    listTemplates: () => listEntities('Template'),
+    listTemplates: () => listEntities("Template"),
 
-    listCells: () => listEntities('Cell'),
+    listCells: () => listEntities("Cell"),
 
     getProject: async (projDid: string) => {
       const projRec = await getEntity(projDid);
@@ -324,26 +323,26 @@ export function makeClient(
 
     createProject: (projectData: any, cnUrl = defaultCellnodeUrl) =>
       cnRpc(cnUrl, () => ({
-        method: 'createProject',
-        tplName: 'create_project',
+        method: "createProject",
+        tplName: "create_project",
         data: projectData,
       })),
 
     updateProject: (projectDocUpdates: any, cnUrl = defaultCellnodeUrl) =>
       cnRpc(cnUrl, () => ({
-        method: 'updateProjectDoc',
-        tplName: 'project_doc',
+        method: "updateProjectDoc",
+        tplName: "project_doc",
         data: projectDocUpdates,
       })),
 
     createEntityFile: (target: string, dataUrl: any) => {
-      const [, contentType, data] = dataUrl.match('^data:([^;]+);base64,(.+)$');
+      const [, contentType, data] = dataUrl.match("^data:([^;]+);base64,(.+)$");
 
       return cnRpc(target, (_: any, serviceEndpoint: string) => ({
-        method: 'createPublic',
+        method: "createPublic",
         data: { data, contentType },
         isPublic: true,
-        then: (data2: string) => serviceEndpoint + '/public/' + data2,
+        then: (data2: string) => serviceEndpoint + "/public/" + data2,
       }));
     },
 
@@ -351,25 +350,25 @@ export function makeClient(
 
     updateProjectStatus: (projRecOrDid: string, status: any) =>
       cnRpc(projRecOrDid, (projectDid: any) => ({
-        method: 'updateProjectStatus',
-        tplName: 'project_status',
+        method: "updateProjectStatus",
+        tplName: "project_status",
         data: { projectDid, status },
       })),
 
     getProjectFundAddress: async (projDid: string) =>
-      (await bcFetchGet('/projectAccounts/' + projDid)).map[projDid],
+      (await bcFetchGet("/projectAccounts/" + projDid)).map[projDid],
 
     listAgents: (projRecOrDid: string) =>
       cnRpc(projRecOrDid, (projectDid: any) => ({
-        method: 'listAgents',
-        tplName: 'list_agent',
+        method: "listAgents",
+        tplName: "list_agent",
         data: { projectDid },
       })),
 
     createAgent: (projRecOrDid: string, { did, role, email, name }: any) =>
       cnRpc(projRecOrDid, (projectDid: any) => ({
-        method: 'createAgent',
-        tplName: 'create_agent',
+        method: "createAgent",
+        tplName: "create_agent",
         data: { projectDid, agentDid: did, role, email, name },
       })),
 
@@ -379,15 +378,15 @@ export function makeClient(
       { status, role, version }: any
     ) =>
       cnRpc(projRecOrDid, (projectDid: any) => ({
-        method: 'updateAgentStatus',
-        tplName: 'agent_status',
+        method: "updateAgentStatus",
+        tplName: "agent_status",
         data: { projectDid, agentDid, status, role, version },
       })),
 
     listClaims: (projRecOrDid: string, tplId?: any) =>
       cnRpc(projRecOrDid, (projectDid: any) => ({
-        method: tplId ? 'listClaimsByTemplateId' : 'listClaims',
-        tplName: 'list_claim',
+        method: tplId ? "listClaimsByTemplateId" : "listClaims",
+        tplName: "list_claim",
         data: { projectDid, claimTemplateId: tplId },
       })),
 
@@ -402,18 +401,18 @@ export function makeClient(
       return await cnRpc(
         projRecOrDid,
         (projectDid: any) => ({
-          method: 'submitClaim',
-          tplName: 'submit_claim',
+          method: "submitClaim",
+          tplName: "submit_claim",
           data: {
-            '@context':
-              'https://schema.ixo.foundation/claims/53690e7d550278dbe228ddf35e0ba72b2666cba6', // eslint-disable-line max-len
-            'claimTemplateId': tplRec.projectDid,
-            'type': tplRec.data.page.content.claimInfo.type,
-            'issuerId': signer.agent.did,
-            'claimSubject': { id: projectDid },
-            'items': claimItems,
+            "@context":
+              "https://schema.ixo.foundation/claims/53690e7d550278dbe228ddf35e0ba72b2666cba6",
+            claimTemplateId: tplRec.projectDid,
+            type: tplRec.data.page.content.claimInfo.type,
+            issuerId: signer.agent.did,
+            claimSubject: { id: projectDid },
+            items: claimItems,
             projectDid,
-            'dateTime': new Date().toISOString(),
+            dateTime: new Date().toISOString(),
           },
         }),
         fetchOpts
@@ -424,88 +423,83 @@ export function makeClient(
 
     evaluateClaim: (projRecOrDid: string, claimId: any, status: any) =>
       cnRpc(projRecOrDid, (projectDid: any) => ({
-        method: 'evaluateClaim',
-        tplName: 'evaluate_claim',
+        method: "evaluateClaim",
+        tplName: "evaluate_claim",
         data: { projectDid, claimId, status },
       })),
 
-    sendTokens: async (to: any, amount: any, denom = 'uixo') =>
-      await signAndBroadcast('secp', {
-        type: 'cosmos-sdk/MsgSend',
+    sendTokens: async (to: any, amount: any, denom = "uixo") =>
+      await signAndBroadcast("secp", {
+        type: "cosmos-sdk/MsgSend",
         value: {
           amount: [{ amount: String(amount), denom }],
-          from_address: (await getSignerAccount('secp')).address,
+          from_address: (await getSignerAccount("secp")).address,
           to_address: to,
         },
       }),
+    getTransactions: async (address: any, asset: any) =>
+      blockScanFetchGet(
+        `/transactions/listTransactionsByAddrByAsset/${address}/${asset}`
+      ),
 
     staking: {
-      listValidators: (urlParams: any) =>
-        bcFetchGet('/staking/validators', { urlParams }),
+      listValidators: (urlParams?: any) =>
+        bcFetchGet("/staking/validators", { urlParams }),
 
       getValidator: (validatorAddr: any) =>
-        bcFetchGet('/staking/validators/' + validatorAddr),
+        bcFetchGet("/staking/validators/" + validatorAddr),
 
       myDelegations: async () =>
         await bcFetchGet(
-          fmt(
-            '/staking/delegators/%s/delegations',
+          `/staking/delegators/${
             (
-              await getSignerAccount('secp')
+              await getSignerAccount("secp")
             ).address
-          )
+          }/delegations`
         ),
 
-      pool: () => bcFetchGet('/staking/pool'),
+      pool: () => bcFetchGet("/staking/pool"),
 
       validatorDistribution: (validatorAddr: any) =>
-        bcFetchGet('/distribution/validators/' + validatorAddr),
+        bcFetchGet("/distribution/validators/" + validatorAddr),
 
       delegatorValidatorRewards: (delegatorAddr: any, validatorAddr: any) =>
         bcFetchGet(
-          fmt(
-            '/distribution/delegators/%s/rewards/%s',
-            delegatorAddr,
-            validatorAddr
-          )
+          `/distribution/delegators/${delegatorAddr}/rewards/${validatorAddr}`
         ),
 
       delegation: (delegatorAddr: any, validatorAddr: any) =>
         bcFetchGet(
-          fmt(
-            '/staking/delegators/%s/delegations/%s',
-            delegatorAddr,
-            validatorAddr
-          )
+          `/staking/delegators/${delegatorAddr}/delegations/${validatorAddr}`
         ),
 
       delegatorDelegations: (delegatorAddr: any) =>
-        bcFetchGet(fmt('/staking/delegators/%s/delegations', delegatorAddr)),
+        bcFetchGet(`/staking/delegators/${delegatorAddr}/delegations`),
 
       delegatorUnbondingDelegations: (delegatorAddr: any) =>
         bcFetchGet(
-          fmt('/staking/delegators/%s/unbonding_delegations', delegatorAddr)
+          `/staking/delegators/${delegatorAddr}/unbonding_delegations`
         ),
 
       delegatorRewards: (delegatorAddr: any) =>
         bcFetchGet(`/distribution/delegators/${delegatorAddr}/rewards`),
 
       delegate: async (validatorAddr: any, amount: any) =>
-        await signAndBroadcast('secp', {
-          type: 'cosmos-sdk/MsgDelegate',
+        await signAndBroadcast("secp", {
+          type: "cosmos-sdk/MsgDelegate",
           value: {
-            amount: { denom: 'uixo', amount: String(amount) },
-            delegator_address: (await getSignerAccount('secp')).address,
+            amount: { denom: "uixo", amount: String(amount) },
+            delegator_address: (await getSignerAccount("secp")).address,
             validator_address: validatorAddr,
           },
         }),
 
       undelegate: async (validatorAddr: any, amount: any) =>
-        await signAndBroadcast('secp', {
-          type: 'cosmos-sdk/MsgUndelegate',
+        await signAndBroadcast("secp", {
+          type: "cosmos-sdk/MsgUndelegate",
           value: {
-            amount: { denom: 'uixo', amount: String(amount) },
-            delegator_address: (await getSignerAccount('secp')).address,
+            amount: { denom: "uixo", amount: String(amount) },
+            delegator_address: (await getSignerAccount("secp")).address,
             validator_address: validatorAddr,
           },
         }),
@@ -515,11 +509,11 @@ export function makeClient(
         validatorDstAddr: any,
         amount: any
       ) =>
-        await signAndBroadcast('secp', {
-          type: 'cosmos-sdk/MsgBeginRedelegate',
+        await signAndBroadcast("secp", {
+          type: "cosmos-sdk/MsgBeginRedelegate",
           value: {
-            amount: { denom: 'uixo', amount: String(amount) },
-            delegator_address: (await getSignerAccount('secp')).address,
+            amount: { denom: "uixo", amount: String(amount) },
+            delegator_address: (await getSignerAccount("secp")).address,
             validator_src_address: validatorSrcAddr,
             validator_dst_address: validatorDstAddr,
           },
@@ -527,9 +521,9 @@ export function makeClient(
     },
 
     bonds: {
-      byId: (did: string) => bcFetchGet('/bonds/' + did),
+      byId: (did: string) => bcFetchGet("/bonds/" + did),
 
-      list: () => bcFetchGet('/bonds_detailed'),
+      list: () => bcFetchGet("/bonds_detailed"),
 
       buy: (
         bondDid: any,
@@ -538,8 +532,8 @@ export function makeClient(
         amount: any,
         maxPrice: any
       ) =>
-        signAndBroadcast('agent', {
-          type: 'bonds/MsgBuy',
+        signAndBroadcast("agent", {
+          type: "bonds/MsgBuy",
           value: {
             buyer_did: signer.agent.did,
             bond_did: bondDid,
@@ -549,14 +543,16 @@ export function makeClient(
         }),
 
       sell: (bondDid: any, bondToken: any, amount: any) =>
-        signAndBroadcast('agent', {
-          type: 'bonds/MsgSell',
+        signAndBroadcast("agent", {
+          type: "bonds/MsgSell",
           value: {
             seller_did: signer.agent.did,
             bond_did: bondDid,
             amount: { amount: String(amount), denom: bondToken },
           },
         }),
+      getBondPrice: (bondDid: any) =>
+        bcFetchGet(`/bonds/${bondDid}/buy_price/1`),
     },
 
     custom: (signerToUse: any, msg: any, fee: any) =>
@@ -566,14 +562,14 @@ export function makeClient(
 
 export async function getTemplate(tplRecOrDid: string): Promise<any> {
   const getEntityHead = async (projRecOrDid: any): Promise<any> => {
-    if (typeof projRecOrDid === 'object') {
+    if (typeof projRecOrDid === "object") {
       const { projectDid } = projRecOrDid;
       let serviceEndpoint;
 
       try {
         serviceEndpoint = projRecOrDid.data.nodes.items
-          .find((i: { [x: string]: string }) => i['@type'] === 'CellNode')
-          .serviceEndpoint.replace(/\/$/, '');
+          .find((i: { [x: string]: string }) => i["@type"] === "CellNode")
+          .serviceEndpoint.replace(/\/$/, "");
 
         if (GlobaldashifyUrls) serviceEndpoint = dashifyUrl(serviceEndpoint);
       } catch (e) {
@@ -585,92 +581,92 @@ export async function getTemplate(tplRecOrDid: string): Promise<any> {
     }
 
     return getEntityHead(
-      await makeFetcherGet('/api/project/getByProjectDid/' + projRecOrDid)
+      await makeFetcherGet("/api/project/getByProjectDid/" + projRecOrDid)
     );
   };
 
   const cnRpc = async (target: string, dataCb: any, fetchOpts?: any) => {
-      const getSignerAccount = memoize((signerToUse: string | number) =>
-        GlobalSigner[signerToUse].getAccounts().then((as: any[]) => as[0])
+    const getSignerAccount = memoize((signerToUse: string | number) =>
+      GlobalSigner[signerToUse].getAccounts().then((as: any[]) => as[0])
+    );
+
+    const sign = async (
+      signerToUse: string,
+      signDoc: {
+        account_number: any;
+        chain_id: any;
+        fee: { amount: any; gas: string };
+        memo: string;
+        msgs: any[];
+        sequence: any;
+      }
+    ) =>
+      GlobalSigner[signerToUse].signAmino(
+        (await getSignerAccount(signerToUse)).address,
+        signDoc
       );
 
-      const sign = async (
-        signerToUse: string,
-        signDoc: {
-          account_number: any;
-          chain_id: any;
-          fee: { amount: any; gas: string };
-          memo: string;
-          msgs: any[];
-          sequence: any;
-        }
-      ) =>
-        GlobalSigner[signerToUse].signAmino(
-          (await getSignerAccount(signerToUse)).address,
-          signDoc
-        );
+    if (!GlobalSigner)
+      throw new Error(
+        "The client needs to be initialized with a wallet / signer in order for this method to be used"
+      );
 
-      if (!GlobalSigner)
-        throw new Error(
-          'The client needs to be initialized with a wallet / signer in order for this method to be used'
-        );
+    const { projectDid, serviceEndpoint } =
+      typeof target === "string" && target.startsWith("http")
+        ? { projectDid: null, serviceEndpoint: target }
+        : await getEntityHead(target);
 
-      const { projectDid, serviceEndpoint } =
-        typeof target === 'string' && target.startsWith('http')
-          ? { projectDid: null, serviceEndpoint: target }
-          : await getEntityHead(target);
+    const {
+      method,
+      tplName,
+      data,
+      isPublic = false,
+      then = (x: any) => x,
+    } = dataCb(projectDid, serviceEndpoint);
+    const message = isPublic
+      ? makePublicRpcMsg(method, data)
+      : makeRpcMsg(method, tplName, data, {
+          type: (await getSignerAccount("agent")).algo,
+          created: new Date().toISOString(),
+          creator: GlobalSigner.agent.did,
+          signatureValue: (await sign("agent", data)).signature.signature,
+        });
+    const path = isPublic ? "/api/public" : "/api/request";
 
-      const {
-          method,
-          tplName,
-          data,
-          isPublic = false,
-          then = (x: any) => x,
-        } = dataCb(projectDid, serviceEndpoint),
-        message = isPublic
-          ? makePublicRpcMsg(method, data)
-          : makeRpcMsg(method, tplName, data, {
-              type: (await getSignerAccount('agent')).algo,
-              created: new Date().toISOString(),
-              creator: GlobalSigner.agent.did,
-              signatureValue: (await sign('agent', data)).signature.signature,
-            }),
-        path = isPublic ? '/api/public' : '/api/request';
+    const respBody = await cnFetch(serviceEndpoint + path, {
+      method: "POST",
+      body: message,
+      ...fetchOpts,
+    });
 
-      const respBody = await cnFetch(serviceEndpoint + path, {
-        method: 'POST',
-        body: message,
-        ...fetchOpts,
-      });
+    if (fetchOpts.dryRun) return respBody;
 
-      if (fetchOpts.dryRun) return respBody;
+    if (respBody.error) throw respBody.error;
 
-      if (respBody.error) throw respBody.error;
-
-      return then(respBody.result);
-    },
-    getEntityFile = (target: string, key: any) =>
-      cnRpc(target, () => ({
-        method: 'fetchPublic',
-        data: { key },
-        isPublic: true,
-      }));
+    return then(respBody.result);
+  };
+  const getEntityFile = (target: string, key: any) =>
+    cnRpc(target, () => ({
+      method: "fetchPublic",
+      data: { key },
+      isPublic: true,
+    }));
 
   const tplDoc =
-    typeof tplRecOrDid === 'object'
+    typeof tplRecOrDid === "object"
       ? tplRecOrDid
-      : await makeFetcherGet('/api/project/getByProjectDid/' + tplRecOrDid);
+      : await makeFetcherGet("/api/project/getByProjectDid/" + tplRecOrDid);
 
   if (!tplDoc.data.page.content) {
     const { data: rawTplContent } = await getEntityFile(
-        tplDoc,
-        tplDoc.data.page.cid
-      ),
-      decodedTplContent = String.fromCharCode.apply(
-        null,
-        fromBase64(rawTplContent)
-      ),
-      parsedTplContent = JSON.parse(decodedTplContent);
+      tplDoc,
+      tplDoc.data.page.cid
+    );
+    const decodedTplContent = String.fromCharCode.apply(
+      null,
+      Array.from(fromBase64(rawTplContent))
+    );
+    const parsedTplContent = JSON.parse(decodedTplContent);
 
     tplDoc.data.page.content = parsedTplContent;
     // Here we're arbitrarily extending the template schema to add a
@@ -687,23 +683,23 @@ export function assertSignerIsValid(signer: any): void {
     !signer ||
     !signer.secp ||
     !signer.agent ||
-    typeof signer.secp.getAccounts !== 'function' ||
-    typeof signer.secp.signAmino !== 'function' ||
-    typeof signer.agent.getAccounts !== 'function' ||
-    typeof signer.agent.signAmino !== 'function' ||
-    typeof signer.agent.did !== 'string'
+    typeof signer.secp.getAccounts !== "function" ||
+    typeof signer.secp.signAmino !== "function" ||
+    typeof signer.agent.getAccounts !== "function" ||
+    typeof signer.agent.signAmino !== "function" ||
+    typeof signer.agent.did !== "string"
   )
-    throw new Error('Invalid signer');
+    throw new Error("Invalid signer");
 }
 
 export async function cnFetch(
   url: string,
   { ...options },
   urlParams?: any,
-  fullResponse: boolean = false
+  fullResponse = false
 ): Promise<any> {
   const urlParamsStr = new URLSearchParams(urlParams).toString();
-  const modifiedUrl = url + (urlParamsStr ? '?' + urlParamsStr : '');
+  const modifiedUrl = url + (urlParamsStr ? "?" + urlParamsStr : "");
   // used for debug
   // const rawBody = options ? options.body : undefined;
 
@@ -711,73 +707,109 @@ export async function cnFetch(
     ...options,
     body: options?.body && sortedJsonStringify(options?.body),
     headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
+      Accept: "application/json",
+      "Content-Type": "application/json",
       ...options?.headers,
     },
   };
 
-  const resp = await cnFetchAPI.post(modifiedUrl, fetchOps.body);
+  const resp: any = await cnFetchAPI.post(modifiedUrl, fetchOps.body);
 
   if (!resp.headers) {
-    throw new Error('Response is undefined');
+    throw new Error("Response is undefined");
   }
   if (resp.problem) {
     throw new Error(resp.problem);
   }
   const body = resp.data;
-  return Promise[resp.ok ? 'resolve' : 'reject'](
-    fullResponse
-      ? {
-          status: resp.status,
-          headers: resp.headers,
-          body,
-        }
-      : body
-  );
+  if (resp.ok) {
+    return new Promise(
+      fullResponse
+        ? {
+            status: resp.status,
+            headers: resp.headers,
+            body,
+          }
+        : body
+    );
+  }
 }
 
 export async function bcFetchGet(
   url: string,
   urlParams?: any,
-  fullResponse: boolean = false
+  fullResponse = false
 ): Promise<any> {
   const urlParamsStr = new URLSearchParams(urlParams).toString();
   const modifiedUrl =
     blockChainFetchAPI.getBaseURL() +
     url +
-    (urlParamsStr ? '?' + urlParamsStr : '');
+    (urlParamsStr ? "?" + urlParamsStr : "");
   // used for debug
   // const rawBody = options ? options.body : undefined;
 
-  const resp = await blockChainFetchAPI.get(modifiedUrl);
+  const resp: any = await blockChainFetchAPI.get(modifiedUrl);
 
   if (!resp.headers) {
-    throw new Error('Response is undefined');
+    throw new Error("Response is undefined");
   }
   const body = resp.data;
-  return Promise[resp.ok ? 'resolve' : 'reject'](
-    fullResponse
-      ? {
-          status: resp.status,
-          headers: resp.headers,
-          body,
-        }
-      : body
-  );
+  if (resp.ok) {
+    return new Promise(
+      fullResponse
+        ? {
+            status: resp.status,
+            headers: resp.headers,
+            body,
+          }
+        : body
+    );
+  }
+}
+
+export async function blockScanFetchGet(
+  url: string,
+  urlParams?: any,
+  fullResponse = false
+): Promise<any> {
+  const urlParamsStr = new URLSearchParams(urlParams).toString();
+  const modifiedUrl =
+    blockScanFetchAPI.getBaseURL() +
+    url +
+    (urlParamsStr ? "?" + urlParamsStr : "");
+  // used for debug
+  // const rawBody = options ? options.body : undefined;
+
+  const resp: any = await blockScanFetchAPI.get(modifiedUrl);
+
+  if (!resp.headers) {
+    throw new Error("Response is undefined");
+  }
+  const body = resp.data;
+  if (resp.ok) {
+    return new Promise(
+      fullResponse
+        ? {
+            status: resp.status,
+            headers: resp.headers,
+            body,
+          }
+        : body
+    );
+  }
 }
 
 export async function bcFetchPost(
   url: string,
   { ...options },
   urlParams?: any,
-  fullResponse: boolean = false
+  fullResponse = false
 ): Promise<any> {
   const urlParamsStr = new URLSearchParams(urlParams).toString();
   const modifiedUrl =
     blockChainFetchAPI.getBaseURL() +
     url +
-    (urlParamsStr ? '?' + urlParamsStr : '');
+    (urlParamsStr ? "?" + urlParamsStr : "");
   // used for debug
   // const rawBody = options ? options.body : undefined;
 
@@ -785,70 +817,74 @@ export async function bcFetchPost(
     ...options,
     body: options?.body && sortedJsonStringify(options?.body),
     headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
+      Accept: "application/json",
+      "Content-Type": "application/json",
       ...options?.headers,
     },
   };
 
-  const resp = await blockChainFetchAPI.post(modifiedUrl, fetchOps.body);
+  const resp: any = await blockChainFetchAPI.post(modifiedUrl, fetchOps.body);
 
   if (!resp.headers) {
-    throw new Error('Response is undefined');
+    throw new Error("Response is undefined");
   }
   const body = resp.data;
-  return Promise[resp.ok ? 'resolve' : 'reject'](
-    fullResponse
-      ? {
-          status: resp.status,
-          headers: resp.headers,
-          body,
-        }
-      : body
-  );
+  if (resp.ok) {
+    return new Promise(
+      fullResponse
+        ? {
+            status: resp.status,
+            headers: resp.headers,
+            body,
+          }
+        : body
+    );
+  }
 }
 
 export async function bsFetchGet(
   url: string,
   urlParams?: any,
-  fullResponse: boolean = false
+  fullResponse = false
 ): Promise<any> {
   const urlParamsStr = new URLSearchParams(urlParams).toString();
   const modifiedUrl =
     blockSyncFetchAPI.getBaseURL() +
     url +
-    (urlParamsStr ? '?' + urlParamsStr : '');
+    (urlParamsStr ? "?" + urlParamsStr : "");
   // used for debug
   // const rawBody = options ? options.body : undefined;
 
-  const resp = await blockSyncFetchAPI.get(modifiedUrl);
+  const resp: any = await blockSyncFetchAPI.get(modifiedUrl);
 
   if (!resp.headers) {
-    throw new Error('Response is undefined');
+    throw new Error("Response is undefined");
   }
   const body = resp.data;
-  return Promise[resp.ok ? 'resolve' : 'reject'](
-    fullResponse
-      ? {
-          status: resp.status,
-          headers: resp.headers,
-          body,
-        }
-      : body
-  );
+  if (resp.ok) {
+    return new Promise(
+      fullResponse
+        ? {
+            status: resp.status,
+            headers: resp.headers,
+            body,
+          }
+        : body
+    );
+  }
 }
 
 export async function bsFetchPost(
   url: string,
   { ...options },
   urlParams?: any,
-  fullResponse: boolean = false
+  fullResponse = false
 ): Promise<any> {
   const urlParamsStr = new URLSearchParams(urlParams).toString();
   const modifiedUrl =
     blockSyncFetchAPI.getBaseURL() +
     url +
-    (urlParamsStr ? '?' + urlParamsStr : '');
+    (urlParamsStr ? "?" + urlParamsStr : "");
   // used for debug
   // const rawBody = options ? options.body : undefined;
 
@@ -856,118 +892,68 @@ export async function bsFetchPost(
     ...options,
     body: options?.body && sortedJsonStringify(options?.body),
     headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
+      Accept: "application/json",
+      "Content-Type": "application/json",
       ...options?.headers,
     },
   };
 
-  const resp = await blockSyncFetchAPI.post(modifiedUrl, fetchOps.body);
+  const resp: any = await blockSyncFetchAPI.post(modifiedUrl, fetchOps.body);
 
   if (!resp.headers) {
-    throw new Error('Response is undefined');
+    throw new Error("Response is undefined");
   }
   const body = resp.data;
-  return Promise[resp.ok ? 'resolve' : 'reject'](
-    fullResponse
-      ? {
-          status: resp.status,
-          headers: resp.headers,
-          body,
-        }
-      : body
-  );
+  if (resp.ok) {
+    return new Promise(
+      fullResponse
+        ? {
+            status: resp.status,
+            headers: resp.headers,
+            body,
+          }
+        : body
+    );
+  }
 }
 
 export async function makeFetcherGet(
   url: string,
   urlParams?: any,
-  fullResponse: boolean = false
+  fullResponse = false
 ): Promise<any> {
   const urlParamsStr = new URLSearchParams(urlParams).toString();
-  const modifiedUrl = url + (urlParamsStr ? '?' + urlParamsStr : '');
+  const modifiedUrl = url + (urlParamsStr ? "?" + urlParamsStr : "");
   // used for debug
   // const rawBody = options ? options.body : undefined;
 
-  const resp = await cnFetchAPI.get(modifiedUrl);
+  const resp: any = await cnFetchAPI.get(modifiedUrl);
 
   if (!resp.headers) {
-    throw new Error('Response is undefined');
+    throw new Error("Response is undefined");
   }
   const body = resp.data;
-  return Promise[resp.ok ? 'resolve' : 'reject'](
-    fullResponse
-      ? {
-          status: resp.status,
-          headers: resp.headers,
-          body,
-        }
-      : body
-  );
+  if (resp.ok) {
+    return new Promise(
+      fullResponse
+        ? {
+            status: resp.status,
+            headers: resp.headers,
+            body,
+          }
+        : body
+    );
+  }
 }
-
-// const makeFetcher =
-//   (urlPrefix = '') =>
-//   async (
-//     path: string,
-//     { urlParams, fullResponse = false, dryRun = false, ...fetchOpts }
-//   ) => {
-//     const urlParamsStr = new URLSearchParams(urlParams).toString(),
-//       url = urlPrefix + path + (urlParamsStr ? '?' + urlParamsStr : ''),
-//       rawBody = fetchOpts.body;
-
-//     fetchOpts = {
-//       ...fetchOpts,
-//       body: fetchOpts.body && sortedJsonStringify(fetchOpts.body),
-//       headers: {
-//         'Accept': 'application/json',
-//         'Content-Type': 'application/json',
-//         ...fetchOpts.headers,
-//       },
-//     };
-
-//     if (dryRun) return { url, ...fetchOpts };
-
-//     debug(
-//       '> Request',
-//       inspect({ url, ...fetchOpts, body: rawBody }, { depth: 10 })
-//     );
-
-//     const resp = await fetch(url, fetchOpts),
-//       isJson = resp.headers.get('content-type').startsWith('application/json'),
-//       body = await resp[isJson ? 'json' : 'text']();
-
-//     debug(
-//       '< Response',
-//       inspect(
-//         {
-//           status: resp.status,
-//           headers: Object.fromEntries(resp.headers.entries()),
-//           body: body,
-//         },
-//         { depth: 10 }
-//       )
-//     );
-
-//     return Promise[resp.ok ? 'resolve' : 'reject'](
-//       fullResponse
-//         ? {
-//             status: resp.status,
-//             headers: resp.headers,
-//             body,
-//           }
-//         : body
-//     );
-//   };
 
 export function generateTxId(): number {
   return Math.floor(Math.random() * 1000000 + 1);
 }
 
-//todo
+// todo
 export function makePublicRpcMsg(method: any, params: any) {
   return {
-    jsonrpc: '2.0',
+    jsonrpc: "2.0",
     method,
     id: generateTxId(),
     params,
@@ -981,12 +967,12 @@ export function makeRpcMsg(
   signature?: any
 ): any {
   return {
-    jsonrpc: '2.0',
+    jsonrpc: "2.0",
     method,
     id: generateTxId(),
     params: {
       payload: {
-        data: data ? data : {},
+        data: data || {},
         template: templateName ? { name: templateName } : undefined,
       },
       signature,
@@ -997,74 +983,56 @@ export function makeRpcMsg(
 export function dashifyUrl(urlStr: string): string {
   urlStr.replace(
     /^(https?:\/\/)([^/]+)(\/.*)?/,
-    (_, proto, host, path) => proto + host.replace('_', '-') + (path || '')
+    (_, proto, host, path) => proto + host.replace("_", "-") + (path || "")
   );
   return urlStr;
 }
-
-//wallet
-
-export async function makeWallet(src: any, didPrefix = 'did:ixo:') {
-  let secp: any, agent: any;
-
-  if (typeof src === 'object') {
-    ({ secp, agent } = fromSerializableWallet(src));
-  } else {
-    secp = await (src
-      ? Secp256k1HdWallet.fromMnemonic(src, { prefix: 'ixo' })
-      : Secp256k1HdWallet.generate(12, { prefix: 'ixo' }));
-    // See note [1]
-
-    agent = await makeAgentWallet(secp.mnemonic, undefined, didPrefix);
+//TODO
+function isJsonString(str: string) {
+  try {
+    JSON.parse(str);
+  } catch (e) {
+    return false;
   }
-
-  const toJSON = () => toSerializableWallet({ secp, agent });
-  GlobalSigner = { secp, agent, toJSON };
-  return { secp, agent, toJSON };
+  return true;
 }
-
-export function toSerializableWallet(w: { secp: any; agent: any }): any {
-  return {
-    secp: {
-      mnemonic: w.secp.mnemonic,
-      seed: base58.encode(w.secp.seed),
-      accounts: w.secp.accounts.map((a: { hdPath: any }) => ({
-        ...a,
-        hdPath: pathToString(a.hdPath),
-      })),
-    },
-    agent: {
-      mnemonic: w.agent.mnemonic,
-      didPrefix: w.agent.didPrefix,
-      didDoc: w.agent.didDoc,
-    },
-  };
-}
-
-export function fromSerializableWallet(s: any) {
-  return {
-    secp: new Secp256k1HdWallet(
-      s.secp.mnemonic && new EnglishMnemonic(s.secp.mnemonic),
-
-      {
-        seed: Uint8Array.from(base58.decode(s.secp.seed)),
-        prefix: s.secp.accounts[0].prefix,
-        hdPaths: s.secp.accounts.map((a: { hdPath: any }) =>
-          stringToPath(a.hdPath)
-        ),
+// wallet
+export async function makeWallet(
+  src: any,
+  didPrefix = "did:ixo:",
+  walletPassword: string
+) {
+  let secp: Secp256k1HdWallet;
+  let agent: any;
+  if (isJsonString(src)) {
+    secp = await Secp256k1HdWallet.deserialize(src, walletPassword);
+    const toJSON = () => secp.serialize(walletPassword);
+    agent = await makeAgentWallet(secp.mnemonic, undefined, didPrefix);
+    GlobalSigner = { secp, agent, toJSON };
+    return { secp, agent, toJSON };
+  } else {
+    if (src) {
+      if (Array.isArray(src)) {
+        secp = await Secp256k1HdWallet.fromMnemonic(src.join(" "), {
+          prefix: "ixo",
+        });
       }
-    ),
-
-    agent: makeAgentWallet(s.agent.mnemonic, s.agent.didDoc, s.agent.didPrefix),
-  };
+      secp = await Secp256k1HdWallet.fromMnemonic(src, { prefix: "ixo" });
+    } else {
+      secp = await Secp256k1HdWallet.generate(12, { prefix: "ixo" });
+      // See note [1]
+    }
+    agent = await makeAgentWallet(secp.mnemonic, undefined, didPrefix);
+    const toJSON = async () => await secp.serialize(walletPassword);
+    GlobalSigner = { secp, agent, toJSON };
+    return { secp: secp, agent: agent, toJSON: toJSON };
+  }
 }
-
-/* @returns OfflineAminoSigner: https://github.com/cosmos/cosmjs/blob/98e91ae5fe699733497befef95204923c93a7373/packages/amino/src/signer.ts#L22-L38 */
 
 export function makeAgentWallet(
   mnemonic: any,
-  didDoc = sovrin.fromSeed(sha256(mnemonic).slice(0, 32)),
-  didPrefix = 'did:ixo:'
+  didDoc = fromSeed(sha256(mnemonic).slice(0, 32)),
+  didPrefix = "did:ixo:"
 ) {
   return {
     mnemonic,
@@ -1075,10 +1043,10 @@ export function makeAgentWallet(
     async getAccounts() {
       return [
         {
-          algo: 'ed25519-sha-256',
+          algo: "ed25519-sha-256",
           pubkey: Uint8Array.from(base58.decode(didDoc.verifyKey)),
           address: Bech32.encode(
-            'ixo',
+            "ixo",
             sha256(base58.decode(didDoc.verifyKey)).slice(0, 20)
           ),
         },
@@ -1093,13 +1061,13 @@ export function makeAgentWallet(
       if (!account)
         throw new Error(`Address ${signerAddress} not found in wallet`);
 
-      const fullSignature = sovrin.signMessage(
-          serializeSignDoc(signDoc),
-          didDoc.secret.signKey,
-          didDoc.verifyKey
-        ),
-        signatureBase64 = toBase64(fullSignature.slice(0, 64));
-
+      const fullSignature = signMessage(
+        serializeSignDoc(signDoc),
+        didDoc.secret.signKey,
+        didDoc.verifyKey
+      );
+      const signatureBase64 = toBase64(fullSignature.slice(0, 64));
+      const pub_keyBase64 = base58.decode(didDoc.verifyKey);
       return {
         signed: signDoc,
 
@@ -1107,8 +1075,8 @@ export function makeAgentWallet(
           signature: signatureBase64,
 
           pub_key: {
-            type: 'tendermint/PubKeyEd25519',
-            value: base58.decode(didDoc.verifyKey).toString('base64'),
+            type: "tendermint/PubKeyEd25519",
+            value: toBase64(pub_keyBase64).toString(),
           },
         },
       };
@@ -1116,9 +1084,9 @@ export function makeAgentWallet(
   };
 }
 
-// Notes
-//
-// [1]: The prefix parameters here are not to be confused with the "didPrefix'
-//      parameter of this "makeWallet" function. The prefixes used in the
-//      Secp256k1HdWallet constructor functions are prefixes for cosmos wallet
-//      addresses while the did prefix is the prefix of the did address.
+// // Notes
+// //
+// // [1]: The prefix parameters here are not to be confused with the "didPrefix'
+// //      parameter of this "makeWallet" function. The prefixes used in the
+// //      Secp256k1HdWallet constructor functions are prefixes for cosmos wallet
+// //      addresses while the did prefix is the prefix of the did address.
