@@ -987,7 +987,8 @@ export function dashifyUrl(urlStr: string): string {
   );
   return urlStr;
 }
-//TODO
+// Used to check if the passed in string is a mnemonic or
+// a serialized wallet 
 function isJsonString(str: string) {
   try {
     JSON.parse(str);
