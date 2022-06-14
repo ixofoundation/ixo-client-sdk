@@ -988,7 +988,7 @@ export function dashifyUrl(urlStr: string): string {
   return urlStr;
 }
 // Used to check if the passed in string is a mnemonic or
-// a serialized wallet 
+// a serialized wallet
 function isJsonString(str: string) {
   try {
     JSON.parse(str);
@@ -1000,8 +1000,8 @@ function isJsonString(str: string) {
 // wallet
 export async function makeWallet(
   src: any,
-  didPrefix = "did:ixo:",
-  walletPassword: string
+  walletPassword: string,
+  didPrefix = "did:ixo:"
 ) {
   let secp: Secp256k1HdWallet;
   let agent: any;
