@@ -1,5 +1,7 @@
 import { encode, decode } from "bs58";
 import { sign, box, randomBytes } from "tweetnacl";
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const Buffer = require('buffer/').Buffer
 export function gen(): any {
   const seed = randomBytes(sign.seedLength);
   return fromSeed(seed);
