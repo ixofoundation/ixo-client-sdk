@@ -1,8 +1,11 @@
 import path from "path";
 import { build as esbuild } from "esbuild";
+const glob = require('glob')
+const entryPoints = glob.sync('./src/**/*.ts')
 
 const baseConfig = {
   platform: "node" as const,
+  bundle: true,
   target: "esnext" as const,
   format: "cjs" as const,
   nodePaths: [path.join(__dirname, "../src")],

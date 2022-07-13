@@ -1,3 +1,5 @@
 export * from "./bonds"
 export * from "./projects"
 export * from "./utils"
+export * from "./payments"
+export * from "./did"

@@ -1,2 +1,2 @@
-export * from "./client"
-export * from "./protoquery"
+export *  from "./client"
+export *  from  "./protoquery"

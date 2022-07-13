@@ -1,4 +1,4 @@
-name: Typescript Library Starter
+name: ixo-client-sdk
 
 on: [push]
 
@@ -6,7 +6,7 @@ env:
   NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
 jobs:
-  typescript-library-starter:
+  ixo-client-sdk:
     runs-on: ubuntu-latest
 
     concurrency:
@@ -35,9 +35,6 @@ jobs:
 
       - name: Test
         run: npm run test
-
-      - name: Setup test
-        run: npm run test:setup
 
       - name: Release
         env:

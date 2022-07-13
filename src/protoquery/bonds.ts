@@ -1,6 +1,5 @@
-import { fromBase64 } from "@cosmjs/encoding";
-import { DirectSecp256k1HdWallet, Registry, decodeTxRaw, OfflineSigner } from "@cosmjs/proto-signing";
-import { defaultRegistryTypes as defaultStargateTypes, SigningStargateClient, createProtobufRpcClient, QueryClient, ProtobufRpcClient } from "@cosmjs/stargate";
+import { Registry } from "@cosmjs/proto-signing";
+import { defaultRegistryTypes as defaultStargateTypes, createProtobufRpcClient, QueryClient, ProtobufRpcClient } from "@cosmjs/stargate";
 import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
 import { QueryAlphaMaximumsResponse, QueryAvailableReserveResponse, QueryBondResponse, QueryBondsResponse, QueryBuyPriceResponse, QueryClientImpl, QueryCurrentPriceResponse, QueryCurrentReserveResponse } from "../codec/bonds/query";
 import { MsgCreateBond, MsgEditBond, MsgSetNextAlpha, MsgUpdateBondState, MsgUpdateBondStateResponse, MsgBuy, MsgSell, MsgSwap, MsgMakeOutcomePayment, MsgWithdrawShare, MsgWithdrawReserve } from "../codec/bonds/tx";
@@ -23,7 +22,7 @@ myRegistry.register("./proto/bonds/tx.proto", MsgWithdrawShare);
 myRegistry.register("./proto/bonds/tx.proto", MsgWithdrawReserve);
 
 
-async function initializerpcclient(rpcendpoint = "impacthub-grpc.ixo.earth:443"): Promise<{ tendermintClient: any, queryClient: QueryClient, rpcClient: ProtobufRpcClient, queryService: any }> {
+async function initializerpcclient(rpcendpoint = "testnet-grpc.ixo.earth:9090"): Promise<{ tendermintClient: any, queryClient: QueryClient, rpcClient: ProtobufRpcClient, queryService: any }> {
 
     const tendermintClient = await Tendermint34Client.connect(rpcendpoint);
 

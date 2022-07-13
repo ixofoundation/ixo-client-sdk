@@ -5,21 +5,21 @@ import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
 import { QueryClientImpl, QueryProjectAccountsResponse, QueryProjectDocResponse, QueryProjectTxResponse } from "../codec/project/query";
 import { MsgCreateAgent, MsgCreateClaim, MsgCreateEvaluation, MsgCreateProject, MsgUpdateAgent, MsgUpdateProjectDoc, MsgUpdateProjectStatus, MsgWithdrawFunds } from "../codec/project/tx";
 
-const myRegistry = new Registry(defaultStargateTypes);
+// const myRegistry = new Registry(defaultStargateTypes);
 //Register Project Types
-myRegistry.register("./proto/project/tx.proto", MsgCreateAgent);
-myRegistry.register("./proto/project/tx.proto", MsgCreateProject);
-myRegistry.register("./proto/project/tx.proto", MsgUpdateProjectStatus);
-myRegistry.register("./proto/project/tx.proto", MsgCreateEvaluation);
-myRegistry.register("./proto/project/tx.proto", MsgUpdateAgent);
-myRegistry.register("./proto/project/tx.proto", MsgCreateClaim);
-myRegistry.register("./proto/project/tx.proto", MsgWithdrawFunds);
-myRegistry.register("./proto/project/tx.proto", MsgUpdateProjectDoc);
+// myRegistry.register("../codec/project/ms", MsgCreateAgent);
+// myRegistry.register("./proto/project/tx.proto", MsgCreateProject);
+// myRegistry.register("./proto/project/tx.proto", MsgUpdateProjectStatus);
+// myRegistry.register("./proto/project/tx.proto", MsgCreateEvaluation);
+// myRegistry.register("./proto/project/tx.proto", MsgUpdateAgent);
+// myRegistry.register("./proto/project/tx.proto", MsgCreateClaim);
+// myRegistry.register("./proto/project/tx.proto", MsgWithdrawFunds);
+// myRegistry.register("./proto/project/tx.proto", MsgUpdateProjectDoc);
 
 
 
 
-export async function initializerpcclient(rpcendpoint = "impacthub-grpc.ixo.earth:443"): Promise<{ tendermintClient: any, queryClient: QueryClient, rpcClient: ProtobufRpcClient, queryService: any }> {
+ async function initializerpcclient(rpcendpoint = "testnet-grpc.ixo.earth:9090"): Promise<{ tendermintClient: any, queryClient: QueryClient, rpcClient: ProtobufRpcClient, queryService: any }> {
 
     const tendermintClient = await Tendermint34Client.connect(rpcendpoint);
 

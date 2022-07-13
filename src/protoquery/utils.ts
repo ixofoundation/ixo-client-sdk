@@ -9,7 +9,7 @@ export async function initializesigner(Mnemonic: string): Promise<OfflineSigner>
     return signer;
 }
 
-export async function initializeclient(signer: OfflineSigner, rpcendpoint = "impacthub-grpc.ixo.earth:443", myRegistry: any): Promise<SigningStargateClient> {
+export async function initializeclient(signer: OfflineSigner, rpcendpoint = "testnet-grpc.ixo.earth:9090", myRegistry: any): Promise<SigningStargateClient> {
 
     const client = await SigningStargateClient.connectWithSigner(rpcendpoint, signer, { registry: myRegistry });
 

@@ -1,6 +1,6 @@
 {
   "name": "@ixo/client-sdk",
-  "version": "1.12.2",
+  "version": "1.20.5",
   "description": "One ixo client to rule them all, One ixo client to find, One ixo client to bring them all, and in impact bind them",
   "keywords": [
     "typescript",
@@ -80,6 +80,7 @@
     "eslint-import-resolver-typescript": "^2.7.1",
     "eslint-plugin-eslint-comments": "^3.2.0",
     "eslint-plugin-import": "^2.26.0",
+    "glob": "^8.0.3",
     "nyc": "^15.1.0",
     "prettier": "^2.6.2",
     "prompts": "^2.4.2",
