@@ -1,78 +1,239 @@
 import { Registry } from "@cosmjs/proto-signing";
-import { defaultRegistryTypes as defaultStargateTypes, createProtobufRpcClient, QueryClient, ProtobufRpcClient } from "@cosmjs/stargate";
+import {
+  defaultRegistryTypes as defaultStargateTypes,
+  createProtobufRpcClient,
+  QueryClient,
+  ProtobufRpcClient,
+} from "@cosmjs/stargate";
 import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
-import {  QueryClientImpl, QueryPaymentContractResponse, QueryPaymentContractsByIdPrefixResponse, QueryPaymentTemplateResponse, QuerySubscriptionResponse } from "../codec/payments/query";
-import { } from "../codec/payments/tx";
-
+import { PaymentTemplate, DistributionShare } from "../codec/payments/payments";
+import {
+  Query,
+  QueryClientImpl,
+  QueryPaymentContractResponse,
+  QueryPaymentContractsByIdPrefixResponse,
+  QueryPaymentTemplateResponse,
+  QuerySubscriptionResponse,
+} from "../codec/payments/query";
+import {
+  Msg,
+  MsgClientImpl,
+  MsgCreatePaymentContract,
+  MsgCreatePaymentTemplate,
+  MsgCreateSubscription,
+  MsgCreateSubscriptionResponse,
+  MsgEffectPayment,
+  MsgEffectPaymentResponse,
+  MsgGrantDiscount,
+  MsgRevokeDiscount,
+  MsgSetPaymentContractAuthorisation,
+  MsgSetPaymentContractAuthorisationResponse,
+} from "../codec/payments/tx";
 const myRegistry = new Registry(defaultStargateTypes);
-
 
 //Register payment Types
 // myRegistry.register("./proto/payments/tx.proto",MsgAddCredential);
 // myRegistry.register("./proto/payments/tx.proto", MsgAddDid);
 
+async function initializerpcclient(
+  rpcendpoint = "testnet-grpc.ixo.earth:9090"
+): Promise<{
+  tendermintClient: any;
+  queryClient: QueryClient;
+  rpcClient: ProtobufRpcClient;
+  queryService: Query;
+  msgqueryService: Msg;
+}> {
+  const tendermintClient = await Tendermint34Client.connect(rpcendpoint);
 
+  const queryClient = new QueryClient(tendermintClient);
 
-async function initializerpcclient(rpcendpoint = "testnet-grpc.ixo.earth:9090"): Promise<{ tendermintClient: any, queryClient: QueryClient, rpcClient: ProtobufRpcClient, queryService: any }> {
+  const rpcClient = createProtobufRpcClient(queryClient);
 
-    const tendermintClient = await Tendermint34Client.connect(rpcendpoint);
+  const queryService = new QueryClientImpl(rpcClient);
 
+  const msgqueryService = new MsgClientImpl(rpcClient);
 
-    const queryClient = new QueryClient(tendermintClient);
-
-
-    const rpcClient = createProtobufRpcClient(queryClient);
-
-    const queryService = new QueryClientImpl(rpcClient);
-
-    return { tendermintClient: tendermintClient, queryClient: queryClient, rpcClient: rpcClient, queryService: queryService }
+  return {
+    tendermintClient: tendermintClient,
+    queryClient: queryClient,
+    rpcClient: rpcClient,
+    queryService: queryService,
+    msgqueryService: msgqueryService,
+  };
 }
-
-
 
 //Query Functions
 
+export async function QueryPaymentTemplate(
+  paymentTemplateId: string
+): Promise<QueryPaymentTemplateResponse> {
+  const { queryService } = await initializerpcclient();
 
-export async function QueryPaymentTemplate (paymentTemplateId: string): Promise<QueryPaymentTemplateResponse> {
+  const queryResult = await queryService.PaymentTemplate({
+    paymentTemplateId: paymentTemplateId,
+  });
 
-    const { queryService } = await initializerpcclient();
-
-    const queryResult = await queryService.PaymentTemplate({
-        paymentTemplateId: paymentTemplateId,
-    });
-
-    return queryResult
+  return queryResult;
 }
 
-export async function QueryPaymentContract (paymentContractId: string): Promise<QueryPaymentContractResponse> {
+export async function QueryPaymentContract(
+  paymentContractId: string
+): Promise<QueryPaymentContractResponse> {
+  const { queryService } = await initializerpcclient();
 
-    const { queryService } = await initializerpcclient();
+  const queryResult = await queryService.PaymentContract({
+    paymentContractId: paymentContractId,
+  });
 
-    const queryResult = await queryService.PaymentContract({
-        paymentContractId: paymentContractId,
-    });
-
-    return queryResult
+  return queryResult;
 }
 
-export async function QueryPaymentContractsByIdPrefix (paymentContractsIdPrefix: string): Promise<QueryPaymentContractsByIdPrefixResponse> {
+export async function QueryPaymentContractsByIdPrefix(
+  paymentContractsIdPrefix: string
+): Promise<QueryPaymentContractsByIdPrefixResponse> {
+  const { queryService } = await initializerpcclient();
 
-    const { queryService } = await initializerpcclient();
+  const queryResult = await queryService.PaymentContractsByIdPrefix({
+    paymentContractsIdPrefix: paymentContractsIdPrefix,
+  });
 
-    const queryResult = await queryService.PaymentContractsByIdPrefix({
-        paymentContractsIdPrefix: paymentContractsIdPrefix,
-    });
-
-    return queryResult
+  return queryResult;
 }
 
-export async function QueryPaymentSubscription (subscriptionId: string): Promise<QuerySubscriptionResponse> {
+export async function QueryPaymentSubscription(
+  subscriptionId: string
+): Promise<QuerySubscriptionResponse> {
+  const { queryService } = await initializerpcclient();
 
-    const { queryService } = await initializerpcclient();
+  const queryResult = await queryService.Subscription({
+    subscriptionId: subscriptionId,
+  });
 
-    const queryResult = await queryService.Subscription({
-        subscriptionId: subscriptionId,
+  return queryResult;
+}
+
+// Transaction
+
+export async function TransactionSetPaymentContractAuthorisation(
+  paymentContractId: string,
+  payerDid: string,
+  authorised: false
+): Promise<MsgSetPaymentContractAuthorisationResponse> {
+  const { msgqueryService } = await initializerpcclient();
+
+  const transactionResult =
+    await msgqueryService.SetPaymentContractAuthorisation({
+      paymentContractId,
+      payerDid,
+      authorised,
     });
 
-    return queryResult
+  return transactionResult;
+}
+
+export async function TransactionCreatePaymentTemplate(
+  creatorDid: string,
+  paymentTemplate?: PaymentTemplate
+): Promise<MsgSetPaymentContractAuthorisationResponse> {
+  const { msgqueryService } = await initializerpcclient();
+
+  const transactionResult = await msgqueryService.CreatePaymentTemplate({
+    creatorDid,
+    paymentTemplate,
+  });
+
+  return transactionResult;
+}
+
+export async function TransactionCreatePaymentContract(
+  creatorDid: string,
+  paymentTemplateId: string,
+  paymentContractId: string,
+  payer: string,
+  recipients: DistributionShare[],
+  canDeauthorise: boolean,
+  discountId: string
+): Promise<MsgSetPaymentContractAuthorisationResponse> {
+  const { msgqueryService } = await initializerpcclient();
+
+  const transactionResult = await msgqueryService.CreatePaymentContract({
+    creatorDid,
+    paymentTemplateId,
+    paymentContractId,
+    payer,
+    recipients,
+    canDeauthorise,
+    discountId,
+  });
+
+  return transactionResult;
+}
+
+export async function TransactionCreateSubscription(
+  creatorDid: string,
+  subscriptionId: string,
+  paymentContractId: string,
+  maxPeriods: string,
+  period?: any
+): Promise<MsgCreateSubscriptionResponse> {
+  const { msgqueryService } = await initializerpcclient();
+
+  const transactionResult = await msgqueryService.CreateSubscription({
+    creatorDid,
+    subscriptionId,
+    paymentContractId,
+    maxPeriods,
+    period,
+  });
+
+  return transactionResult;
+}
+
+export async function TransactionGrantDiscount(
+  senderDid: string,
+  paymentContractId: string,
+  discountId: string,
+  recipient: string
+): Promise<MsgCreateSubscriptionResponse> {
+  const { msgqueryService } = await initializerpcclient();
+
+  const transactionResult = await msgqueryService.GrantDiscount({
+    senderDid,
+    paymentContractId,
+    discountId,
+    recipient,
+  });
+
+  return transactionResult;
+}
+
+export async function TransactionRevokeDiscount(
+  senderDid: string,
+  paymentContractId: string,
+  holder: string
+): Promise<MsgCreateSubscriptionResponse> {
+  const { msgqueryService } = await initializerpcclient();
+
+  const transactionResult = await msgqueryService.RevokeDiscount({
+    senderDid,
+    paymentContractId,
+    holder,
+  });
+
+  return transactionResult;
+}
+
+export async function TransactionEffectPayment(
+  senderDid: string,
+  paymentContractId: string
+): Promise<MsgEffectPaymentResponse> {
+  const { msgqueryService } = await initializerpcclient();
+
+  const transactionResult = await msgqueryService.EffectPayment({
+    senderDid,
+    paymentContractId,
+  });
+
+  return transactionResult;
 }

@@ -321,6 +321,7 @@ Client methods:
     - `0` for pending
     - `1` for approved
     - `2` for rejected
+    - `3` for disputed
 
 - `staking`:
 
