@@ -1,2 +1,2 @@
-export *  from "./client"
-export *  from  "./protoquery"
+export * as LegacyClient from "./client";
+export * as ProtoClient from "./protoquery";

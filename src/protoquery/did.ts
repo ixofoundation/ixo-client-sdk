@@ -11,6 +11,7 @@ import {
   Query,
   QueryAddressFromBase58EncodedPubkeyResponse,
   QueryAddressFromDidResponse,
+  QueryAllDidDocsResponse,
   QueryAllDidsResponse,
   QueryClientImpl,
   QueryDidDocResponse,
@@ -84,10 +85,10 @@ export async function QueryAlldids(
 
 export async function QueryAlldidDoc(
   diddoc: string
-): Promise<QueryAllDidsResponse> {
+): Promise<QueryAllDidDocsResponse> {
   const { queryService } = await initializerpcclient();
 
-  const queryResult = await queryService.AllDidDocs({});
+  const queryResult = await queryService.AllDidDocs({ diddoc });
 
   return queryResult;
 }
