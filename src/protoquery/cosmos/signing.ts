@@ -1,0 +1,1 @@
+export * as signing from "../../codec/external/cosmos/tx/signing/v1beta1/signing"
