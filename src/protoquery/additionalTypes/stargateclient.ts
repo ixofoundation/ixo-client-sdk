@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable eslint-comments/disable-enable-pair */
 /* eslint-disable @typescript-eslint/naming-convention */
 import { addCoins } from "@cosmjs/amino";
@@ -244,7 +245,8 @@ export class StargateClient {
         searchAddress
       );
       return account ? this.accountParser(account) : null;
-    } catch (error: any) {
+    } catch (error) {
+      // @ts-ignore
       if (/rpc error: code = NotFound/i.test(error.toString())) {
         return null;
       }
@@ -339,7 +341,8 @@ export class StargateClient {
           validatorAddress
         )
       ).delegationResponse?.balance;
-    } catch (e: any) {
+    } catch (e) {
+      // @ts-ignore
       if (e.toString().includes("key not found")) {
         // ignore, `delegatedAmount` remains undefined
       } else {

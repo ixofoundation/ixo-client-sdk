@@ -68,7 +68,7 @@ export const defaultRegistryTypes: ReadonlyArray<[string, GeneratedType]> = [
   ...distributionTypes,
   ...feegrantTypes,
   ...govTypes,
-  ...stakingTypes,
+  // ...stakingTypes,
   ...ibcTypes,
   ...vestingTypes,
 ];

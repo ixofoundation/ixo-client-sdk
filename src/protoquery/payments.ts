@@ -18,15 +18,8 @@ import {
 import {
   Msg,
   MsgClientImpl,
-  MsgCreatePaymentContract,
-  MsgCreatePaymentTemplate,
-  MsgCreateSubscription,
   MsgCreateSubscriptionResponse,
-  MsgEffectPayment,
   MsgEffectPaymentResponse,
-  MsgGrantDiscount,
-  MsgRevokeDiscount,
-  MsgSetPaymentContractAuthorisation,
   MsgSetPaymentContractAuthorisationResponse,
 } from "../codec/payments/tx";
 const myRegistry = new Registry(defaultStargateTypes);
@@ -36,7 +29,7 @@ const myRegistry = new Registry(defaultStargateTypes);
 // myRegistry.register("./proto/payments/tx.proto", MsgAddDid);
 
 async function initializerpcclient(
-  rpcendpoint = "testnet-grpc.ixo.earth:443"
+  rpcendpoint = "https://testnet.ixo.world/rpc/"
 ): Promise<{
   tendermintClient: any;
   queryClient: QueryClient;

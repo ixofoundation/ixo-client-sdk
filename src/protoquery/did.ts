@@ -17,9 +17,7 @@ import {
   QueryDidDocResponse,
 } from "../codec/did/query";
 import {
-  MsgAddCredential,
   MsgAddCredentialResponse,
-  MsgAddDid,
   MsgAddDidResponse,
   MsgClientImpl,
   Msg,
@@ -32,7 +30,7 @@ const myRegistry = new Registry(defaultStargateTypes);
 // myRegistry.register("./proto/did/tx.proto", MsgAddDid);
 
 async function initializerpcclient(
-  rpcendpoint = "testnet-grpc.ixo.earth:443"
+  rpcendpoint = "https://testnet.ixo.world/rpc/"
 ): Promise<{
   tendermintClient: any;
   queryClient: QueryClient;

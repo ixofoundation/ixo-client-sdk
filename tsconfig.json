@@ -8,8 +8,7 @@
     "moduleResolution": "node",
     "rootDir": "./src",
     "outDir": "build",
-
-    "strict": true,
+    "strict": false,
     "sourceMap": true,
     "esModuleInterop": true,
     "skipLibCheck": true,

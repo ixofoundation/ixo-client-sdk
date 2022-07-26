@@ -1,12 +1,9 @@
-import { Registry } from "@cosmjs/proto-signing";
 import {
-  defaultRegistryTypes as defaultStargateTypes,
   createProtobufRpcClient,
   QueryClient,
   ProtobufRpcClient,
 } from "@cosmjs/stargate";
 import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
-
 import {
   UpdateProjectStatusDoc,
   CreateAgentDoc,
@@ -27,21 +24,13 @@ import {
 import {
   Msg,
   MsgClientImpl,
-  MsgCreateAgent,
   MsgCreateAgentResponse,
-  MsgCreateClaim,
   MsgCreateClaimResponse,
-  MsgCreateEvaluation,
   MsgCreateEvaluationResponse,
-  MsgCreateProject,
   MsgCreateProjectResponse,
-  MsgUpdateAgent,
   MsgUpdateAgentResponse,
-  MsgUpdateProjectDoc,
   MsgUpdateProjectDocResponse,
-  MsgUpdateProjectStatus,
   MsgUpdateProjectStatusResponse,
-  MsgWithdrawFunds,
   MsgWithdrawFundsResponse,
 } from "../codec/project/tx";
 
@@ -57,7 +46,7 @@ import {
 // myRegistry.register("./proto/project/tx.proto", MsgUpdateProjectDoc);
 
 async function initializerpcclient(
-  rpcendpoint = "testnet-grpc.ixo.earth:443"
+  rpcendpoint = "https://testnet.ixo.world/rpc/"
 ): Promise<{
   tendermintClient: any;
   queryClient: QueryClient;

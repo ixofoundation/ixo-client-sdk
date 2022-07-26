@@ -21,15 +21,10 @@ import {
   QueryBondsDetailedRequest,
   QueryParamsRequest,
   QueryParamsResponse,
-  QueryBatchRequest,
   QueryBatchResponse,
-  QueryLastBatchRequest,
   QueryLastBatchResponse,
-  QueryCustomPriceRequest,
   QueryCustomPriceResponse,
-  QuerySellReturnRequest,
   QuerySellReturnResponse,
-  QuerySwapReturnRequest,
   QuerySwapReturnResponse,
 } from "../codec/bonds/query";
 import {
@@ -74,7 +69,7 @@ myRegistry.register("./proto/bonds/tx.proto", MsgWithdrawShare);
 myRegistry.register("./proto/bonds/tx.proto", MsgWithdrawReserve);
 
 async function initializerpcclient(
-  rpcendpoint = "testnet-grpc.ixo.earth:443"
+  rpcendpoint = "https://testnet.ixo.world/rpc/"
 ): Promise<{
   tendermintClient: any;
   queryClient: QueryClient;
