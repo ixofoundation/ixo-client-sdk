@@ -57,7 +57,7 @@ import {
 // myRegistry.register("./proto/project/tx.proto", MsgUpdateProjectDoc);
 
 async function initializerpcclient(
-  rpcendpoint = "testnet-grpc.ixo.earth:9090"
+  rpcendpoint = "testnet-grpc.ixo.earth:443"
 ): Promise<{
   tendermintClient: any;
   queryClient: QueryClient;

@@ -32,7 +32,7 @@ const myRegistry = new Registry(defaultStargateTypes);
 // myRegistry.register("./proto/did/tx.proto", MsgAddDid);
 
 async function initializerpcclient(
-  rpcendpoint = "testnet-grpc.ixo.earth:9090"
+  rpcendpoint = "testnet-grpc.ixo.earth:443"
 ): Promise<{
   tendermintClient: any;
   queryClient: QueryClient;
