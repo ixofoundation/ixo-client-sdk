@@ -41,6 +41,12 @@ export async function parseTx(tx: string, registry: Registry): Promise<any> {
   return parsedData;
 }
 
+// JSON to Uint8Array parsing and visa versa
+export const JsonToArray = function (json) {
+  const ret = new Uint8Array(Buffer.from(json));
+  return ret;
+};
+
 function Utf8ArrayToStr(array: any) {
   let out, i, c;
   let char2, char3;
@@ -81,7 +87,7 @@ function Utf8ArrayToStr(array: any) {
 
   return out;
 }
-
+// Converts A Unit8Array to String
 export function Uint8ArrayToJS(data: Uint8Array): string {
   const decodedData = Utf8ArrayToStr(data);
   return decodedData;
