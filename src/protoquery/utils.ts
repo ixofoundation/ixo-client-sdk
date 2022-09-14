@@ -1,35 +1,35 @@
-import { fromBase64 } from "@cosmjs/encoding";
-import {
-  OfflineSigner,
-  DirectSecp256k1HdWallet,
-  Registry,
-  decodeTxRaw,
-} from "@cosmjs/proto-signing";
-import { SigningStargateClient } from "@cosmjs/stargate";
+/* eslint-disable eslint-comments/disable-enable-pair */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+import { serializeSignDoc } from "@cosmjs/amino";
+import { sha256 } from "@cosmjs/crypto";
+import { Bech32, fromBase64, toBase64, toUtf8 } from "@cosmjs/encoding";
+import { Registry, decodeTxRaw } from "@cosmjs/proto-signing";
+import { decode } from "bs58";
+import sovrin from "sovrin-did";
 
-export async function initializesigner(
-  Mnemonic: string
-): Promise<OfflineSigner> {
-  const signer = await DirectSecp256k1HdWallet.fromMnemonic(Mnemonic, {
-    prefix: "ixo",
-  });
+// export async function initializesigner(
+//   Mnemonic: string
+// ): Promise<OfflineSigner> {
+//   const signer = await DirectSecp256k1HdWallet.fromMnemonic(Mnemonic, {
+//     prefix: "ixo",
+//   });
 
-  return signer;
-}
+//   return signer;
+// }
 
-export async function initializeclient(
-  signer: OfflineSigner,
-  rpcendpoint = "https://testnet.ixo.world/rpc/",
-  myRegistry: any
-): Promise<SigningStargateClient> {
-  const client = await SigningStargateClient.connectWithSigner(
-    rpcendpoint,
-    signer,
-    { registry: myRegistry }
-  );
+// export async function initializeclient(
+//   signer: OfflineSigner,
+//   rpcendpoint = "https://testnet.ixo.world/rpc/",
+//   myRegistry: any
+// ): Promise<SigningStargateClient> {
+//   const client = await SigningStargateClient.connectWithSigner(
+//     rpcendpoint,
+//     signer,
+//     { registry: myRegistry }
+//   );
 
-  return client;
-}
+//   return client;
+// }
 
 export async function parseTx(tx: string, registry: Registry): Promise<any> {
   const decoded = decodeTxRaw(fromBase64(tx));
@@ -42,12 +42,12 @@ export async function parseTx(tx: string, registry: Registry): Promise<any> {
 }
 
 // JSON to Uint8Array parsing and visa versa
-export const JsonToArray = function (json) {
+export const JsonToArray = function (json: string) {
   const ret = new Uint8Array(Buffer.from(json));
   return ret;
 };
 
-function Utf8ArrayToStr(array: any) {
+function Utf8ArrayToStr(array: Uint8Array) {
   let out, i, c;
   let char2, char3;
 
@@ -92,3 +92,66 @@ export function Uint8ArrayToJS(data: Uint8Array): string {
   const decodedData = Utf8ArrayToStr(data);
   return decodedData;
 }
+
+export const getEdClient = () => {
+  const mnemonic =
+    "creek obvious bamboo ozone dwarf above hill muscle image fossil drastic toy";
+
+  // Creating diddoc from MM - edkeys
+  const didDoc = sovrin.fromSeed(sha256(toUtf8(mnemonic)).slice(0, 32));
+
+  console.log("diddoc-", didDoc);
+
+  // const pubKey = toBase64(pub_keyBase64).toString();
+
+  const edClient = {
+    mnemonic,
+    didDoc,
+    didPrefix: "did:ixo:",
+    did: "did:ixo:" + didDoc.did,
+    didSov: "did:sov:" + didDoc.did,
+
+    async getAccounts() {
+      return [
+        {
+          algo: "ed25519-sha-256",
+          pubkey: Uint8Array.from(decode(didDoc.verifyKey)),
+          address: Bech32.encode(
+            "ixo",
+            sha256(decode(didDoc.verifyKey)).slice(0, 20)
+          ),
+        },
+      ];
+    },
+    async signAmino(signerAddress: any, signDoc: any) {
+      const account = (await this.getAccounts()).find(
+        ({ address }) => address === signerAddress
+      );
+
+      if (!account)
+        throw new Error(`Address ${signerAddress} not found in wallet`);
+
+      const fullSignature = sovrin.signMessage(
+        serializeSignDoc(signDoc),
+        didDoc.secret.signKey,
+        didDoc.verifyKey
+      );
+      const signatureBase64 = toBase64(fullSignature.slice(0, 64));
+      const pub_keyBase64 = decode(didDoc.verifyKey);
+      return {
+        signed: signDoc,
+
+        signature: {
+          signature: signatureBase64,
+
+          pub_key: {
+            type: "tendermint/PubKeyEd25519",
+            value: toBase64(pub_keyBase64).toString(),
+          },
+        },
+      };
+    },
+  };
+
+  return edClient;
+};
