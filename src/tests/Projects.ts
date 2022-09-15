@@ -6,7 +6,17 @@ import { toUtf8, Bech32, toBase64 } from "@cosmjs/encoding";
 import { Registry } from "@cosmjs/proto-signing";
 import { decode } from "bs58";
 import sovrin from "sovrin-did";
-import { MsgCreateProject } from "../codec/project/tx";
+import { WithdrawFundsDoc } from "../codec/project/project";
+import {
+  MsgCreateAgent,
+  MsgCreateClaim,
+  MsgCreateEvaluation,
+  MsgCreateProject,
+  MsgUpdateAgent,
+  MsgUpdateProjectDoc,
+  MsgUpdateProjectStatus,
+  MsgWithdrawFunds,
+} from "../codec/project/tx";
 import { JsonToArray } from "../protoquery/utils";
 import { SigningStargateClient } from "../utils/customClient";
 import { accountFromAny } from "../utils/EdAccountHandler";
@@ -61,6 +71,334 @@ export const CreateProject = async () => {
       projectDid: "did:ixo:" + projectDID.did,
       pubKey: edClient.didDoc.verifyKey,
       data: JsonToArray(JSON.stringify(parsed.tx.msg[0].value.data)),
+    }),
+  };
+
+  const fee = {
+    amount: [
+      {
+        denom: "uixo", // Use the appropriate fee denom for your chain
+        amount: "1000000",
+      },
+    ],
+    gas: "3000000",
+  };
+
+  const response = await client.signAndBroadcast(myAddress, [message], fee);
+  return response;
+};
+
+export const UpdateProjectStatus = async () => {
+  const myRegistry = new Registry();
+  myRegistry.register(
+    "/project.MsgUpdateProjectStatus",
+    MsgUpdateProjectStatus
+  );
+
+  const edClient = getEdClient();
+
+  const ad = await edClient.getAccounts();
+
+  const client = await SigningStargateClient.connectWithSigner(
+    "https://testnet.ixo.earth/rpc/",
+    // @ts-ignore
+    edClient,
+    {
+      registry: myRegistry,
+      accountParser: accountFromAny,
+    }
+  );
+
+  const myAddress = ad[0].address;
+
+  const projectDID = sovrin.gen();
+
+  const message = {
+    typeUrl: "/project.MsgUpdateProjectStatus", // Same as above
+    value: MsgUpdateProjectStatus.fromPartial({
+      txHash: "",
+      senderDid: edClient.did,
+      projectDid: "did:ixo:" + projectDID.did,
+      data: undefined,
+    }),
+  };
+
+  const fee = {
+    amount: [
+      {
+        denom: "uixo", // Use the appropriate fee denom for your chain
+        amount: "1000000",
+      },
+    ],
+    gas: "3000000",
+  };
+
+  const response = await client.signAndBroadcast(myAddress, [message], fee);
+  return response;
+};
+
+export const CreateAgent = async () => {
+  const myRegistry = new Registry();
+  myRegistry.register("/project.MsgCreateAgent", MsgCreateAgent);
+
+  const edClient = getEdClient();
+
+  const ad = await edClient.getAccounts();
+
+  const client = await SigningStargateClient.connectWithSigner(
+    "https://testnet.ixo.earth/rpc/",
+    // @ts-ignore
+    edClient,
+    {
+      registry: myRegistry,
+      accountParser: accountFromAny,
+    }
+  );
+
+  const myAddress = ad[0].address;
+
+  const projectDID = sovrin.gen();
+
+  const message = {
+    typeUrl: "/project.MsgCreateAgent", // Same as above
+    value: MsgCreateAgent.fromPartial({
+      txHash: "",
+      senderDid: edClient.did,
+      projectDid: "did:ixo:" + projectDID.did,
+      data: undefined,
+    }),
+  };
+
+  const fee = {
+    amount: [
+      {
+        denom: "uixo", // Use the appropriate fee denom for your chain
+        amount: "1000000",
+      },
+    ],
+    gas: "3000000",
+  };
+
+  const response = await client.signAndBroadcast(myAddress, [message], fee);
+  return response;
+};
+
+export const UpdateAgent = async () => {
+  const myRegistry = new Registry();
+  myRegistry.register("/project.MsgUpdateAgent", MsgUpdateAgent);
+
+  const edClient = getEdClient();
+
+  const ad = await edClient.getAccounts();
+
+  const client = await SigningStargateClient.connectWithSigner(
+    "https://testnet.ixo.earth/rpc/",
+    // @ts-ignore
+    edClient,
+    {
+      registry: myRegistry,
+      accountParser: accountFromAny,
+    }
+  );
+
+  const myAddress = ad[0].address;
+
+  const projectDID = sovrin.gen();
+
+  const message = {
+    typeUrl: "/project.MsgUpdateAgent", // Same as above
+    value: MsgUpdateAgent.fromPartial({
+      txHash: "",
+      senderDid: edClient.did,
+      projectDid: "did:ixo:" + projectDID.did,
+      data: undefined,
+    }),
+  };
+
+  const fee = {
+    amount: [
+      {
+        denom: "uixo", // Use the appropriate fee denom for your chain
+        amount: "1000000",
+      },
+    ],
+    gas: "3000000",
+  };
+
+  const response = await client.signAndBroadcast(myAddress, [message], fee);
+  return response;
+};
+
+export const CreateClaim = async () => {
+  const myRegistry = new Registry();
+  myRegistry.register("/project.MsgCreateClaim", MsgCreateClaim);
+
+  const edClient = getEdClient();
+
+  const ad = await edClient.getAccounts();
+
+  const client = await SigningStargateClient.connectWithSigner(
+    "https://testnet.ixo.earth/rpc/",
+    // @ts-ignore
+    edClient,
+    {
+      registry: myRegistry,
+      accountParser: accountFromAny,
+    }
+  );
+
+  const myAddress = ad[0].address;
+
+  const projectDID = sovrin.gen();
+
+  const message = {
+    typeUrl: "/project.MsgCreateClaim", // Same as above
+    value: MsgCreateClaim.fromPartial({
+      txHash: "",
+      senderDid: edClient.did,
+      projectDid: "did:ixo:" + projectDID.did,
+      data: undefined,
+    }),
+  };
+
+  const fee = {
+    amount: [
+      {
+        denom: "uixo", // Use the appropriate fee denom for your chain
+        amount: "1000000",
+      },
+    ],
+    gas: "3000000",
+  };
+
+  const response = await client.signAndBroadcast(myAddress, [message], fee);
+  return response;
+};
+
+export const CreateEvaluation = async () => {
+  const myRegistry = new Registry();
+  myRegistry.register("/project.MsgCreateEvaluation", MsgCreateEvaluation);
+
+  const edClient = getEdClient();
+
+  const ad = await edClient.getAccounts();
+
+  const client = await SigningStargateClient.connectWithSigner(
+    "https://testnet.ixo.earth/rpc/",
+    // @ts-ignore
+    edClient,
+    {
+      registry: myRegistry,
+      accountParser: accountFromAny,
+    }
+  );
+
+  const myAddress = ad[0].address;
+
+  const projectDID = sovrin.gen();
+
+  const message = {
+    typeUrl: "/project.MsgCreateEvaluation", // Same as above
+    value: MsgCreateEvaluation.fromPartial({
+      txHash: "",
+      senderDid: edClient.did,
+      projectDid: "did:ixo:" + projectDID.did,
+      data: undefined,
+    }),
+  };
+
+  const fee = {
+    amount: [
+      {
+        denom: "uixo", // Use the appropriate fee denom for your chain
+        amount: "1000000",
+      },
+    ],
+    gas: "3000000",
+  };
+
+  const response = await client.signAndBroadcast(myAddress, [message], fee);
+  return response;
+};
+
+export const WithdrawFunds = async () => {
+  const myRegistry = new Registry();
+  myRegistry.register("/project.MsgWithdrawFunds", MsgWithdrawFunds);
+
+  const edClient = getEdClient();
+
+  const ad = await edClient.getAccounts();
+
+  const client = await SigningStargateClient.connectWithSigner(
+    "https://testnet.ixo.earth/rpc/",
+    // @ts-ignore
+    edClient,
+    {
+      registry: myRegistry,
+      accountParser: accountFromAny,
+    }
+  );
+
+  const myAddress = ad[0].address;
+
+  const projectDID = sovrin.gen();
+
+  const message = {
+    typeUrl: "/project.MsgWithdrawFunds", // Same as above
+    value: MsgWithdrawFunds.fromPartial({
+      senderDid: edClient.did,
+      data: WithdrawFundsDoc.fromPartial({
+        projectDid: "",
+        recipientDid: "",
+        amount: "",
+        isRefund: false,
+      }),
+    }),
+  };
+
+  const fee = {
+    amount: [
+      {
+        denom: "uixo", // Use the appropriate fee denom for your chain
+        amount: "1000000",
+      },
+    ],
+    gas: "3000000",
+  };
+
+  const response = await client.signAndBroadcast(myAddress, [message], fee);
+  return response;
+};
+
+export const UpdateProjectDoc = async () => {
+  const myRegistry = new Registry();
+  myRegistry.register("/project.MsgUpdateProjectDoc", MsgUpdateProjectDoc);
+
+  const edClient = getEdClient();
+
+  const ad = await edClient.getAccounts();
+
+  const client = await SigningStargateClient.connectWithSigner(
+    "https://testnet.ixo.earth/rpc/",
+    // @ts-ignore
+    edClient,
+    {
+      registry: myRegistry,
+      accountParser: accountFromAny,
+    }
+  );
+
+  const myAddress = ad[0].address;
+
+  const projectDID = sovrin.gen();
+
+  const message = {
+    typeUrl: "/project.MsgUpdateProjectDoc", // Same as above
+    value: MsgUpdateProjectDoc.fromPartial({
+      txHash: "",
+      senderDid: edClient.did,
+      projectDid: "did:ixo:" + projectDID.did,
+      data: undefined,
     }),
   };
 

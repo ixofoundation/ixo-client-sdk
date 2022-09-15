@@ -4,10 +4,10 @@ import { serializeSignDoc } from "@cosmjs/amino";
 import { sha256 } from "@cosmjs/crypto";
 import { toUtf8, Bech32, toBase64 } from "@cosmjs/encoding";
 import { Registry } from "@cosmjs/proto-signing";
-
 import { decode } from "bs58";
 import sovrin from "sovrin-did";
-import { MsgAddDid } from "../codec/did/tx";
+import { Claim, DidCredential } from "../codec/did/did";
+import { MsgAddCredential, MsgAddDid } from "../codec/did/tx";
 import { SigningStargateClient } from "../utils/customClient";
 import { accountFromAny } from "../utils/EdAccountHandler";
 
@@ -36,6 +36,55 @@ export const AddDid = async () => {
     value: MsgAddDid.fromPartial({
       did: edClient.didSov,
       pubKey: edClient.didDoc.verifyKey,
+    }),
+  };
+
+  const fee = {
+    amount: [
+      {
+        denom: "uixo", // Use the appropriate fee denom for your chain
+        amount: "1000000",
+      },
+    ],
+    gas: "3000000",
+  };
+
+  const response = await client.signAndBroadcast(myAddress, [message], fee);
+  return response;
+};
+
+export const AddCredential = async () => {
+  const myRegistry = new Registry();
+  myRegistry.register("/did.MsgAddCredential", MsgAddCredential); // Replace with your own type URL and Msg class
+
+  const edClient = getEdClient();
+
+  const ad = await edClient.getAccounts();
+
+  const client = await SigningStargateClient.connectWithSigner(
+    "https://testnet.ixo.earth/rpc/", // Replace with your own RPC endpoint
+    // @ts-ignore
+    edClient,
+    {
+      registry: myRegistry,
+      accountParser: accountFromAny,
+    }
+  );
+
+  const myAddress = ad[0].address;
+
+  const message = {
+    typeUrl: "/did.MsgAddCredential",
+    value: MsgAddCredential.fromPartial({
+      didCredential: DidCredential.fromPartial({
+        credType: [""],
+        issuer: "",
+        issued: "",
+        claim: Claim.fromPartial({
+          id: "",
+          KYCValidated: false,
+        }),
+      }),
     }),
   };
 
