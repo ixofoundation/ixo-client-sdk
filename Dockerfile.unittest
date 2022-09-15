@@ -1,0 +1,10 @@
+FROM node:latest
+WORKDIR /app
+
+COPY package* . 
+
+RUN yarn
+
+COPY . .
+
+CMD [ "yarn","test" ]
