@@ -50,9 +50,40 @@ import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
 import { MsgTransfer } from "cosmjs-types/ibc/applications/transfer/v1/tx";
 import { Height } from "cosmjs-types/ibc/core/client/v1/client";
 import Long from "long";
-import { createBondAminoConverters } from "../codec/bonds/aminomessages";
-import { AddDidAminoConverters } from "../codec/did/aminomessages";
-import { createProjectAminoConverters } from "../codec/project/aminomessages";
+import {
+  BuyAminoConverters,
+  createBondAminoConverters,
+  EditBondAminoConverters,
+  MakeOutcomePaymentAminoConverters,
+  NextAlphaAminoConverters,
+  SellAminoConverters,
+  SwapAminoConverters,
+  UpdateBondStateAminoConverters,
+  WithdrawReserveAminoConverters,
+  WithdrawShareAminoConverters,
+} from "../codec/bonds/aminomessages";
+import {
+  AddCredentialAminoConverters,
+  AddDidAminoConverters,
+} from "../codec/did/aminomessages";
+import {
+  CreatePaymentTemplateAminoConverters,
+  CreatePaymentContractAminoConverters,
+  CreateSubscriptionAminoConverters,
+  GrantDiscountAminoConverters,
+  RevokeDiscountAminoConverters,
+  EffectPaymentAminoConverters,
+} from "../codec/payments/aminomessages";
+import {
+  CreateAgentAminoConverters,
+  CreateClaimAminoConverters,
+  CreateEvaluationAminoConverters,
+  createProjectAminoConverters,
+  UpdateAgentAminoConverters,
+  UpdateProjectDocAminoConverters,
+  UpdateProjectStatusAminoConverters,
+  WithdrawFundsAminoConverters,
+} from "../codec/project/aminomessages";
 
 import { encodePubkey } from "./customPubkey";
 import { calculateFee, GasPrice } from "./gasPrice";
@@ -88,6 +119,34 @@ export interface SigningStargateClientOptions extends StargateClientOptions {
 
 function createDefaultTypes(prefix: string): AminoConverters {
   return {
+    //payments
+    ...CreatePaymentTemplateAminoConverters(),
+    ...CreatePaymentContractAminoConverters(),
+    ...CreateSubscriptionAminoConverters(),
+    ...GrantDiscountAminoConverters(),
+    ...RevokeDiscountAminoConverters(),
+    ...EffectPaymentAminoConverters(),
+    //
+    //projects
+    ...UpdateProjectDocAminoConverters(),
+    ...WithdrawFundsAminoConverters(),
+    ...CreateEvaluationAminoConverters(),
+    ...CreateClaimAminoConverters(),
+    ...UpdateAgentAminoConverters(),
+    ...CreateAgentAminoConverters(),
+    ...UpdateProjectStatusAminoConverters(),
+    ...createProjectAminoConverters(),
+    //
+    ...AddCredentialAminoConverters(),
+    ...WithdrawReserveAminoConverters(),
+    ...WithdrawShareAminoConverters(),
+    ...MakeOutcomePaymentAminoConverters(),
+    ...SwapAminoConverters(),
+    ...SellAminoConverters(),
+    ...BuyAminoConverters(),
+    ...UpdateBondStateAminoConverters(),
+    ...NextAlphaAminoConverters(),
+    ...EditBondAminoConverters(),
     ...AddDidAminoConverters(),
     ...createBondAminoConverters(),
     ...createProjectAminoConverters(),
