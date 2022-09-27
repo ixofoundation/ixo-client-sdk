@@ -51,7 +51,7 @@ export const CreateProject = async () => {
   const ad = await edClient.getAccounts();
 
   const client = await SigningStargateClient.connectWithSigner(
-    "https://testnet.ixo.earth/rpc/", // Replace with your own RPC endpoint
+    process.env.RPC_URL, // Replace with your own RPC endpoint
     // @ts-ignore
     edClient,
     {
@@ -100,7 +100,7 @@ export const UpdateProjectStatus = async () => {
   const ad = await edClient.getAccounts();
 
   const client = await SigningStargateClient.connectWithSigner(
-    "https://testnet.ixo.earth/rpc/",
+    process.env.RPC_URL,
     // @ts-ignore
     edClient,
     {
@@ -146,7 +146,7 @@ export const CreateAgent = async () => {
   const ad = await edClient.getAccounts();
 
   const client = await SigningStargateClient.connectWithSigner(
-    "https://testnet.ixo.earth/rpc/",
+    process.env.RPC_URL,
     // @ts-ignore
     edClient,
     {
@@ -192,7 +192,7 @@ export const UpdateAgent = async () => {
   const ad = await edClient.getAccounts();
 
   const client = await SigningStargateClient.connectWithSigner(
-    "https://testnet.ixo.earth/rpc/",
+    process.env.RPC_URL,
     // @ts-ignore
     edClient,
     {
@@ -238,7 +238,7 @@ export const CreateClaim = async () => {
   const ad = await edClient.getAccounts();
 
   const client = await SigningStargateClient.connectWithSigner(
-    "https://testnet.ixo.earth/rpc/",
+    process.env.RPC_URL,
     // @ts-ignore
     edClient,
     {
@@ -284,7 +284,7 @@ export const CreateEvaluation = async () => {
   const ad = await edClient.getAccounts();
 
   const client = await SigningStargateClient.connectWithSigner(
-    "https://testnet.ixo.earth/rpc/",
+    process.env.RPC_URL,
     // @ts-ignore
     edClient,
     {
@@ -330,7 +330,7 @@ export const WithdrawFunds = async () => {
   const ad = await edClient.getAccounts();
 
   const client = await SigningStargateClient.connectWithSigner(
-    "https://testnet.ixo.earth/rpc/",
+    process.env.RPC_URL,
     // @ts-ignore
     edClient,
     {
@@ -379,7 +379,7 @@ export const UpdateProjectDoc = async () => {
   const ad = await edClient.getAccounts();
 
   const client = await SigningStargateClient.connectWithSigner(
-    "https://testnet.ixo.earth/rpc/",
+    process.env.RPC_URL,
     // @ts-ignore
     edClient,
     {

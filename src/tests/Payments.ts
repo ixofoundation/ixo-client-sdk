@@ -37,7 +37,7 @@ export const SetPaymentContractAuthorization = async () => {
   const ad = await edClient.getAccounts();
 
   const client = await SigningStargateClient.connectWithSigner(
-    "https://testnet.ixo.earth/rpc/", // Replace with your own RPC endpoint
+    process.env.RPC_URL, // Replace with your own RPC endpoint
     // @ts-ignore
     edClient,
     {
@@ -83,7 +83,7 @@ export const CreatePaymentTemplate = async () => {
   const ad = await edClient.getAccounts();
 
   const client = await SigningStargateClient.connectWithSigner(
-    "https://testnet.ixo.earth/rpc/", // Replace with your own RPC endpoint
+    process.env.RPC_URL, // Replace with your own RPC endpoint
     // @ts-ignore
     edClient,
     {
@@ -149,7 +149,7 @@ export const CreatePaymentContract = async () => {
   const ad = await edClient.getAccounts();
 
   const client = await SigningStargateClient.connectWithSigner(
-    "https://testnet.ixo.earth/rpc/", // Replace with your own RPC endpoint
+    process.env.RPC_URL, // Replace with your own RPC endpoint
     // @ts-ignore
     edClient,
     {
@@ -198,7 +198,7 @@ export const CreateSubscription = async () => {
   const ad = await edClient.getAccounts();
 
   const client = await SigningStargateClient.connectWithSigner(
-    "https://testnet.ixo.earth/rpc/", // Replace with your own RPC endpoint
+    process.env.RPC_URL, // Replace with your own RPC endpoint
     // @ts-ignore
     edClient,
     {
@@ -246,7 +246,7 @@ export const GrantDiscount = async () => {
   const ad = await edClient.getAccounts();
 
   const client = await SigningStargateClient.connectWithSigner(
-    "https://testnet.ixo.earth/rpc/", // Replace with your own RPC endpoint
+    process.env.RPC_URL, // Replace with your own RPC endpoint
     // @ts-ignore
     edClient,
     {
@@ -290,7 +290,7 @@ export const RevokeDiscount = async () => {
   const ad = await edClient.getAccounts();
 
   const client = await SigningStargateClient.connectWithSigner(
-    "https://testnet.ixo.earth/rpc/", // Replace with your own RPC endpoint
+    process.env.RPC_URL, // Replace with your own RPC endpoint
     // @ts-ignore
     edClient,
     {
@@ -333,7 +333,7 @@ export const EffectPayment = async () => {
   const ad = await edClient.getAccounts();
 
   const client = await SigningStargateClient.connectWithSigner(
-    "https://testnet.ixo.earth/rpc/", // Replace with your own RPC endpoint
+    process.env.RPC_URL, // Replace with your own RPC endpoint
     // @ts-ignore
     edClient,
     {

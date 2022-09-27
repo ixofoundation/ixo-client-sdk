@@ -20,7 +20,7 @@ export const AddDid = async () => {
   const ad = await edClient.getAccounts();
 
   const client = await SigningStargateClient.connectWithSigner(
-    "https://testnet.ixo.earth/rpc/", // Replace with your own RPC endpoint
+    process.env.RPC_URL, // Replace with your own RPC endpoint
     // @ts-ignore
     edClient,
     {
@@ -62,7 +62,7 @@ export const AddCredential = async () => {
   const ad = await edClient.getAccounts();
 
   const client = await SigningStargateClient.connectWithSigner(
-    "https://testnet.ixo.earth/rpc/", // Replace with your own RPC endpoint
+    process.env.RPC_URL, // Replace with your own RPC endpoint
     // @ts-ignore
     edClient,
     {
