@@ -275,6 +275,7 @@ export async function TransactionCreateBond(
   alphaBond: boolean,
   batchBlocks: string,
   outcomePayment: string,
+  creatorAddress: string,
   maxSupply?: Coin
 ): Promise<MsgCreateBondResponse> {
   const { msgqueryService } = await initializerpcclient();
@@ -302,6 +303,7 @@ export async function TransactionCreateBond(
     alphaBond,
     batchBlocks,
     outcomePayment,
+    creatorAddress,
   });
 
   return transactionResult;
@@ -326,6 +328,7 @@ export async function TransactionEditBond(
     sanityRate,
     sanityMarginPercentage,
     editorDid,
+    editorAddress: "",
   });
 
   return transactionResult;
@@ -342,6 +345,7 @@ export async function TransactionNextAlpha(
     bondDid,
     alpha,
     editorDid,
+    editorAddress: "",
   });
 
   return transactionResult;
@@ -358,6 +362,7 @@ export async function TransactionUpdateBondState(
     bondDid,
     state,
     editorDid,
+    editorAddress: "",
   });
 
   return transactionResult;
@@ -376,6 +381,7 @@ export async function TransactionBuy(
     amount,
     maxPrices,
     bondDid,
+    buyerAddress: "",
   });
 
   return transactionResult;
@@ -392,6 +398,7 @@ export async function TransactionSell(
     sellerDid,
     amount,
     bondDid,
+    sellerAddress: "",
   });
 
   return transactionResult;
@@ -410,6 +417,7 @@ export async function TransactionSwap(
     bondDid,
     toToken,
     from,
+    swapperAddress: "",
   });
 
   return transactionResult;
@@ -426,6 +434,7 @@ export async function TransactionMakeOutcomePayment(
     senderDid,
     amount,
     bondDid,
+    senderAddress: "",
   });
 
   return transactionResult;
@@ -440,6 +449,7 @@ export async function TransactionWithdrawShare(
   const transactionResult = await msgqueryService.WithdrawShare({
     recipientDid,
     bondDid,
+    recipientAddress: "",
   });
 
   return transactionResult;
@@ -456,6 +466,7 @@ export async function TransactionWithdrawReserve(
     withdrawerDid,
     amount,
     bondDid,
+    withdrawerAddress: "",
   });
 
   return transactionResult;
