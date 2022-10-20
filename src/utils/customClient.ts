@@ -320,6 +320,7 @@ export class SigningStargateClient extends StargateClient {
 			type: pubkeyType.ed25519,
 			value: toBase64(accountFromSigner.pubkey),
 		});
+		console.log(messages);
 		const txBodyEncodeObject: TxBodyEncodeObject = {
 			typeUrl: '/cosmos.tx.v1beta1.TxBody',
 			value: {
