@@ -1,31 +1,27 @@
 /* eslint-disable */
 import Long from "long";
 import _m0 from "protobufjs/minimal";
-import { Batch, Bond, Params } from "./bonds";
+import { IidDocument, IidMetadata } from "./iid";
 
-export const protobufPackage = "bonds";
+export const protobufPackage = "iid";
 
-/** GenesisState defines the bonds module's genesis state. */
+/** GenesisState defines the did module's genesis state. */
 export interface GenesisState {
-  bonds: Bond[];
-  batches: Batch[];
-  params?: Params;
+  iidDocs: IidDocument[];
+  iidMeta: IidMetadata[];
 }
 
 function createBaseGenesisState(): GenesisState {
-  return { bonds: [], batches: [], params: undefined };
+  return { iidDocs: [], iidMeta: [] };
 }
 
 export const GenesisState = {
   encode(message: GenesisState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    for (const v of message.bonds) {
-      Bond.encode(v!, writer.uint32(10).fork()).ldelim();
+    for (const v of message.iidDocs) {
+      IidDocument.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    for (const v of message.batches) {
-      Batch.encode(v!, writer.uint32(18).fork()).ldelim();
-    }
-    if (message.params !== undefined) {
-      Params.encode(message.params, writer.uint32(26).fork()).ldelim();
+    for (const v of message.iidMeta) {
+      IidMetadata.encode(v!, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -38,13 +34,10 @@ export const GenesisState = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.bonds.push(Bond.decode(reader, reader.uint32()));
+          message.iidDocs.push(IidDocument.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.batches.push(Batch.decode(reader, reader.uint32()));
-          break;
-        case 3:
-          message.params = Params.decode(reader, reader.uint32());
+          message.iidMeta.push(IidMetadata.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -56,35 +49,30 @@ export const GenesisState = {
 
   fromJSON(object: any): GenesisState {
     return {
-      bonds: Array.isArray(object?.bonds) ? object.bonds.map((e: any) => Bond.fromJSON(e)) : [],
-      batches: Array.isArray(object?.batches) ? object.batches.map((e: any) => Batch.fromJSON(e)) : [],
-      params: isSet(object.params) ? Params.fromJSON(object.params) : undefined,
+      iidDocs: Array.isArray(object?.iidDocs) ? object.iidDocs.map((e: any) => IidDocument.fromJSON(e)) : [],
+      iidMeta: Array.isArray(object?.iidMeta) ? object.iidMeta.map((e: any) => IidMetadata.fromJSON(e)) : [],
     };
   },
 
   toJSON(message: GenesisState): unknown {
     const obj: any = {};
-    if (message.bonds) {
-      obj.bonds = message.bonds.map((e) => e ? Bond.toJSON(e) : undefined);
+    if (message.iidDocs) {
+      obj.iidDocs = message.iidDocs.map((e) => e ? IidDocument.toJSON(e) : undefined);
     } else {
-      obj.bonds = [];
+      obj.iidDocs = [];
     }
-    if (message.batches) {
-      obj.batches = message.batches.map((e) => e ? Batch.toJSON(e) : undefined);
+    if (message.iidMeta) {
+      obj.iidMeta = message.iidMeta.map((e) => e ? IidMetadata.toJSON(e) : undefined);
     } else {
-      obj.batches = [];
+      obj.iidMeta = [];
     }
-    message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<GenesisState>, I>>(object: I): GenesisState {
     const message = createBaseGenesisState();
-    message.bonds = object.bonds?.map((e) => Bond.fromPartial(e)) || [];
-    message.batches = object.batches?.map((e) => Batch.fromPartial(e)) || [];
-    message.params = (object.params !== undefined && object.params !== null)
-      ? Params.fromPartial(object.params)
-      : undefined;
+    message.iidDocs = object.iidDocs?.map((e) => IidDocument.fromPartial(e)) || [];
+    message.iidMeta = object.iidMeta?.map((e) => IidMetadata.fromPartial(e)) || [];
     return message;
   },
 };
@@ -104,8 +92,4 @@ export type Exact<P, I extends P> = P extends Builtin ? P
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;
   _m0.configure();
-}
-
-function isSet(value: any): boolean {
-  return value !== null && value !== undefined;
 }

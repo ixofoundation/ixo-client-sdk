@@ -1,13 +1,14 @@
 /* eslint-disable */
 import Long from "long";
-import * as _m0 from "protobufjs/minimal";
-import { Bond, Batch, Params, BondDetails } from "../bonds/bonds";
+import _m0 from "protobufjs/minimal";
 import { Coin, DecCoin } from "../cosmos/coin";
+import { Batch, Bond, BondDetails, Params } from "./bonds";
 
 export const protobufPackage = "bonds";
 
 /** QueryBondsRequest is the request type for the Query/Bonds RPC method. */
-export interface QueryBondsRequest {}
+export interface QueryBondsRequest {
+}
 
 /** QueryBondsResponse is the response type for the Query/Bonds RPC method. */
 export interface QueryBondsResponse {
@@ -15,7 +16,8 @@ export interface QueryBondsResponse {
 }
 
 /** QueryBondsDetailedRequest is the request type for the Query/BondsDetailed RPC method. */
-export interface QueryBondsDetailedRequest {}
+export interface QueryBondsDetailedRequest {
+}
 
 /** QueryBondsDetailedResponse is the response type for the Query/BondsDetailed RPC method. */
 export interface QueryBondsDetailedResponse {
@@ -149,7 +151,8 @@ export interface QueryAlphaMaximumsResponse {
 }
 
 /** QueryParamsRequest is the request type for the Query/Params RPC method. */
-export interface QueryParamsRequest {}
+export interface QueryParamsRequest {
+}
 
 /** QueryParamsResponse is the response type for the Query/Params RPC method. */
 export interface QueryParamsResponse {
@@ -161,10 +164,7 @@ function createBaseQueryBondsRequest(): QueryBondsRequest {
 }
 
 export const QueryBondsRequest = {
-  encode(
-    _: QueryBondsRequest,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: QueryBondsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
@@ -192,9 +192,7 @@ export const QueryBondsRequest = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryBondsRequest>, I>>(
-    _: I
-  ): QueryBondsRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryBondsRequest>, I>>(_: I): QueryBondsRequest {
     const message = createBaseQueryBondsRequest();
     return message;
   },
@@ -205,10 +203,7 @@ function createBaseQueryBondsResponse(): QueryBondsResponse {
 }
 
 export const QueryBondsResponse = {
-  encode(
-    message: QueryBondsResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryBondsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.bonds) {
       writer.uint32(10).string(v!);
     }
@@ -234,11 +229,7 @@ export const QueryBondsResponse = {
   },
 
   fromJSON(object: any): QueryBondsResponse {
-    return {
-      bonds: Array.isArray(object?.bonds)
-        ? object.bonds.map((e: any) => String(e))
-        : [],
-    };
+    return { bonds: Array.isArray(object?.bonds) ? object.bonds.map((e: any) => String(e)) : [] };
   },
 
   toJSON(message: QueryBondsResponse): unknown {
@@ -251,9 +242,7 @@ export const QueryBondsResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryBondsResponse>, I>>(
-    object: I
-  ): QueryBondsResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryBondsResponse>, I>>(object: I): QueryBondsResponse {
     const message = createBaseQueryBondsResponse();
     message.bonds = object.bonds?.map((e) => e) || [];
     return message;
@@ -265,17 +254,11 @@ function createBaseQueryBondsDetailedRequest(): QueryBondsDetailedRequest {
 }
 
 export const QueryBondsDetailedRequest = {
-  encode(
-    _: QueryBondsDetailedRequest,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: QueryBondsDetailedRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryBondsDetailedRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryBondsDetailedRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryBondsDetailedRequest();
@@ -299,9 +282,7 @@ export const QueryBondsDetailedRequest = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryBondsDetailedRequest>, I>>(
-    _: I
-  ): QueryBondsDetailedRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryBondsDetailedRequest>, I>>(_: I): QueryBondsDetailedRequest {
     const message = createBaseQueryBondsDetailedRequest();
     return message;
   },
@@ -312,20 +293,14 @@ function createBaseQueryBondsDetailedResponse(): QueryBondsDetailedResponse {
 }
 
 export const QueryBondsDetailedResponse = {
-  encode(
-    message: QueryBondsDetailedResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryBondsDetailedResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.bondsDetailed) {
       BondDetails.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryBondsDetailedResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryBondsDetailedResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryBondsDetailedResponse();
@@ -333,9 +308,7 @@ export const QueryBondsDetailedResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.bondsDetailed.push(
-            BondDetails.decode(reader, reader.uint32())
-          );
+          message.bondsDetailed.push(BondDetails.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -356,21 +329,16 @@ export const QueryBondsDetailedResponse = {
   toJSON(message: QueryBondsDetailedResponse): unknown {
     const obj: any = {};
     if (message.bondsDetailed) {
-      obj.bondsDetailed = message.bondsDetailed.map((e) =>
-        e ? BondDetails.toJSON(e) : undefined
-      );
+      obj.bondsDetailed = message.bondsDetailed.map((e) => e ? BondDetails.toJSON(e) : undefined);
     } else {
       obj.bondsDetailed = [];
     }
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryBondsDetailedResponse>, I>>(
-    object: I
-  ): QueryBondsDetailedResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryBondsDetailedResponse>, I>>(object: I): QueryBondsDetailedResponse {
     const message = createBaseQueryBondsDetailedResponse();
-    message.bondsDetailed =
-      object.bondsDetailed?.map((e) => BondDetails.fromPartial(e)) || [];
+    message.bondsDetailed = object.bondsDetailed?.map((e) => BondDetails.fromPartial(e)) || [];
     return message;
   },
 };
@@ -380,10 +348,7 @@ function createBaseQueryBondRequest(): QueryBondRequest {
 }
 
 export const QueryBondRequest = {
-  encode(
-    message: QueryBondRequest,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryBondRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.bondDid !== "") {
       writer.uint32(10).string(message.bondDid);
     }
@@ -409,9 +374,7 @@ export const QueryBondRequest = {
   },
 
   fromJSON(object: any): QueryBondRequest {
-    return {
-      bondDid: isSet(object.bondDid) ? String(object.bondDid) : "",
-    };
+    return { bondDid: isSet(object.bondDid) ? String(object.bondDid) : "" };
   },
 
   toJSON(message: QueryBondRequest): unknown {
@@ -420,9 +383,7 @@ export const QueryBondRequest = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryBondRequest>, I>>(
-    object: I
-  ): QueryBondRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryBondRequest>, I>>(object: I): QueryBondRequest {
     const message = createBaseQueryBondRequest();
     message.bondDid = object.bondDid ?? "";
     return message;
@@ -434,10 +395,7 @@ function createBaseQueryBondResponse(): QueryBondResponse {
 }
 
 export const QueryBondResponse = {
-  encode(
-    message: QueryBondResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryBondResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.bond !== undefined) {
       Bond.encode(message.bond, writer.uint32(10).fork()).ldelim();
     }
@@ -463,26 +421,18 @@ export const QueryBondResponse = {
   },
 
   fromJSON(object: any): QueryBondResponse {
-    return {
-      bond: isSet(object.bond) ? Bond.fromJSON(object.bond) : undefined,
-    };
+    return { bond: isSet(object.bond) ? Bond.fromJSON(object.bond) : undefined };
   },
 
   toJSON(message: QueryBondResponse): unknown {
     const obj: any = {};
-    message.bond !== undefined &&
-      (obj.bond = message.bond ? Bond.toJSON(message.bond) : undefined);
+    message.bond !== undefined && (obj.bond = message.bond ? Bond.toJSON(message.bond) : undefined);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryBondResponse>, I>>(
-    object: I
-  ): QueryBondResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryBondResponse>, I>>(object: I): QueryBondResponse {
     const message = createBaseQueryBondResponse();
-    message.bond =
-      object.bond !== undefined && object.bond !== null
-        ? Bond.fromPartial(object.bond)
-        : undefined;
+    message.bond = (object.bond !== undefined && object.bond !== null) ? Bond.fromPartial(object.bond) : undefined;
     return message;
   },
 };
@@ -492,10 +442,7 @@ function createBaseQueryBatchRequest(): QueryBatchRequest {
 }
 
 export const QueryBatchRequest = {
-  encode(
-    message: QueryBatchRequest,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryBatchRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.bondDid !== "") {
       writer.uint32(10).string(message.bondDid);
     }
@@ -521,9 +468,7 @@ export const QueryBatchRequest = {
   },
 
   fromJSON(object: any): QueryBatchRequest {
-    return {
-      bondDid: isSet(object.bondDid) ? String(object.bondDid) : "",
-    };
+    return { bondDid: isSet(object.bondDid) ? String(object.bondDid) : "" };
   },
 
   toJSON(message: QueryBatchRequest): unknown {
@@ -532,9 +477,7 @@ export const QueryBatchRequest = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryBatchRequest>, I>>(
-    object: I
-  ): QueryBatchRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryBatchRequest>, I>>(object: I): QueryBatchRequest {
     const message = createBaseQueryBatchRequest();
     message.bondDid = object.bondDid ?? "";
     return message;
@@ -546,10 +489,7 @@ function createBaseQueryBatchResponse(): QueryBatchResponse {
 }
 
 export const QueryBatchResponse = {
-  encode(
-    message: QueryBatchResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryBatchResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.batch !== undefined) {
       Batch.encode(message.batch, writer.uint32(10).fork()).ldelim();
     }
@@ -575,26 +515,18 @@ export const QueryBatchResponse = {
   },
 
   fromJSON(object: any): QueryBatchResponse {
-    return {
-      batch: isSet(object.batch) ? Batch.fromJSON(object.batch) : undefined,
-    };
+    return { batch: isSet(object.batch) ? Batch.fromJSON(object.batch) : undefined };
   },
 
   toJSON(message: QueryBatchResponse): unknown {
     const obj: any = {};
-    message.batch !== undefined &&
-      (obj.batch = message.batch ? Batch.toJSON(message.batch) : undefined);
+    message.batch !== undefined && (obj.batch = message.batch ? Batch.toJSON(message.batch) : undefined);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryBatchResponse>, I>>(
-    object: I
-  ): QueryBatchResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryBatchResponse>, I>>(object: I): QueryBatchResponse {
     const message = createBaseQueryBatchResponse();
-    message.batch =
-      object.batch !== undefined && object.batch !== null
-        ? Batch.fromPartial(object.batch)
-        : undefined;
+    message.batch = (object.batch !== undefined && object.batch !== null) ? Batch.fromPartial(object.batch) : undefined;
     return message;
   },
 };
@@ -604,20 +536,14 @@ function createBaseQueryLastBatchRequest(): QueryLastBatchRequest {
 }
 
 export const QueryLastBatchRequest = {
-  encode(
-    message: QueryLastBatchRequest,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryLastBatchRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.bondDid !== "") {
       writer.uint32(10).string(message.bondDid);
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryLastBatchRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryLastBatchRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryLastBatchRequest();
@@ -636,9 +562,7 @@ export const QueryLastBatchRequest = {
   },
 
   fromJSON(object: any): QueryLastBatchRequest {
-    return {
-      bondDid: isSet(object.bondDid) ? String(object.bondDid) : "",
-    };
+    return { bondDid: isSet(object.bondDid) ? String(object.bondDid) : "" };
   },
 
   toJSON(message: QueryLastBatchRequest): unknown {
@@ -647,9 +571,7 @@ export const QueryLastBatchRequest = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryLastBatchRequest>, I>>(
-    object: I
-  ): QueryLastBatchRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryLastBatchRequest>, I>>(object: I): QueryLastBatchRequest {
     const message = createBaseQueryLastBatchRequest();
     message.bondDid = object.bondDid ?? "";
     return message;
@@ -661,20 +583,14 @@ function createBaseQueryLastBatchResponse(): QueryLastBatchResponse {
 }
 
 export const QueryLastBatchResponse = {
-  encode(
-    message: QueryLastBatchResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryLastBatchResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.lastBatch !== undefined) {
       Batch.encode(message.lastBatch, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryLastBatchResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryLastBatchResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryLastBatchResponse();
@@ -693,30 +609,21 @@ export const QueryLastBatchResponse = {
   },
 
   fromJSON(object: any): QueryLastBatchResponse {
-    return {
-      lastBatch: isSet(object.lastBatch)
-        ? Batch.fromJSON(object.lastBatch)
-        : undefined,
-    };
+    return { lastBatch: isSet(object.lastBatch) ? Batch.fromJSON(object.lastBatch) : undefined };
   },
 
   toJSON(message: QueryLastBatchResponse): unknown {
     const obj: any = {};
     message.lastBatch !== undefined &&
-      (obj.lastBatch = message.lastBatch
-        ? Batch.toJSON(message.lastBatch)
-        : undefined);
+      (obj.lastBatch = message.lastBatch ? Batch.toJSON(message.lastBatch) : undefined);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryLastBatchResponse>, I>>(
-    object: I
-  ): QueryLastBatchResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryLastBatchResponse>, I>>(object: I): QueryLastBatchResponse {
     const message = createBaseQueryLastBatchResponse();
-    message.lastBatch =
-      object.lastBatch !== undefined && object.lastBatch !== null
-        ? Batch.fromPartial(object.lastBatch)
-        : undefined;
+    message.lastBatch = (object.lastBatch !== undefined && object.lastBatch !== null)
+      ? Batch.fromPartial(object.lastBatch)
+      : undefined;
     return message;
   },
 };
@@ -726,20 +633,14 @@ function createBaseQueryCurrentPriceRequest(): QueryCurrentPriceRequest {
 }
 
 export const QueryCurrentPriceRequest = {
-  encode(
-    message: QueryCurrentPriceRequest,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryCurrentPriceRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.bondDid !== "") {
       writer.uint32(10).string(message.bondDid);
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryCurrentPriceRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryCurrentPriceRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryCurrentPriceRequest();
@@ -758,9 +659,7 @@ export const QueryCurrentPriceRequest = {
   },
 
   fromJSON(object: any): QueryCurrentPriceRequest {
-    return {
-      bondDid: isSet(object.bondDid) ? String(object.bondDid) : "",
-    };
+    return { bondDid: isSet(object.bondDid) ? String(object.bondDid) : "" };
   },
 
   toJSON(message: QueryCurrentPriceRequest): unknown {
@@ -769,9 +668,7 @@ export const QueryCurrentPriceRequest = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryCurrentPriceRequest>, I>>(
-    object: I
-  ): QueryCurrentPriceRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryCurrentPriceRequest>, I>>(object: I): QueryCurrentPriceRequest {
     const message = createBaseQueryCurrentPriceRequest();
     message.bondDid = object.bondDid ?? "";
     return message;
@@ -783,20 +680,14 @@ function createBaseQueryCurrentPriceResponse(): QueryCurrentPriceResponse {
 }
 
 export const QueryCurrentPriceResponse = {
-  encode(
-    message: QueryCurrentPriceResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryCurrentPriceResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.currentPrice) {
       DecCoin.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryCurrentPriceResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryCurrentPriceResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryCurrentPriceResponse();
@@ -816,30 +707,23 @@ export const QueryCurrentPriceResponse = {
 
   fromJSON(object: any): QueryCurrentPriceResponse {
     return {
-      currentPrice: Array.isArray(object?.currentPrice)
-        ? object.currentPrice.map((e: any) => DecCoin.fromJSON(e))
-        : [],
+      currentPrice: Array.isArray(object?.currentPrice) ? object.currentPrice.map((e: any) => DecCoin.fromJSON(e)) : [],
     };
   },
 
   toJSON(message: QueryCurrentPriceResponse): unknown {
     const obj: any = {};
     if (message.currentPrice) {
-      obj.currentPrice = message.currentPrice.map((e) =>
-        e ? DecCoin.toJSON(e) : undefined
-      );
+      obj.currentPrice = message.currentPrice.map((e) => e ? DecCoin.toJSON(e) : undefined);
     } else {
       obj.currentPrice = [];
     }
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryCurrentPriceResponse>, I>>(
-    object: I
-  ): QueryCurrentPriceResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryCurrentPriceResponse>, I>>(object: I): QueryCurrentPriceResponse {
     const message = createBaseQueryCurrentPriceResponse();
-    message.currentPrice =
-      object.currentPrice?.map((e) => DecCoin.fromPartial(e)) || [];
+    message.currentPrice = object.currentPrice?.map((e) => DecCoin.fromPartial(e)) || [];
     return message;
   },
 };
@@ -849,20 +733,14 @@ function createBaseQueryCurrentReserveRequest(): QueryCurrentReserveRequest {
 }
 
 export const QueryCurrentReserveRequest = {
-  encode(
-    message: QueryCurrentReserveRequest,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryCurrentReserveRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.bondDid !== "") {
       writer.uint32(10).string(message.bondDid);
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryCurrentReserveRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryCurrentReserveRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryCurrentReserveRequest();
@@ -881,9 +759,7 @@ export const QueryCurrentReserveRequest = {
   },
 
   fromJSON(object: any): QueryCurrentReserveRequest {
-    return {
-      bondDid: isSet(object.bondDid) ? String(object.bondDid) : "",
-    };
+    return { bondDid: isSet(object.bondDid) ? String(object.bondDid) : "" };
   },
 
   toJSON(message: QueryCurrentReserveRequest): unknown {
@@ -892,9 +768,7 @@ export const QueryCurrentReserveRequest = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryCurrentReserveRequest>, I>>(
-    object: I
-  ): QueryCurrentReserveRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryCurrentReserveRequest>, I>>(object: I): QueryCurrentReserveRequest {
     const message = createBaseQueryCurrentReserveRequest();
     message.bondDid = object.bondDid ?? "";
     return message;
@@ -906,20 +780,14 @@ function createBaseQueryCurrentReserveResponse(): QueryCurrentReserveResponse {
 }
 
 export const QueryCurrentReserveResponse = {
-  encode(
-    message: QueryCurrentReserveResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryCurrentReserveResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.currentReserve) {
       Coin.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryCurrentReserveResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryCurrentReserveResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryCurrentReserveResponse();
@@ -948,21 +816,16 @@ export const QueryCurrentReserveResponse = {
   toJSON(message: QueryCurrentReserveResponse): unknown {
     const obj: any = {};
     if (message.currentReserve) {
-      obj.currentReserve = message.currentReserve.map((e) =>
-        e ? Coin.toJSON(e) : undefined
-      );
+      obj.currentReserve = message.currentReserve.map((e) => e ? Coin.toJSON(e) : undefined);
     } else {
       obj.currentReserve = [];
     }
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryCurrentReserveResponse>, I>>(
-    object: I
-  ): QueryCurrentReserveResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryCurrentReserveResponse>, I>>(object: I): QueryCurrentReserveResponse {
     const message = createBaseQueryCurrentReserveResponse();
-    message.currentReserve =
-      object.currentReserve?.map((e) => Coin.fromPartial(e)) || [];
+    message.currentReserve = object.currentReserve?.map((e) => Coin.fromPartial(e)) || [];
     return message;
   },
 };
@@ -972,20 +835,14 @@ function createBaseQueryAvailableReserveRequest(): QueryAvailableReserveRequest 
 }
 
 export const QueryAvailableReserveRequest = {
-  encode(
-    message: QueryAvailableReserveRequest,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryAvailableReserveRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.bondDid !== "") {
       writer.uint32(10).string(message.bondDid);
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryAvailableReserveRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAvailableReserveRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAvailableReserveRequest();
@@ -1004,9 +861,7 @@ export const QueryAvailableReserveRequest = {
   },
 
   fromJSON(object: any): QueryAvailableReserveRequest {
-    return {
-      bondDid: isSet(object.bondDid) ? String(object.bondDid) : "",
-    };
+    return { bondDid: isSet(object.bondDid) ? String(object.bondDid) : "" };
   },
 
   toJSON(message: QueryAvailableReserveRequest): unknown {
@@ -1015,9 +870,7 @@ export const QueryAvailableReserveRequest = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryAvailableReserveRequest>, I>>(
-    object: I
-  ): QueryAvailableReserveRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryAvailableReserveRequest>, I>>(object: I): QueryAvailableReserveRequest {
     const message = createBaseQueryAvailableReserveRequest();
     message.bondDid = object.bondDid ?? "";
     return message;
@@ -1029,20 +882,14 @@ function createBaseQueryAvailableReserveResponse(): QueryAvailableReserveRespons
 }
 
 export const QueryAvailableReserveResponse = {
-  encode(
-    message: QueryAvailableReserveResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryAvailableReserveResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.availableReserve) {
       Coin.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryAvailableReserveResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAvailableReserveResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAvailableReserveResponse();
@@ -1071,9 +918,7 @@ export const QueryAvailableReserveResponse = {
   toJSON(message: QueryAvailableReserveResponse): unknown {
     const obj: any = {};
     if (message.availableReserve) {
-      obj.availableReserve = message.availableReserve.map((e) =>
-        e ? Coin.toJSON(e) : undefined
-      );
+      obj.availableReserve = message.availableReserve.map((e) => e ? Coin.toJSON(e) : undefined);
     } else {
       obj.availableReserve = [];
     }
@@ -1081,11 +926,10 @@ export const QueryAvailableReserveResponse = {
   },
 
   fromPartial<I extends Exact<DeepPartial<QueryAvailableReserveResponse>, I>>(
-    object: I
+    object: I,
   ): QueryAvailableReserveResponse {
     const message = createBaseQueryAvailableReserveResponse();
-    message.availableReserve =
-      object.availableReserve?.map((e) => Coin.fromPartial(e)) || [];
+    message.availableReserve = object.availableReserve?.map((e) => Coin.fromPartial(e)) || [];
     return message;
   },
 };
@@ -1095,10 +939,7 @@ function createBaseQueryCustomPriceRequest(): QueryCustomPriceRequest {
 }
 
 export const QueryCustomPriceRequest = {
-  encode(
-    message: QueryCustomPriceRequest,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryCustomPriceRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.bondDid !== "") {
       writer.uint32(10).string(message.bondDid);
     }
@@ -1108,10 +949,7 @@ export const QueryCustomPriceRequest = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryCustomPriceRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryCustomPriceRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryCustomPriceRequest();
@@ -1146,9 +984,7 @@ export const QueryCustomPriceRequest = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryCustomPriceRequest>, I>>(
-    object: I
-  ): QueryCustomPriceRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryCustomPriceRequest>, I>>(object: I): QueryCustomPriceRequest {
     const message = createBaseQueryCustomPriceRequest();
     message.bondDid = object.bondDid ?? "";
     message.bondAmount = object.bondAmount ?? "";
@@ -1161,20 +997,14 @@ function createBaseQueryCustomPriceResponse(): QueryCustomPriceResponse {
 }
 
 export const QueryCustomPriceResponse = {
-  encode(
-    message: QueryCustomPriceResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryCustomPriceResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.price) {
       DecCoin.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryCustomPriceResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryCustomPriceResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryCustomPriceResponse();
@@ -1193,26 +1023,20 @@ export const QueryCustomPriceResponse = {
   },
 
   fromJSON(object: any): QueryCustomPriceResponse {
-    return {
-      price: Array.isArray(object?.price)
-        ? object.price.map((e: any) => DecCoin.fromJSON(e))
-        : [],
-    };
+    return { price: Array.isArray(object?.price) ? object.price.map((e: any) => DecCoin.fromJSON(e)) : [] };
   },
 
   toJSON(message: QueryCustomPriceResponse): unknown {
     const obj: any = {};
     if (message.price) {
-      obj.price = message.price.map((e) => (e ? DecCoin.toJSON(e) : undefined));
+      obj.price = message.price.map((e) => e ? DecCoin.toJSON(e) : undefined);
     } else {
       obj.price = [];
     }
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryCustomPriceResponse>, I>>(
-    object: I
-  ): QueryCustomPriceResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryCustomPriceResponse>, I>>(object: I): QueryCustomPriceResponse {
     const message = createBaseQueryCustomPriceResponse();
     message.price = object.price?.map((e) => DecCoin.fromPartial(e)) || [];
     return message;
@@ -1224,10 +1048,7 @@ function createBaseQueryBuyPriceRequest(): QueryBuyPriceRequest {
 }
 
 export const QueryBuyPriceRequest = {
-  encode(
-    message: QueryBuyPriceRequest,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryBuyPriceRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.bondDid !== "") {
       writer.uint32(10).string(message.bondDid);
     }
@@ -1237,10 +1058,7 @@ export const QueryBuyPriceRequest = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryBuyPriceRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryBuyPriceRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryBuyPriceRequest();
@@ -1275,9 +1093,7 @@ export const QueryBuyPriceRequest = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryBuyPriceRequest>, I>>(
-    object: I
-  ): QueryBuyPriceRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryBuyPriceRequest>, I>>(object: I): QueryBuyPriceRequest {
     const message = createBaseQueryBuyPriceRequest();
     message.bondDid = object.bondDid ?? "";
     message.bondAmount = object.bondAmount ?? "";
@@ -1286,20 +1102,11 @@ export const QueryBuyPriceRequest = {
 };
 
 function createBaseQueryBuyPriceResponse(): QueryBuyPriceResponse {
-  return {
-    adjustedSupply: undefined,
-    prices: [],
-    txFees: [],
-    totalPrices: [],
-    totalFees: [],
-  };
+  return { adjustedSupply: undefined, prices: [], txFees: [], totalPrices: [], totalFees: [] };
 }
 
 export const QueryBuyPriceResponse = {
-  encode(
-    message: QueryBuyPriceResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryBuyPriceResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.adjustedSupply !== undefined) {
       Coin.encode(message.adjustedSupply, writer.uint32(10).fork()).ldelim();
     }
@@ -1318,10 +1125,7 @@ export const QueryBuyPriceResponse = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryBuyPriceResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryBuyPriceResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryBuyPriceResponse();
@@ -1353,69 +1157,49 @@ export const QueryBuyPriceResponse = {
 
   fromJSON(object: any): QueryBuyPriceResponse {
     return {
-      adjustedSupply: isSet(object.adjustedSupply)
-        ? Coin.fromJSON(object.adjustedSupply)
-        : undefined,
-      prices: Array.isArray(object?.prices)
-        ? object.prices.map((e: any) => Coin.fromJSON(e))
-        : [],
-      txFees: Array.isArray(object?.txFees)
-        ? object.txFees.map((e: any) => Coin.fromJSON(e))
-        : [],
-      totalPrices: Array.isArray(object?.totalPrices)
-        ? object.totalPrices.map((e: any) => Coin.fromJSON(e))
-        : [],
-      totalFees: Array.isArray(object?.totalFees)
-        ? object.totalFees.map((e: any) => Coin.fromJSON(e))
-        : [],
+      adjustedSupply: isSet(object.adjustedSupply) ? Coin.fromJSON(object.adjustedSupply) : undefined,
+      prices: Array.isArray(object?.prices) ? object.prices.map((e: any) => Coin.fromJSON(e)) : [],
+      txFees: Array.isArray(object?.txFees) ? object.txFees.map((e: any) => Coin.fromJSON(e)) : [],
+      totalPrices: Array.isArray(object?.totalPrices) ? object.totalPrices.map((e: any) => Coin.fromJSON(e)) : [],
+      totalFees: Array.isArray(object?.totalFees) ? object.totalFees.map((e: any) => Coin.fromJSON(e)) : [],
     };
   },
 
   toJSON(message: QueryBuyPriceResponse): unknown {
     const obj: any = {};
     message.adjustedSupply !== undefined &&
-      (obj.adjustedSupply = message.adjustedSupply
-        ? Coin.toJSON(message.adjustedSupply)
-        : undefined);
+      (obj.adjustedSupply = message.adjustedSupply ? Coin.toJSON(message.adjustedSupply) : undefined);
     if (message.prices) {
-      obj.prices = message.prices.map((e) => (e ? Coin.toJSON(e) : undefined));
+      obj.prices = message.prices.map((e) => e ? Coin.toJSON(e) : undefined);
     } else {
       obj.prices = [];
     }
     if (message.txFees) {
-      obj.txFees = message.txFees.map((e) => (e ? Coin.toJSON(e) : undefined));
+      obj.txFees = message.txFees.map((e) => e ? Coin.toJSON(e) : undefined);
     } else {
       obj.txFees = [];
     }
     if (message.totalPrices) {
-      obj.totalPrices = message.totalPrices.map((e) =>
-        e ? Coin.toJSON(e) : undefined
-      );
+      obj.totalPrices = message.totalPrices.map((e) => e ? Coin.toJSON(e) : undefined);
     } else {
       obj.totalPrices = [];
     }
     if (message.totalFees) {
-      obj.totalFees = message.totalFees.map((e) =>
-        e ? Coin.toJSON(e) : undefined
-      );
+      obj.totalFees = message.totalFees.map((e) => e ? Coin.toJSON(e) : undefined);
     } else {
       obj.totalFees = [];
     }
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryBuyPriceResponse>, I>>(
-    object: I
-  ): QueryBuyPriceResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryBuyPriceResponse>, I>>(object: I): QueryBuyPriceResponse {
     const message = createBaseQueryBuyPriceResponse();
-    message.adjustedSupply =
-      object.adjustedSupply !== undefined && object.adjustedSupply !== null
-        ? Coin.fromPartial(object.adjustedSupply)
-        : undefined;
+    message.adjustedSupply = (object.adjustedSupply !== undefined && object.adjustedSupply !== null)
+      ? Coin.fromPartial(object.adjustedSupply)
+      : undefined;
     message.prices = object.prices?.map((e) => Coin.fromPartial(e)) || [];
     message.txFees = object.txFees?.map((e) => Coin.fromPartial(e)) || [];
-    message.totalPrices =
-      object.totalPrices?.map((e) => Coin.fromPartial(e)) || [];
+    message.totalPrices = object.totalPrices?.map((e) => Coin.fromPartial(e)) || [];
     message.totalFees = object.totalFees?.map((e) => Coin.fromPartial(e)) || [];
     return message;
   },
@@ -1426,10 +1210,7 @@ function createBaseQuerySellReturnRequest(): QuerySellReturnRequest {
 }
 
 export const QuerySellReturnRequest = {
-  encode(
-    message: QuerySellReturnRequest,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QuerySellReturnRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.bondDid !== "") {
       writer.uint32(10).string(message.bondDid);
     }
@@ -1439,10 +1220,7 @@ export const QuerySellReturnRequest = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QuerySellReturnRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QuerySellReturnRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQuerySellReturnRequest();
@@ -1477,9 +1255,7 @@ export const QuerySellReturnRequest = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QuerySellReturnRequest>, I>>(
-    object: I
-  ): QuerySellReturnRequest {
+  fromPartial<I extends Exact<DeepPartial<QuerySellReturnRequest>, I>>(object: I): QuerySellReturnRequest {
     const message = createBaseQuerySellReturnRequest();
     message.bondDid = object.bondDid ?? "";
     message.bondAmount = object.bondAmount ?? "";
@@ -1488,21 +1264,11 @@ export const QuerySellReturnRequest = {
 };
 
 function createBaseQuerySellReturnResponse(): QuerySellReturnResponse {
-  return {
-    adjustedSupply: undefined,
-    returns: [],
-    txFees: [],
-    exitFees: [],
-    totalReturns: [],
-    totalFees: [],
-  };
+  return { adjustedSupply: undefined, returns: [], txFees: [], exitFees: [], totalReturns: [], totalFees: [] };
 }
 
 export const QuerySellReturnResponse = {
-  encode(
-    message: QuerySellReturnResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QuerySellReturnResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.adjustedSupply !== undefined) {
       Coin.encode(message.adjustedSupply, writer.uint32(10).fork()).ldelim();
     }
@@ -1524,10 +1290,7 @@ export const QuerySellReturnResponse = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QuerySellReturnResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QuerySellReturnResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQuerySellReturnResponse();
@@ -1562,82 +1325,56 @@ export const QuerySellReturnResponse = {
 
   fromJSON(object: any): QuerySellReturnResponse {
     return {
-      adjustedSupply: isSet(object.adjustedSupply)
-        ? Coin.fromJSON(object.adjustedSupply)
-        : undefined,
-      returns: Array.isArray(object?.returns)
-        ? object.returns.map((e: any) => Coin.fromJSON(e))
-        : [],
-      txFees: Array.isArray(object?.txFees)
-        ? object.txFees.map((e: any) => Coin.fromJSON(e))
-        : [],
-      exitFees: Array.isArray(object?.exitFees)
-        ? object.exitFees.map((e: any) => Coin.fromJSON(e))
-        : [],
-      totalReturns: Array.isArray(object?.totalReturns)
-        ? object.totalReturns.map((e: any) => Coin.fromJSON(e))
-        : [],
-      totalFees: Array.isArray(object?.totalFees)
-        ? object.totalFees.map((e: any) => Coin.fromJSON(e))
-        : [],
+      adjustedSupply: isSet(object.adjustedSupply) ? Coin.fromJSON(object.adjustedSupply) : undefined,
+      returns: Array.isArray(object?.returns) ? object.returns.map((e: any) => Coin.fromJSON(e)) : [],
+      txFees: Array.isArray(object?.txFees) ? object.txFees.map((e: any) => Coin.fromJSON(e)) : [],
+      exitFees: Array.isArray(object?.exitFees) ? object.exitFees.map((e: any) => Coin.fromJSON(e)) : [],
+      totalReturns: Array.isArray(object?.totalReturns) ? object.totalReturns.map((e: any) => Coin.fromJSON(e)) : [],
+      totalFees: Array.isArray(object?.totalFees) ? object.totalFees.map((e: any) => Coin.fromJSON(e)) : [],
     };
   },
 
   toJSON(message: QuerySellReturnResponse): unknown {
     const obj: any = {};
     message.adjustedSupply !== undefined &&
-      (obj.adjustedSupply = message.adjustedSupply
-        ? Coin.toJSON(message.adjustedSupply)
-        : undefined);
+      (obj.adjustedSupply = message.adjustedSupply ? Coin.toJSON(message.adjustedSupply) : undefined);
     if (message.returns) {
-      obj.returns = message.returns.map((e) =>
-        e ? Coin.toJSON(e) : undefined
-      );
+      obj.returns = message.returns.map((e) => e ? Coin.toJSON(e) : undefined);
     } else {
       obj.returns = [];
     }
     if (message.txFees) {
-      obj.txFees = message.txFees.map((e) => (e ? Coin.toJSON(e) : undefined));
+      obj.txFees = message.txFees.map((e) => e ? Coin.toJSON(e) : undefined);
     } else {
       obj.txFees = [];
     }
     if (message.exitFees) {
-      obj.exitFees = message.exitFees.map((e) =>
-        e ? Coin.toJSON(e) : undefined
-      );
+      obj.exitFees = message.exitFees.map((e) => e ? Coin.toJSON(e) : undefined);
     } else {
       obj.exitFees = [];
     }
     if (message.totalReturns) {
-      obj.totalReturns = message.totalReturns.map((e) =>
-        e ? Coin.toJSON(e) : undefined
-      );
+      obj.totalReturns = message.totalReturns.map((e) => e ? Coin.toJSON(e) : undefined);
     } else {
       obj.totalReturns = [];
     }
     if (message.totalFees) {
-      obj.totalFees = message.totalFees.map((e) =>
-        e ? Coin.toJSON(e) : undefined
-      );
+      obj.totalFees = message.totalFees.map((e) => e ? Coin.toJSON(e) : undefined);
     } else {
       obj.totalFees = [];
     }
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QuerySellReturnResponse>, I>>(
-    object: I
-  ): QuerySellReturnResponse {
+  fromPartial<I extends Exact<DeepPartial<QuerySellReturnResponse>, I>>(object: I): QuerySellReturnResponse {
     const message = createBaseQuerySellReturnResponse();
-    message.adjustedSupply =
-      object.adjustedSupply !== undefined && object.adjustedSupply !== null
-        ? Coin.fromPartial(object.adjustedSupply)
-        : undefined;
+    message.adjustedSupply = (object.adjustedSupply !== undefined && object.adjustedSupply !== null)
+      ? Coin.fromPartial(object.adjustedSupply)
+      : undefined;
     message.returns = object.returns?.map((e) => Coin.fromPartial(e)) || [];
     message.txFees = object.txFees?.map((e) => Coin.fromPartial(e)) || [];
     message.exitFees = object.exitFees?.map((e) => Coin.fromPartial(e)) || [];
-    message.totalReturns =
-      object.totalReturns?.map((e) => Coin.fromPartial(e)) || [];
+    message.totalReturns = object.totalReturns?.map((e) => Coin.fromPartial(e)) || [];
     message.totalFees = object.totalFees?.map((e) => Coin.fromPartial(e)) || [];
     return message;
   },
@@ -1648,10 +1385,7 @@ function createBaseQuerySwapReturnRequest(): QuerySwapReturnRequest {
 }
 
 export const QuerySwapReturnRequest = {
-  encode(
-    message: QuerySwapReturnRequest,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QuerySwapReturnRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.bondDid !== "") {
       writer.uint32(10).string(message.bondDid);
     }
@@ -1664,10 +1398,7 @@ export const QuerySwapReturnRequest = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QuerySwapReturnRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QuerySwapReturnRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQuerySwapReturnRequest();
@@ -1694,9 +1425,7 @@ export const QuerySwapReturnRequest = {
   fromJSON(object: any): QuerySwapReturnRequest {
     return {
       bondDid: isSet(object.bondDid) ? String(object.bondDid) : "",
-      fromTokenWithAmount: isSet(object.fromTokenWithAmount)
-        ? String(object.fromTokenWithAmount)
-        : "",
+      fromTokenWithAmount: isSet(object.fromTokenWithAmount) ? String(object.fromTokenWithAmount) : "",
       toToken: isSet(object.toToken) ? String(object.toToken) : "",
     };
   },
@@ -1704,15 +1433,12 @@ export const QuerySwapReturnRequest = {
   toJSON(message: QuerySwapReturnRequest): unknown {
     const obj: any = {};
     message.bondDid !== undefined && (obj.bondDid = message.bondDid);
-    message.fromTokenWithAmount !== undefined &&
-      (obj.fromTokenWithAmount = message.fromTokenWithAmount);
+    message.fromTokenWithAmount !== undefined && (obj.fromTokenWithAmount = message.fromTokenWithAmount);
     message.toToken !== undefined && (obj.toToken = message.toToken);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QuerySwapReturnRequest>, I>>(
-    object: I
-  ): QuerySwapReturnRequest {
+  fromPartial<I extends Exact<DeepPartial<QuerySwapReturnRequest>, I>>(object: I): QuerySwapReturnRequest {
     const message = createBaseQuerySwapReturnRequest();
     message.bondDid = object.bondDid ?? "";
     message.fromTokenWithAmount = object.fromTokenWithAmount ?? "";
@@ -1726,10 +1452,7 @@ function createBaseQuerySwapReturnResponse(): QuerySwapReturnResponse {
 }
 
 export const QuerySwapReturnResponse = {
-  encode(
-    message: QuerySwapReturnResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QuerySwapReturnResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.totalReturns) {
       Coin.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -1739,10 +1462,7 @@ export const QuerySwapReturnResponse = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QuerySwapReturnResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QuerySwapReturnResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQuerySwapReturnResponse();
@@ -1765,40 +1485,29 @@ export const QuerySwapReturnResponse = {
 
   fromJSON(object: any): QuerySwapReturnResponse {
     return {
-      totalReturns: Array.isArray(object?.totalReturns)
-        ? object.totalReturns.map((e: any) => Coin.fromJSON(e))
-        : [],
-      totalFees: Array.isArray(object?.totalFees)
-        ? object.totalFees.map((e: any) => Coin.fromJSON(e))
-        : [],
+      totalReturns: Array.isArray(object?.totalReturns) ? object.totalReturns.map((e: any) => Coin.fromJSON(e)) : [],
+      totalFees: Array.isArray(object?.totalFees) ? object.totalFees.map((e: any) => Coin.fromJSON(e)) : [],
     };
   },
 
   toJSON(message: QuerySwapReturnResponse): unknown {
     const obj: any = {};
     if (message.totalReturns) {
-      obj.totalReturns = message.totalReturns.map((e) =>
-        e ? Coin.toJSON(e) : undefined
-      );
+      obj.totalReturns = message.totalReturns.map((e) => e ? Coin.toJSON(e) : undefined);
     } else {
       obj.totalReturns = [];
     }
     if (message.totalFees) {
-      obj.totalFees = message.totalFees.map((e) =>
-        e ? Coin.toJSON(e) : undefined
-      );
+      obj.totalFees = message.totalFees.map((e) => e ? Coin.toJSON(e) : undefined);
     } else {
       obj.totalFees = [];
     }
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QuerySwapReturnResponse>, I>>(
-    object: I
-  ): QuerySwapReturnResponse {
+  fromPartial<I extends Exact<DeepPartial<QuerySwapReturnResponse>, I>>(object: I): QuerySwapReturnResponse {
     const message = createBaseQuerySwapReturnResponse();
-    message.totalReturns =
-      object.totalReturns?.map((e) => Coin.fromPartial(e)) || [];
+    message.totalReturns = object.totalReturns?.map((e) => Coin.fromPartial(e)) || [];
     message.totalFees = object.totalFees?.map((e) => Coin.fromPartial(e)) || [];
     return message;
   },
@@ -1809,20 +1518,14 @@ function createBaseQueryAlphaMaximumsRequest(): QueryAlphaMaximumsRequest {
 }
 
 export const QueryAlphaMaximumsRequest = {
-  encode(
-    message: QueryAlphaMaximumsRequest,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryAlphaMaximumsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.bondDid !== "") {
       writer.uint32(10).string(message.bondDid);
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryAlphaMaximumsRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAlphaMaximumsRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAlphaMaximumsRequest();
@@ -1841,9 +1544,7 @@ export const QueryAlphaMaximumsRequest = {
   },
 
   fromJSON(object: any): QueryAlphaMaximumsRequest {
-    return {
-      bondDid: isSet(object.bondDid) ? String(object.bondDid) : "",
-    };
+    return { bondDid: isSet(object.bondDid) ? String(object.bondDid) : "" };
   },
 
   toJSON(message: QueryAlphaMaximumsRequest): unknown {
@@ -1852,9 +1553,7 @@ export const QueryAlphaMaximumsRequest = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryAlphaMaximumsRequest>, I>>(
-    object: I
-  ): QueryAlphaMaximumsRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryAlphaMaximumsRequest>, I>>(object: I): QueryAlphaMaximumsRequest {
     const message = createBaseQueryAlphaMaximumsRequest();
     message.bondDid = object.bondDid ?? "";
     return message;
@@ -1866,10 +1565,7 @@ function createBaseQueryAlphaMaximumsResponse(): QueryAlphaMaximumsResponse {
 }
 
 export const QueryAlphaMaximumsResponse = {
-  encode(
-    message: QueryAlphaMaximumsResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryAlphaMaximumsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.maxSystemAlphaIncrease !== "") {
       writer.uint32(10).string(message.maxSystemAlphaIncrease);
     }
@@ -1879,10 +1575,7 @@ export const QueryAlphaMaximumsResponse = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryAlphaMaximumsResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAlphaMaximumsResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAlphaMaximumsResponse();
@@ -1905,27 +1598,19 @@ export const QueryAlphaMaximumsResponse = {
 
   fromJSON(object: any): QueryAlphaMaximumsResponse {
     return {
-      maxSystemAlphaIncrease: isSet(object.maxSystemAlphaIncrease)
-        ? String(object.maxSystemAlphaIncrease)
-        : "",
-      maxSystemAlpha: isSet(object.maxSystemAlpha)
-        ? String(object.maxSystemAlpha)
-        : "",
+      maxSystemAlphaIncrease: isSet(object.maxSystemAlphaIncrease) ? String(object.maxSystemAlphaIncrease) : "",
+      maxSystemAlpha: isSet(object.maxSystemAlpha) ? String(object.maxSystemAlpha) : "",
     };
   },
 
   toJSON(message: QueryAlphaMaximumsResponse): unknown {
     const obj: any = {};
-    message.maxSystemAlphaIncrease !== undefined &&
-      (obj.maxSystemAlphaIncrease = message.maxSystemAlphaIncrease);
-    message.maxSystemAlpha !== undefined &&
-      (obj.maxSystemAlpha = message.maxSystemAlpha);
+    message.maxSystemAlphaIncrease !== undefined && (obj.maxSystemAlphaIncrease = message.maxSystemAlphaIncrease);
+    message.maxSystemAlpha !== undefined && (obj.maxSystemAlpha = message.maxSystemAlpha);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryAlphaMaximumsResponse>, I>>(
-    object: I
-  ): QueryAlphaMaximumsResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryAlphaMaximumsResponse>, I>>(object: I): QueryAlphaMaximumsResponse {
     const message = createBaseQueryAlphaMaximumsResponse();
     message.maxSystemAlphaIncrease = object.maxSystemAlphaIncrease ?? "";
     message.maxSystemAlpha = object.maxSystemAlpha ?? "";
@@ -1938,10 +1623,7 @@ function createBaseQueryParamsRequest(): QueryParamsRequest {
 }
 
 export const QueryParamsRequest = {
-  encode(
-    _: QueryParamsRequest,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: QueryParamsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
@@ -1969,9 +1651,7 @@ export const QueryParamsRequest = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryParamsRequest>, I>>(
-    _: I
-  ): QueryParamsRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryParamsRequest>, I>>(_: I): QueryParamsRequest {
     const message = createBaseQueryParamsRequest();
     return message;
   },
@@ -1982,10 +1662,7 @@ function createBaseQueryParamsResponse(): QueryParamsResponse {
 }
 
 export const QueryParamsResponse = {
-  encode(
-    message: QueryParamsResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryParamsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
     }
@@ -2011,26 +1688,20 @@ export const QueryParamsResponse = {
   },
 
   fromJSON(object: any): QueryParamsResponse {
-    return {
-      params: isSet(object.params) ? Params.fromJSON(object.params) : undefined,
-    };
+    return { params: isSet(object.params) ? Params.fromJSON(object.params) : undefined };
   },
 
   toJSON(message: QueryParamsResponse): unknown {
     const obj: any = {};
-    message.params !== undefined &&
-      (obj.params = message.params ? Params.toJSON(message.params) : undefined);
+    message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryParamsResponse>, I>>(
-    object: I
-  ): QueryParamsResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryParamsResponse>, I>>(object: I): QueryParamsResponse {
     const message = createBaseQueryParamsResponse();
-    message.params =
-      object.params !== undefined && object.params !== null
-        ? Params.fromPartial(object.params)
-        : undefined;
+    message.params = (object.params !== undefined && object.params !== null)
+      ? Params.fromPartial(object.params)
+      : undefined;
     return message;
   },
 };
@@ -2040,9 +1711,7 @@ export interface Query {
   /** Bonds returns all existing bonds. */
   Bonds(request: QueryBondsRequest): Promise<QueryBondsResponse>;
   /** BondsDetailed returns a list of all existing bonds with some details about their current state. */
-  BondsDetailed(
-    request: QueryBondsDetailedRequest
-  ): Promise<QueryBondsDetailedResponse>;
+  BondsDetailed(request: QueryBondsDetailedRequest): Promise<QueryBondsDetailedResponse>;
   /** Params queries the paramaters of x/bonds module. */
   Params(request: QueryParamsRequest): Promise<QueryParamsResponse>;
   /** Bond queries info of a specific bond. */
@@ -2052,21 +1721,13 @@ export interface Query {
   /** LastBatch queries info of a specific bond's last batch. */
   LastBatch(request: QueryLastBatchRequest): Promise<QueryLastBatchResponse>;
   /** CurrentPrice queries the current price/s of a specific bond. */
-  CurrentPrice(
-    request: QueryCurrentPriceRequest
-  ): Promise<QueryCurrentPriceResponse>;
+  CurrentPrice(request: QueryCurrentPriceRequest): Promise<QueryCurrentPriceResponse>;
   /** CurrentReserve queries the current balance/s of the reserve pool for a specific bond. */
-  CurrentReserve(
-    request: QueryCurrentReserveRequest
-  ): Promise<QueryCurrentReserveResponse>;
+  CurrentReserve(request: QueryCurrentReserveRequest): Promise<QueryCurrentReserveResponse>;
   /** AvailableReserve queries current available balance/s of the reserve pool for a specific bond. */
-  AvailableReserve(
-    request: QueryAvailableReserveRequest
-  ): Promise<QueryAvailableReserveResponse>;
+  AvailableReserve(request: QueryAvailableReserveRequest): Promise<QueryAvailableReserveResponse>;
   /** CustomPrice queries price/s of a specific bond at a specific supply. */
-  CustomPrice(
-    request: QueryCustomPriceRequest
-  ): Promise<QueryCustomPriceResponse>;
+  CustomPrice(request: QueryCustomPriceRequest): Promise<QueryCustomPriceResponse>;
   /** BuyPrice queries price/s of buying an amount of tokens from a specific bond. */
   BuyPrice(request: QueryBuyPriceRequest): Promise<QueryBuyPriceResponse>;
   /** SellReturn queries return/s on selling an amount of tokens of a specific bond. */
@@ -2074,14 +1735,14 @@ export interface Query {
   /** SwapReturn queries return/s on swapping an amount of tokens to another token of a specific bond. */
   SwapReturn(request: QuerySwapReturnRequest): Promise<QuerySwapReturnResponse>;
   /** AlphaMaximums queries alpha maximums for a specific augmented bonding curve. */
-  AlphaMaximums(
-    request: QueryAlphaMaximumsRequest
-  ): Promise<QueryAlphaMaximumsResponse>;
+  AlphaMaximums(request: QueryAlphaMaximumsRequest): Promise<QueryAlphaMaximumsResponse>;
 }
 
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
-  constructor(rpc: Rpc) {
+  private readonly service: string;
+  constructor(rpc: Rpc, opts?: { service?: string }) {
+    this.service = opts?.service || "bonds.Query";
     this.rpc = rpc;
     this.Bonds = this.Bonds.bind(this);
     this.BondsDetailed = this.BondsDetailed.bind(this);
@@ -2100,169 +1761,104 @@ export class QueryClientImpl implements Query {
   }
   Bonds(request: QueryBondsRequest): Promise<QueryBondsResponse> {
     const data = QueryBondsRequest.encode(request).finish();
-    const promise = this.rpc.request("bonds.Query", "Bonds", data);
-    return promise.then((data) =>
-      QueryBondsResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request(this.service, "Bonds", data);
+    return promise.then((data) => QueryBondsResponse.decode(new _m0.Reader(data)));
   }
 
-  BondsDetailed(
-    request: QueryBondsDetailedRequest
-  ): Promise<QueryBondsDetailedResponse> {
+  BondsDetailed(request: QueryBondsDetailedRequest): Promise<QueryBondsDetailedResponse> {
     const data = QueryBondsDetailedRequest.encode(request).finish();
-    const promise = this.rpc.request("bonds.Query", "BondsDetailed", data);
-    return promise.then((data) =>
-      QueryBondsDetailedResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request(this.service, "BondsDetailed", data);
+    return promise.then((data) => QueryBondsDetailedResponse.decode(new _m0.Reader(data)));
   }
 
   Params(request: QueryParamsRequest): Promise<QueryParamsResponse> {
     const data = QueryParamsRequest.encode(request).finish();
-    const promise = this.rpc.request("bonds.Query", "Params", data);
-    return promise.then((data) =>
-      QueryParamsResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request(this.service, "Params", data);
+    return promise.then((data) => QueryParamsResponse.decode(new _m0.Reader(data)));
   }
 
   Bond(request: QueryBondRequest): Promise<QueryBondResponse> {
     const data = QueryBondRequest.encode(request).finish();
-    const promise = this.rpc.request("bonds.Query", "Bond", data);
-    return promise.then((data) =>
-      QueryBondResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request(this.service, "Bond", data);
+    return promise.then((data) => QueryBondResponse.decode(new _m0.Reader(data)));
   }
 
   Batch(request: QueryBatchRequest): Promise<QueryBatchResponse> {
     const data = QueryBatchRequest.encode(request).finish();
-    const promise = this.rpc.request("bonds.Query", "Batch", data);
-    return promise.then((data) =>
-      QueryBatchResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request(this.service, "Batch", data);
+    return promise.then((data) => QueryBatchResponse.decode(new _m0.Reader(data)));
   }
 
   LastBatch(request: QueryLastBatchRequest): Promise<QueryLastBatchResponse> {
     const data = QueryLastBatchRequest.encode(request).finish();
-    const promise = this.rpc.request("bonds.Query", "LastBatch", data);
-    return promise.then((data) =>
-      QueryLastBatchResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request(this.service, "LastBatch", data);
+    return promise.then((data) => QueryLastBatchResponse.decode(new _m0.Reader(data)));
   }
 
-  CurrentPrice(
-    request: QueryCurrentPriceRequest
-  ): Promise<QueryCurrentPriceResponse> {
+  CurrentPrice(request: QueryCurrentPriceRequest): Promise<QueryCurrentPriceResponse> {
     const data = QueryCurrentPriceRequest.encode(request).finish();
-    const promise = this.rpc.request("bonds.Query", "CurrentPrice", data);
-    return promise.then((data) =>
-      QueryCurrentPriceResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request(this.service, "CurrentPrice", data);
+    return promise.then((data) => QueryCurrentPriceResponse.decode(new _m0.Reader(data)));
   }
 
-  CurrentReserve(
-    request: QueryCurrentReserveRequest
-  ): Promise<QueryCurrentReserveResponse> {
+  CurrentReserve(request: QueryCurrentReserveRequest): Promise<QueryCurrentReserveResponse> {
     const data = QueryCurrentReserveRequest.encode(request).finish();
-    const promise = this.rpc.request("bonds.Query", "CurrentReserve", data);
-    return promise.then((data) =>
-      QueryCurrentReserveResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request(this.service, "CurrentReserve", data);
+    return promise.then((data) => QueryCurrentReserveResponse.decode(new _m0.Reader(data)));
   }
 
-  AvailableReserve(
-    request: QueryAvailableReserveRequest
-  ): Promise<QueryAvailableReserveResponse> {
+  AvailableReserve(request: QueryAvailableReserveRequest): Promise<QueryAvailableReserveResponse> {
     const data = QueryAvailableReserveRequest.encode(request).finish();
-    const promise = this.rpc.request("bonds.Query", "AvailableReserve", data);
-    return promise.then((data) =>
-      QueryAvailableReserveResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request(this.service, "AvailableReserve", data);
+    return promise.then((data) => QueryAvailableReserveResponse.decode(new _m0.Reader(data)));
   }
 
-  CustomPrice(
-    request: QueryCustomPriceRequest
-  ): Promise<QueryCustomPriceResponse> {
+  CustomPrice(request: QueryCustomPriceRequest): Promise<QueryCustomPriceResponse> {
     const data = QueryCustomPriceRequest.encode(request).finish();
-    const promise = this.rpc.request("bonds.Query", "CustomPrice", data);
-    return promise.then((data) =>
-      QueryCustomPriceResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request(this.service, "CustomPrice", data);
+    return promise.then((data) => QueryCustomPriceResponse.decode(new _m0.Reader(data)));
   }
 
   BuyPrice(request: QueryBuyPriceRequest): Promise<QueryBuyPriceResponse> {
     const data = QueryBuyPriceRequest.encode(request).finish();
-    const promise = this.rpc.request("bonds.Query", "BuyPrice", data);
-    return promise.then((data) =>
-      QueryBuyPriceResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request(this.service, "BuyPrice", data);
+    return promise.then((data) => QueryBuyPriceResponse.decode(new _m0.Reader(data)));
   }
 
-  SellReturn(
-    request: QuerySellReturnRequest
-  ): Promise<QuerySellReturnResponse> {
+  SellReturn(request: QuerySellReturnRequest): Promise<QuerySellReturnResponse> {
     const data = QuerySellReturnRequest.encode(request).finish();
-    const promise = this.rpc.request("bonds.Query", "SellReturn", data);
-    return promise.then((data) =>
-      QuerySellReturnResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request(this.service, "SellReturn", data);
+    return promise.then((data) => QuerySellReturnResponse.decode(new _m0.Reader(data)));
   }
 
-  SwapReturn(
-    request: QuerySwapReturnRequest
-  ): Promise<QuerySwapReturnResponse> {
+  SwapReturn(request: QuerySwapReturnRequest): Promise<QuerySwapReturnResponse> {
     const data = QuerySwapReturnRequest.encode(request).finish();
-    const promise = this.rpc.request("bonds.Query", "SwapReturn", data);
-    return promise.then((data) =>
-      QuerySwapReturnResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request(this.service, "SwapReturn", data);
+    return promise.then((data) => QuerySwapReturnResponse.decode(new _m0.Reader(data)));
   }
 
-  AlphaMaximums(
-    request: QueryAlphaMaximumsRequest
-  ): Promise<QueryAlphaMaximumsResponse> {
+  AlphaMaximums(request: QueryAlphaMaximumsRequest): Promise<QueryAlphaMaximumsResponse> {
     const data = QueryAlphaMaximumsRequest.encode(request).finish();
-    const promise = this.rpc.request("bonds.Query", "AlphaMaximums", data);
-    return promise.then((data) =>
-      QueryAlphaMaximumsResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request(this.service, "AlphaMaximums", data);
+    return promise.then((data) => QueryAlphaMaximumsResponse.decode(new _m0.Reader(data)));
   }
 }
 
 interface Rpc {
-  request(
-    service: string,
-    method: string,
-    data: Uint8Array
-  ): Promise<Uint8Array>;
+  request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
 }
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Long
-  ? string | number | Long
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
-        never
-      >;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;

@@ -1,10 +1,10 @@
 /* eslint-disable */
 import Long from "long";
-import * as _m0 from "protobufjs/minimal";
+import _m0 from "protobufjs/minimal";
+import { Coin } from "../cosmos/coin";
 import { Any } from "../google/protobuf/any";
 import { Duration } from "../google/protobuf/duration";
 import { Timestamp } from "../google/protobuf/timestamp";
-import { Coin } from "../cosmos/coin";
 
 export const protobufPackage = "payments";
 
@@ -81,20 +81,11 @@ export interface TestPeriod {
 }
 
 function createBasePaymentTemplate(): PaymentTemplate {
-  return {
-    id: "",
-    paymentAmount: [],
-    paymentMinimum: [],
-    paymentMaximum: [],
-    discounts: [],
-  };
+  return { id: "", paymentAmount: [], paymentMinimum: [], paymentMaximum: [], discounts: [] };
 }
 
 export const PaymentTemplate = {
-  encode(
-    message: PaymentTemplate,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: PaymentTemplate, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -146,18 +137,14 @@ export const PaymentTemplate = {
   fromJSON(object: any): PaymentTemplate {
     return {
       id: isSet(object.id) ? String(object.id) : "",
-      paymentAmount: Array.isArray(object?.paymentAmount)
-        ? object.paymentAmount.map((e: any) => Coin.fromJSON(e))
-        : [],
+      paymentAmount: Array.isArray(object?.paymentAmount) ? object.paymentAmount.map((e: any) => Coin.fromJSON(e)) : [],
       paymentMinimum: Array.isArray(object?.paymentMinimum)
         ? object.paymentMinimum.map((e: any) => Coin.fromJSON(e))
         : [],
       paymentMaximum: Array.isArray(object?.paymentMaximum)
         ? object.paymentMaximum.map((e: any) => Coin.fromJSON(e))
         : [],
-      discounts: Array.isArray(object?.discounts)
-        ? object.discounts.map((e: any) => Discount.fromJSON(e))
-        : [],
+      discounts: Array.isArray(object?.discounts) ? object.discounts.map((e: any) => Discount.fromJSON(e)) : [],
     };
   },
 
@@ -165,49 +152,35 @@ export const PaymentTemplate = {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     if (message.paymentAmount) {
-      obj.paymentAmount = message.paymentAmount.map((e) =>
-        e ? Coin.toJSON(e) : undefined
-      );
+      obj.paymentAmount = message.paymentAmount.map((e) => e ? Coin.toJSON(e) : undefined);
     } else {
       obj.paymentAmount = [];
     }
     if (message.paymentMinimum) {
-      obj.paymentMinimum = message.paymentMinimum.map((e) =>
-        e ? Coin.toJSON(e) : undefined
-      );
+      obj.paymentMinimum = message.paymentMinimum.map((e) => e ? Coin.toJSON(e) : undefined);
     } else {
       obj.paymentMinimum = [];
     }
     if (message.paymentMaximum) {
-      obj.paymentMaximum = message.paymentMaximum.map((e) =>
-        e ? Coin.toJSON(e) : undefined
-      );
+      obj.paymentMaximum = message.paymentMaximum.map((e) => e ? Coin.toJSON(e) : undefined);
     } else {
       obj.paymentMaximum = [];
     }
     if (message.discounts) {
-      obj.discounts = message.discounts.map((e) =>
-        e ? Discount.toJSON(e) : undefined
-      );
+      obj.discounts = message.discounts.map((e) => e ? Discount.toJSON(e) : undefined);
     } else {
       obj.discounts = [];
     }
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<PaymentTemplate>, I>>(
-    object: I
-  ): PaymentTemplate {
+  fromPartial<I extends Exact<DeepPartial<PaymentTemplate>, I>>(object: I): PaymentTemplate {
     const message = createBasePaymentTemplate();
     message.id = object.id ?? "";
-    message.paymentAmount =
-      object.paymentAmount?.map((e) => Coin.fromPartial(e)) || [];
-    message.paymentMinimum =
-      object.paymentMinimum?.map((e) => Coin.fromPartial(e)) || [];
-    message.paymentMaximum =
-      object.paymentMaximum?.map((e) => Coin.fromPartial(e)) || [];
-    message.discounts =
-      object.discounts?.map((e) => Discount.fromPartial(e)) || [];
+    message.paymentAmount = object.paymentAmount?.map((e) => Coin.fromPartial(e)) || [];
+    message.paymentMinimum = object.paymentMinimum?.map((e) => Coin.fromPartial(e)) || [];
+    message.paymentMaximum = object.paymentMaximum?.map((e) => Coin.fromPartial(e)) || [];
+    message.discounts = object.discounts?.map((e) => Discount.fromPartial(e)) || [];
     return message;
   },
 };
@@ -217,10 +190,7 @@ function createBaseDiscount(): Discount {
 }
 
 export const Discount = {
-  encode(
-    message: Discount,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: Discount, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -278,10 +248,7 @@ function createBaseDistributionShare(): DistributionShare {
 }
 
 export const DistributionShare = {
-  encode(
-    message: DistributionShare,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: DistributionShare, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
@@ -326,9 +293,7 @@ export const DistributionShare = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<DistributionShare>, I>>(
-    object: I
-  ): DistributionShare {
+  fromPartial<I extends Exact<DeepPartial<DistributionShare>, I>>(object: I): DistributionShare {
     const message = createBaseDistributionShare();
     message.address = object.address ?? "";
     message.percentage = object.percentage ?? "";
@@ -352,10 +317,7 @@ function createBasePaymentContract(): PaymentContract {
 }
 
 export const PaymentContract = {
-  encode(
-    message: PaymentContract,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: PaymentContract, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -409,9 +371,7 @@ export const PaymentContract = {
           message.payer = reader.string();
           break;
         case 5:
-          message.recipients.push(
-            DistributionShare.decode(reader, reader.uint32())
-          );
+          message.recipients.push(DistributionShare.decode(reader, reader.uint32()));
           break;
         case 6:
           message.cumulativePay.push(Coin.decode(reader, reader.uint32()));
@@ -439,23 +399,17 @@ export const PaymentContract = {
   fromJSON(object: any): PaymentContract {
     return {
       id: isSet(object.id) ? String(object.id) : "",
-      paymentTemplateId: isSet(object.paymentTemplateId)
-        ? String(object.paymentTemplateId)
-        : "",
+      paymentTemplateId: isSet(object.paymentTemplateId) ? String(object.paymentTemplateId) : "",
       creator: isSet(object.creator) ? String(object.creator) : "",
       payer: isSet(object.payer) ? String(object.payer) : "",
       recipients: Array.isArray(object?.recipients)
         ? object.recipients.map((e: any) => DistributionShare.fromJSON(e))
         : [],
-      cumulativePay: Array.isArray(object?.cumulativePay)
-        ? object.cumulativePay.map((e: any) => Coin.fromJSON(e))
-        : [],
+      cumulativePay: Array.isArray(object?.cumulativePay) ? object.cumulativePay.map((e: any) => Coin.fromJSON(e)) : [],
       currentRemainder: Array.isArray(object?.currentRemainder)
         ? object.currentRemainder.map((e: any) => Coin.fromJSON(e))
         : [],
-      canDeauthorise: isSet(object.canDeauthorise)
-        ? Boolean(object.canDeauthorise)
-        : false,
+      canDeauthorise: isSet(object.canDeauthorise) ? Boolean(object.canDeauthorise) : false,
       authorised: isSet(object.authorised) ? Boolean(object.authorised) : false,
       discountId: isSet(object.discountId) ? String(object.discountId) : "",
     };
@@ -464,52 +418,39 @@ export const PaymentContract = {
   toJSON(message: PaymentContract): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.paymentTemplateId !== undefined &&
-      (obj.paymentTemplateId = message.paymentTemplateId);
+    message.paymentTemplateId !== undefined && (obj.paymentTemplateId = message.paymentTemplateId);
     message.creator !== undefined && (obj.creator = message.creator);
     message.payer !== undefined && (obj.payer = message.payer);
     if (message.recipients) {
-      obj.recipients = message.recipients.map((e) =>
-        e ? DistributionShare.toJSON(e) : undefined
-      );
+      obj.recipients = message.recipients.map((e) => e ? DistributionShare.toJSON(e) : undefined);
     } else {
       obj.recipients = [];
     }
     if (message.cumulativePay) {
-      obj.cumulativePay = message.cumulativePay.map((e) =>
-        e ? Coin.toJSON(e) : undefined
-      );
+      obj.cumulativePay = message.cumulativePay.map((e) => e ? Coin.toJSON(e) : undefined);
     } else {
       obj.cumulativePay = [];
     }
     if (message.currentRemainder) {
-      obj.currentRemainder = message.currentRemainder.map((e) =>
-        e ? Coin.toJSON(e) : undefined
-      );
+      obj.currentRemainder = message.currentRemainder.map((e) => e ? Coin.toJSON(e) : undefined);
     } else {
       obj.currentRemainder = [];
     }
-    message.canDeauthorise !== undefined &&
-      (obj.canDeauthorise = message.canDeauthorise);
+    message.canDeauthorise !== undefined && (obj.canDeauthorise = message.canDeauthorise);
     message.authorised !== undefined && (obj.authorised = message.authorised);
     message.discountId !== undefined && (obj.discountId = message.discountId);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<PaymentContract>, I>>(
-    object: I
-  ): PaymentContract {
+  fromPartial<I extends Exact<DeepPartial<PaymentContract>, I>>(object: I): PaymentContract {
     const message = createBasePaymentContract();
     message.id = object.id ?? "";
     message.paymentTemplateId = object.paymentTemplateId ?? "";
     message.creator = object.creator ?? "";
     message.payer = object.payer ?? "";
-    message.recipients =
-      object.recipients?.map((e) => DistributionShare.fromPartial(e)) || [];
-    message.cumulativePay =
-      object.cumulativePay?.map((e) => Coin.fromPartial(e)) || [];
-    message.currentRemainder =
-      object.currentRemainder?.map((e) => Coin.fromPartial(e)) || [];
+    message.recipients = object.recipients?.map((e) => DistributionShare.fromPartial(e)) || [];
+    message.cumulativePay = object.cumulativePay?.map((e) => Coin.fromPartial(e)) || [];
+    message.currentRemainder = object.currentRemainder?.map((e) => Coin.fromPartial(e)) || [];
     message.canDeauthorise = object.canDeauthorise ?? false;
     message.authorised = object.authorised ?? false;
     message.discountId = object.discountId ?? "";
@@ -518,21 +459,11 @@ export const PaymentContract = {
 };
 
 function createBaseSubscription(): Subscription {
-  return {
-    id: "",
-    paymentContractId: "",
-    periodsSoFar: "",
-    maxPeriods: "",
-    periodsAccumulated: "",
-    period: undefined,
-  };
+  return { id: "", paymentContractId: "", periodsSoFar: "", maxPeriods: "", periodsAccumulated: "", period: undefined };
 }
 
 export const Subscription = {
-  encode(
-    message: Subscription,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: Subscription, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -590,16 +521,10 @@ export const Subscription = {
   fromJSON(object: any): Subscription {
     return {
       id: isSet(object.id) ? String(object.id) : "",
-      paymentContractId: isSet(object.paymentContractId)
-        ? String(object.paymentContractId)
-        : "",
-      periodsSoFar: isSet(object.periodsSoFar)
-        ? String(object.periodsSoFar)
-        : "",
+      paymentContractId: isSet(object.paymentContractId) ? String(object.paymentContractId) : "",
+      periodsSoFar: isSet(object.periodsSoFar) ? String(object.periodsSoFar) : "",
       maxPeriods: isSet(object.maxPeriods) ? String(object.maxPeriods) : "",
-      periodsAccumulated: isSet(object.periodsAccumulated)
-        ? String(object.periodsAccumulated)
-        : "",
+      periodsAccumulated: isSet(object.periodsAccumulated) ? String(object.periodsAccumulated) : "",
       period: isSet(object.period) ? Any.fromJSON(object.period) : undefined,
     };
   },
@@ -607,31 +532,24 @@ export const Subscription = {
   toJSON(message: Subscription): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.paymentContractId !== undefined &&
-      (obj.paymentContractId = message.paymentContractId);
-    message.periodsSoFar !== undefined &&
-      (obj.periodsSoFar = message.periodsSoFar);
+    message.paymentContractId !== undefined && (obj.paymentContractId = message.paymentContractId);
+    message.periodsSoFar !== undefined && (obj.periodsSoFar = message.periodsSoFar);
     message.maxPeriods !== undefined && (obj.maxPeriods = message.maxPeriods);
-    message.periodsAccumulated !== undefined &&
-      (obj.periodsAccumulated = message.periodsAccumulated);
-    message.period !== undefined &&
-      (obj.period = message.period ? Any.toJSON(message.period) : undefined);
+    message.periodsAccumulated !== undefined && (obj.periodsAccumulated = message.periodsAccumulated);
+    message.period !== undefined && (obj.period = message.period ? Any.toJSON(message.period) : undefined);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<Subscription>, I>>(
-    object: I
-  ): Subscription {
+  fromPartial<I extends Exact<DeepPartial<Subscription>, I>>(object: I): Subscription {
     const message = createBaseSubscription();
     message.id = object.id ?? "";
     message.paymentContractId = object.paymentContractId ?? "";
     message.periodsSoFar = object.periodsSoFar ?? "";
     message.maxPeriods = object.maxPeriods ?? "";
     message.periodsAccumulated = object.periodsAccumulated ?? "";
-    message.period =
-      object.period !== undefined && object.period !== null
-        ? Any.fromPartial(object.period)
-        : undefined;
+    message.period = (object.period !== undefined && object.period !== null)
+      ? Any.fromPartial(object.period)
+      : undefined;
     return message;
   },
 };
@@ -641,10 +559,7 @@ function createBaseBlockPeriod(): BlockPeriod {
 }
 
 export const BlockPeriod = {
-  encode(
-    message: BlockPeriod,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: BlockPeriod, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (!message.periodLength.isZero()) {
       writer.uint32(8).int64(message.periodLength);
     }
@@ -677,38 +592,27 @@ export const BlockPeriod = {
 
   fromJSON(object: any): BlockPeriod {
     return {
-      periodLength: isSet(object.periodLength)
-        ? Long.fromValue(object.periodLength)
-        : Long.ZERO,
-      periodStartBlock: isSet(object.periodStartBlock)
-        ? Long.fromValue(object.periodStartBlock)
-        : Long.ZERO,
+      periodLength: isSet(object.periodLength) ? Long.fromValue(object.periodLength) : Long.ZERO,
+      periodStartBlock: isSet(object.periodStartBlock) ? Long.fromValue(object.periodStartBlock) : Long.ZERO,
     };
   },
 
   toJSON(message: BlockPeriod): unknown {
     const obj: any = {};
-    message.periodLength !== undefined &&
-      (obj.periodLength = (message.periodLength || Long.ZERO).toString());
+    message.periodLength !== undefined && (obj.periodLength = (message.periodLength || Long.ZERO).toString());
     message.periodStartBlock !== undefined &&
-      (obj.periodStartBlock = (
-        message.periodStartBlock || Long.ZERO
-      ).toString());
+      (obj.periodStartBlock = (message.periodStartBlock || Long.ZERO).toString());
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<BlockPeriod>, I>>(
-    object: I
-  ): BlockPeriod {
+  fromPartial<I extends Exact<DeepPartial<BlockPeriod>, I>>(object: I): BlockPeriod {
     const message = createBaseBlockPeriod();
-    message.periodLength =
-      object.periodLength !== undefined && object.periodLength !== null
-        ? Long.fromValue(object.periodLength)
-        : Long.ZERO;
-    message.periodStartBlock =
-      object.periodStartBlock !== undefined && object.periodStartBlock !== null
-        ? Long.fromValue(object.periodStartBlock)
-        : Long.ZERO;
+    message.periodLength = (object.periodLength !== undefined && object.periodLength !== null)
+      ? Long.fromValue(object.periodLength)
+      : Long.ZERO;
+    message.periodStartBlock = (object.periodStartBlock !== undefined && object.periodStartBlock !== null)
+      ? Long.fromValue(object.periodStartBlock)
+      : Long.ZERO;
     return message;
   },
 };
@@ -718,21 +622,12 @@ function createBaseTimePeriod(): TimePeriod {
 }
 
 export const TimePeriod = {
-  encode(
-    message: TimePeriod,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: TimePeriod, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.periodDurationNs !== undefined) {
-      Duration.encode(
-        message.periodDurationNs,
-        writer.uint32(10).fork()
-      ).ldelim();
+      Duration.encode(message.periodDurationNs, writer.uint32(10).fork()).ldelim();
     }
     if (message.periodStartTime !== undefined) {
-      Timestamp.encode(
-        toTimestamp(message.periodStartTime),
-        writer.uint32(18).fork()
-      ).ldelim();
+      Timestamp.encode(toTimestamp(message.periodStartTime), writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -748,9 +643,7 @@ export const TimePeriod = {
           message.periodDurationNs = Duration.decode(reader, reader.uint32());
           break;
         case 2:
-          message.periodStartTime = fromTimestamp(
-            Timestamp.decode(reader, reader.uint32())
-          );
+          message.periodStartTime = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -762,34 +655,24 @@ export const TimePeriod = {
 
   fromJSON(object: any): TimePeriod {
     return {
-      periodDurationNs: isSet(object.periodDurationNs)
-        ? Duration.fromJSON(object.periodDurationNs)
-        : undefined,
-      periodStartTime: isSet(object.periodStartTime)
-        ? fromJsonTimestamp(object.periodStartTime)
-        : undefined,
+      periodDurationNs: isSet(object.periodDurationNs) ? Duration.fromJSON(object.periodDurationNs) : undefined,
+      periodStartTime: isSet(object.periodStartTime) ? fromJsonTimestamp(object.periodStartTime) : undefined,
     };
   },
 
   toJSON(message: TimePeriod): unknown {
     const obj: any = {};
     message.periodDurationNs !== undefined &&
-      (obj.periodDurationNs = message.periodDurationNs
-        ? Duration.toJSON(message.periodDurationNs)
-        : undefined);
-    message.periodStartTime !== undefined &&
-      (obj.periodStartTime = message.periodStartTime.toISOString());
+      (obj.periodDurationNs = message.periodDurationNs ? Duration.toJSON(message.periodDurationNs) : undefined);
+    message.periodStartTime !== undefined && (obj.periodStartTime = message.periodStartTime.toISOString());
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<TimePeriod>, I>>(
-    object: I
-  ): TimePeriod {
+  fromPartial<I extends Exact<DeepPartial<TimePeriod>, I>>(object: I): TimePeriod {
     const message = createBaseTimePeriod();
-    message.periodDurationNs =
-      object.periodDurationNs !== undefined && object.periodDurationNs !== null
-        ? Duration.fromPartial(object.periodDurationNs)
-        : undefined;
+    message.periodDurationNs = (object.periodDurationNs !== undefined && object.periodDurationNs !== null)
+      ? Duration.fromPartial(object.periodDurationNs)
+      : undefined;
     message.periodStartTime = object.periodStartTime ?? undefined;
     return message;
   },
@@ -800,10 +683,7 @@ function createBaseTestPeriod(): TestPeriod {
 }
 
 export const TestPeriod = {
-  encode(
-    message: TestPeriod,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: TestPeriod, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (!message.periodLength.isZero()) {
       writer.uint32(8).int64(message.periodLength);
     }
@@ -836,70 +716,42 @@ export const TestPeriod = {
 
   fromJSON(object: any): TestPeriod {
     return {
-      periodLength: isSet(object.periodLength)
-        ? Long.fromValue(object.periodLength)
-        : Long.ZERO,
-      periodStartBlock: isSet(object.periodStartBlock)
-        ? Long.fromValue(object.periodStartBlock)
-        : Long.ZERO,
+      periodLength: isSet(object.periodLength) ? Long.fromValue(object.periodLength) : Long.ZERO,
+      periodStartBlock: isSet(object.periodStartBlock) ? Long.fromValue(object.periodStartBlock) : Long.ZERO,
     };
   },
 
   toJSON(message: TestPeriod): unknown {
     const obj: any = {};
-    message.periodLength !== undefined &&
-      (obj.periodLength = (message.periodLength || Long.ZERO).toString());
+    message.periodLength !== undefined && (obj.periodLength = (message.periodLength || Long.ZERO).toString());
     message.periodStartBlock !== undefined &&
-      (obj.periodStartBlock = (
-        message.periodStartBlock || Long.ZERO
-      ).toString());
+      (obj.periodStartBlock = (message.periodStartBlock || Long.ZERO).toString());
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<TestPeriod>, I>>(
-    object: I
-  ): TestPeriod {
+  fromPartial<I extends Exact<DeepPartial<TestPeriod>, I>>(object: I): TestPeriod {
     const message = createBaseTestPeriod();
-    message.periodLength =
-      object.periodLength !== undefined && object.periodLength !== null
-        ? Long.fromValue(object.periodLength)
-        : Long.ZERO;
-    message.periodStartBlock =
-      object.periodStartBlock !== undefined && object.periodStartBlock !== null
-        ? Long.fromValue(object.periodStartBlock)
-        : Long.ZERO;
+    message.periodLength = (object.periodLength !== undefined && object.periodLength !== null)
+      ? Long.fromValue(object.periodLength)
+      : Long.ZERO;
+    message.periodStartBlock = (object.periodStartBlock !== undefined && object.periodStartBlock !== null)
+      ? Long.fromValue(object.periodStartBlock)
+      : Long.ZERO;
     return message;
   },
 };
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Long
-  ? string | number | Long
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
-        never
-      >;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function toTimestamp(date: Date): Timestamp {
   const seconds = numberToLong(date.getTime() / 1_000);

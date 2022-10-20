@@ -1,6 +1,6 @@
 /* eslint-disable */
 import Long from "long";
-import * as _m0 from "protobufjs/minimal";
+import _m0 from "protobufjs/minimal";
 import { Coin } from "../cosmos/coin";
 
 export const protobufPackage = "project";
@@ -112,10 +112,7 @@ function createBaseUpdateProjectStatusDoc(): UpdateProjectStatusDoc {
 }
 
 export const UpdateProjectStatusDoc = {
-  encode(
-    message: UpdateProjectStatusDoc,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: UpdateProjectStatusDoc, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.status !== "") {
       writer.uint32(10).string(message.status);
     }
@@ -125,10 +122,7 @@ export const UpdateProjectStatusDoc = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): UpdateProjectStatusDoc {
+  decode(input: _m0.Reader | Uint8Array, length?: number): UpdateProjectStatusDoc {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseUpdateProjectStatusDoc();
@@ -152,23 +146,18 @@ export const UpdateProjectStatusDoc = {
   fromJSON(object: any): UpdateProjectStatusDoc {
     return {
       status: isSet(object.status) ? String(object.status) : "",
-      ethFundingTxnId: isSet(object.ethFundingTxnId)
-        ? String(object.ethFundingTxnId)
-        : "",
+      ethFundingTxnId: isSet(object.ethFundingTxnId) ? String(object.ethFundingTxnId) : "",
     };
   },
 
   toJSON(message: UpdateProjectStatusDoc): unknown {
     const obj: any = {};
     message.status !== undefined && (obj.status = message.status);
-    message.ethFundingTxnId !== undefined &&
-      (obj.ethFundingTxnId = message.ethFundingTxnId);
+    message.ethFundingTxnId !== undefined && (obj.ethFundingTxnId = message.ethFundingTxnId);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<UpdateProjectStatusDoc>, I>>(
-    object: I
-  ): UpdateProjectStatusDoc {
+  fromPartial<I extends Exact<DeepPartial<UpdateProjectStatusDoc>, I>>(object: I): UpdateProjectStatusDoc {
     const message = createBaseUpdateProjectStatusDoc();
     message.status = object.status ?? "";
     message.ethFundingTxnId = object.ethFundingTxnId ?? "";
@@ -181,10 +170,7 @@ function createBaseCreateAgentDoc(): CreateAgentDoc {
 }
 
 export const CreateAgentDoc = {
-  encode(
-    message: CreateAgentDoc,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: CreateAgentDoc, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.agentDid !== "") {
       writer.uint32(10).string(message.agentDid);
     }
@@ -229,9 +215,7 @@ export const CreateAgentDoc = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<CreateAgentDoc>, I>>(
-    object: I
-  ): CreateAgentDoc {
+  fromPartial<I extends Exact<DeepPartial<CreateAgentDoc>, I>>(object: I): CreateAgentDoc {
     const message = createBaseCreateAgentDoc();
     message.agentDid = object.agentDid ?? "";
     message.role = object.role ?? "";
@@ -244,10 +228,7 @@ function createBaseUpdateAgentDoc(): UpdateAgentDoc {
 }
 
 export const UpdateAgentDoc = {
-  encode(
-    message: UpdateAgentDoc,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: UpdateAgentDoc, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.did !== "") {
       writer.uint32(10).string(message.did);
     }
@@ -300,9 +281,7 @@ export const UpdateAgentDoc = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<UpdateAgentDoc>, I>>(
-    object: I
-  ): UpdateAgentDoc {
+  fromPartial<I extends Exact<DeepPartial<UpdateAgentDoc>, I>>(object: I): UpdateAgentDoc {
     const message = createBaseUpdateAgentDoc();
     message.did = object.did ?? "";
     message.status = object.status ?? "";
@@ -316,10 +295,7 @@ function createBaseCreateClaimDoc(): CreateClaimDoc {
 }
 
 export const CreateClaimDoc = {
-  encode(
-    message: CreateClaimDoc,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: CreateClaimDoc, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.claimId !== "") {
       writer.uint32(10).string(message.claimId);
     }
@@ -353,23 +329,18 @@ export const CreateClaimDoc = {
   fromJSON(object: any): CreateClaimDoc {
     return {
       claimId: isSet(object.claimId) ? String(object.claimId) : "",
-      claimTemplateId: isSet(object.claimTemplateId)
-        ? String(object.claimTemplateId)
-        : "",
+      claimTemplateId: isSet(object.claimTemplateId) ? String(object.claimTemplateId) : "",
     };
   },
 
   toJSON(message: CreateClaimDoc): unknown {
     const obj: any = {};
     message.claimId !== undefined && (obj.claimId = message.claimId);
-    message.claimTemplateId !== undefined &&
-      (obj.claimTemplateId = message.claimTemplateId);
+    message.claimTemplateId !== undefined && (obj.claimTemplateId = message.claimTemplateId);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<CreateClaimDoc>, I>>(
-    object: I
-  ): CreateClaimDoc {
+  fromPartial<I extends Exact<DeepPartial<CreateClaimDoc>, I>>(object: I): CreateClaimDoc {
     const message = createBaseCreateClaimDoc();
     message.claimId = object.claimId ?? "";
     message.claimTemplateId = object.claimTemplateId ?? "";
@@ -382,10 +353,7 @@ function createBaseCreateEvaluationDoc(): CreateEvaluationDoc {
 }
 
 export const CreateEvaluationDoc = {
-  encode(
-    message: CreateEvaluationDoc,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: CreateEvaluationDoc, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.claimId !== "") {
       writer.uint32(10).string(message.claimId);
     }
@@ -430,9 +398,7 @@ export const CreateEvaluationDoc = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<CreateEvaluationDoc>, I>>(
-    object: I
-  ): CreateEvaluationDoc {
+  fromPartial<I extends Exact<DeepPartial<CreateEvaluationDoc>, I>>(object: I): CreateEvaluationDoc {
     const message = createBaseCreateEvaluationDoc();
     message.claimId = object.claimId ?? "";
     message.status = object.status ?? "";
@@ -445,10 +411,7 @@ function createBaseWithdrawFundsDoc(): WithdrawFundsDoc {
 }
 
 export const WithdrawFundsDoc = {
-  encode(
-    message: WithdrawFundsDoc,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: WithdrawFundsDoc, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.projectDid !== "") {
       writer.uint32(10).string(message.projectDid);
     }
@@ -494,9 +457,7 @@ export const WithdrawFundsDoc = {
   fromJSON(object: any): WithdrawFundsDoc {
     return {
       projectDid: isSet(object.projectDid) ? String(object.projectDid) : "",
-      recipientDid: isSet(object.recipientDid)
-        ? String(object.recipientDid)
-        : "",
+      recipientDid: isSet(object.recipientDid) ? String(object.recipientDid) : "",
       amount: isSet(object.amount) ? String(object.amount) : "",
       isRefund: isSet(object.isRefund) ? Boolean(object.isRefund) : false,
     };
@@ -505,16 +466,13 @@ export const WithdrawFundsDoc = {
   toJSON(message: WithdrawFundsDoc): unknown {
     const obj: any = {};
     message.projectDid !== undefined && (obj.projectDid = message.projectDid);
-    message.recipientDid !== undefined &&
-      (obj.recipientDid = message.recipientDid);
+    message.recipientDid !== undefined && (obj.recipientDid = message.recipientDid);
     message.amount !== undefined && (obj.amount = message.amount);
     message.isRefund !== undefined && (obj.isRefund = message.isRefund);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<WithdrawFundsDoc>, I>>(
-    object: I
-  ): WithdrawFundsDoc {
+  fromPartial<I extends Exact<DeepPartial<WithdrawFundsDoc>, I>>(object: I): WithdrawFundsDoc {
     const message = createBaseWithdrawFundsDoc();
     message.projectDid = object.projectDid ?? "";
     message.recipientDid = object.recipientDid ?? "";
@@ -525,21 +483,11 @@ export const WithdrawFundsDoc = {
 };
 
 function createBaseProjectDoc(): ProjectDoc {
-  return {
-    txHash: "",
-    projectDid: "",
-    senderDid: "",
-    pubKey: "",
-    status: "",
-    data: new Uint8Array(),
-  };
+  return { txHash: "", projectDid: "", senderDid: "", pubKey: "", status: "", data: new Uint8Array() };
 }
 
 export const ProjectDoc = {
-  encode(
-    message: ProjectDoc,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: ProjectDoc, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.txHash !== "") {
       writer.uint32(10).string(message.txHash);
     }
@@ -601,9 +549,7 @@ export const ProjectDoc = {
       senderDid: isSet(object.senderDid) ? String(object.senderDid) : "",
       pubKey: isSet(object.pubKey) ? String(object.pubKey) : "",
       status: isSet(object.status) ? String(object.status) : "",
-      data: isSet(object.data)
-        ? bytesFromBase64(object.data)
-        : new Uint8Array(),
+      data: isSet(object.data) ? bytesFromBase64(object.data) : new Uint8Array(),
     };
   },
 
@@ -615,15 +561,11 @@ export const ProjectDoc = {
     message.pubKey !== undefined && (obj.pubKey = message.pubKey);
     message.status !== undefined && (obj.status = message.status);
     message.data !== undefined &&
-      (obj.data = base64FromBytes(
-        message.data !== undefined ? message.data : new Uint8Array()
-      ));
+      (obj.data = base64FromBytes(message.data !== undefined ? message.data : new Uint8Array()));
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<ProjectDoc>, I>>(
-    object: I
-  ): ProjectDoc {
+  fromPartial<I extends Exact<DeepPartial<ProjectDoc>, I>>(object: I): ProjectDoc {
     const message = createBaseProjectDoc();
     message.txHash = object.txHash ?? "";
     message.projectDid = object.projectDid ?? "";
@@ -640,10 +582,7 @@ function createBaseWithdrawalInfoDoc(): WithdrawalInfoDoc {
 }
 
 export const WithdrawalInfoDoc = {
-  encode(
-    message: WithdrawalInfoDoc,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: WithdrawalInfoDoc, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.projectDid !== "") {
       writer.uint32(10).string(message.projectDid);
     }
@@ -683,9 +622,7 @@ export const WithdrawalInfoDoc = {
   fromJSON(object: any): WithdrawalInfoDoc {
     return {
       projectDid: isSet(object.projectDid) ? String(object.projectDid) : "",
-      recipientDid: isSet(object.recipientDid)
-        ? String(object.recipientDid)
-        : "",
+      recipientDid: isSet(object.recipientDid) ? String(object.recipientDid) : "",
       amount: isSet(object.amount) ? Coin.fromJSON(object.amount) : undefined,
     };
   },
@@ -693,41 +630,28 @@ export const WithdrawalInfoDoc = {
   toJSON(message: WithdrawalInfoDoc): unknown {
     const obj: any = {};
     message.projectDid !== undefined && (obj.projectDid = message.projectDid);
-    message.recipientDid !== undefined &&
-      (obj.recipientDid = message.recipientDid);
-    message.amount !== undefined &&
-      (obj.amount = message.amount ? Coin.toJSON(message.amount) : undefined);
+    message.recipientDid !== undefined && (obj.recipientDid = message.recipientDid);
+    message.amount !== undefined && (obj.amount = message.amount ? Coin.toJSON(message.amount) : undefined);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<WithdrawalInfoDoc>, I>>(
-    object: I
-  ): WithdrawalInfoDoc {
+  fromPartial<I extends Exact<DeepPartial<WithdrawalInfoDoc>, I>>(object: I): WithdrawalInfoDoc {
     const message = createBaseWithdrawalInfoDoc();
     message.projectDid = object.projectDid ?? "";
     message.recipientDid = object.recipientDid ?? "";
-    message.amount =
-      object.amount !== undefined && object.amount !== null
-        ? Coin.fromPartial(object.amount)
-        : undefined;
+    message.amount = (object.amount !== undefined && object.amount !== null)
+      ? Coin.fromPartial(object.amount)
+      : undefined;
     return message;
   },
 };
 
 function createBaseParams(): Params {
-  return {
-    ixoDid: "",
-    projectMinimumInitialFunding: [],
-    oracleFeePercentage: "",
-    nodeFeePercentage: "",
-  };
+  return { ixoDid: "", projectMinimumInitialFunding: [], oracleFeePercentage: "", nodeFeePercentage: "" };
 }
 
 export const Params = {
-  encode(
-    message: Params,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: Params, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.ixoDid !== "") {
       writer.uint32(10).string(message.ixoDid);
     }
@@ -754,9 +678,7 @@ export const Params = {
           message.ixoDid = reader.string();
           break;
         case 2:
-          message.projectMinimumInitialFunding.push(
-            Coin.decode(reader, reader.uint32())
-          );
+          message.projectMinimumInitialFunding.push(Coin.decode(reader, reader.uint32()));
           break;
         case 3:
           message.oracleFeePercentage = reader.string();
@@ -775,17 +697,11 @@ export const Params = {
   fromJSON(object: any): Params {
     return {
       ixoDid: isSet(object.ixoDid) ? String(object.ixoDid) : "",
-      projectMinimumInitialFunding: Array.isArray(
-        object?.projectMinimumInitialFunding
-      )
+      projectMinimumInitialFunding: Array.isArray(object?.projectMinimumInitialFunding)
         ? object.projectMinimumInitialFunding.map((e: any) => Coin.fromJSON(e))
         : [],
-      oracleFeePercentage: isSet(object.oracleFeePercentage)
-        ? String(object.oracleFeePercentage)
-        : "",
-      nodeFeePercentage: isSet(object.nodeFeePercentage)
-        ? String(object.nodeFeePercentage)
-        : "",
+      oracleFeePercentage: isSet(object.oracleFeePercentage) ? String(object.oracleFeePercentage) : "",
+      nodeFeePercentage: isSet(object.nodeFeePercentage) ? String(object.nodeFeePercentage) : "",
     };
   },
 
@@ -793,26 +709,21 @@ export const Params = {
     const obj: any = {};
     message.ixoDid !== undefined && (obj.ixoDid = message.ixoDid);
     if (message.projectMinimumInitialFunding) {
-      obj.projectMinimumInitialFunding =
-        message.projectMinimumInitialFunding.map((e) =>
-          e ? Coin.toJSON(e) : undefined
-        );
+      obj.projectMinimumInitialFunding = message.projectMinimumInitialFunding.map((e) =>
+        e ? Coin.toJSON(e) : undefined
+      );
     } else {
       obj.projectMinimumInitialFunding = [];
     }
-    message.oracleFeePercentage !== undefined &&
-      (obj.oracleFeePercentage = message.oracleFeePercentage);
-    message.nodeFeePercentage !== undefined &&
-      (obj.nodeFeePercentage = message.nodeFeePercentage);
+    message.oracleFeePercentage !== undefined && (obj.oracleFeePercentage = message.oracleFeePercentage);
+    message.nodeFeePercentage !== undefined && (obj.nodeFeePercentage = message.nodeFeePercentage);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<Params>, I>>(object: I): Params {
     const message = createBaseParams();
     message.ixoDid = object.ixoDid ?? "";
-    message.projectMinimumInitialFunding =
-      object.projectMinimumInitialFunding?.map((e) => Coin.fromPartial(e)) ||
-      [];
+    message.projectMinimumInitialFunding = object.projectMinimumInitialFunding?.map((e) => Coin.fromPartial(e)) || [];
     message.oracleFeePercentage = object.oracleFeePercentage ?? "";
     message.nodeFeePercentage = object.nodeFeePercentage ?? "";
     return message;
@@ -900,15 +811,9 @@ function createBaseGenesisAccountMap(): GenesisAccountMap {
 }
 
 export const GenesisAccountMap = {
-  encode(
-    message: GenesisAccountMap,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: GenesisAccountMap, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     Object.entries(message.map).forEach(([key, value]) => {
-      GenesisAccountMap_MapEntry.encode(
-        { key: key as any, value },
-        writer.uint32(10).fork()
-      ).ldelim();
+      GenesisAccountMap_MapEntry.encode({ key: key as any, value }, writer.uint32(10).fork()).ldelim();
     });
     return writer;
   },
@@ -921,10 +826,7 @@ export const GenesisAccountMap = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          const entry1 = GenesisAccountMap_MapEntry.decode(
-            reader,
-            reader.uint32()
-          );
+          const entry1 = GenesisAccountMap_MapEntry.decode(reader, reader.uint32());
           if (entry1.value !== undefined) {
             message.map[entry1.key] = entry1.value;
           }
@@ -940,13 +842,10 @@ export const GenesisAccountMap = {
   fromJSON(object: any): GenesisAccountMap {
     return {
       map: isObject(object.map)
-        ? Object.entries(object.map).reduce<{ [key: string]: string }>(
-            (acc, [key, value]) => {
-              acc[key] = String(value);
-              return acc;
-            },
-            {}
-          )
+        ? Object.entries(object.map).reduce<{ [key: string]: string }>((acc, [key, value]) => {
+          acc[key] = String(value);
+          return acc;
+        }, {})
         : {},
     };
   },
@@ -962,13 +861,9 @@ export const GenesisAccountMap = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<GenesisAccountMap>, I>>(
-    object: I
-  ): GenesisAccountMap {
+  fromPartial<I extends Exact<DeepPartial<GenesisAccountMap>, I>>(object: I): GenesisAccountMap {
     const message = createBaseGenesisAccountMap();
-    message.map = Object.entries(object.map ?? {}).reduce<{
-      [key: string]: string;
-    }>((acc, [key, value]) => {
+    message.map = Object.entries(object.map ?? {}).reduce<{ [key: string]: string }>((acc, [key, value]) => {
       if (value !== undefined) {
         acc[key] = String(value);
       }
@@ -983,10 +878,7 @@ function createBaseGenesisAccountMap_MapEntry(): GenesisAccountMap_MapEntry {
 }
 
 export const GenesisAccountMap_MapEntry = {
-  encode(
-    message: GenesisAccountMap_MapEntry,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: GenesisAccountMap_MapEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.key !== "") {
       writer.uint32(10).string(message.key);
     }
@@ -996,10 +888,7 @@ export const GenesisAccountMap_MapEntry = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): GenesisAccountMap_MapEntry {
+  decode(input: _m0.Reader | Uint8Array, length?: number): GenesisAccountMap_MapEntry {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGenesisAccountMap_MapEntry();
@@ -1021,10 +910,7 @@ export const GenesisAccountMap_MapEntry = {
   },
 
   fromJSON(object: any): GenesisAccountMap_MapEntry {
-    return {
-      key: isSet(object.key) ? String(object.key) : "",
-      value: isSet(object.value) ? String(object.value) : "",
-    };
+    return { key: isSet(object.key) ? String(object.key) : "", value: isSet(object.value) ? String(object.value) : "" };
   },
 
   toJSON(message: GenesisAccountMap_MapEntry): unknown {
@@ -1034,9 +920,7 @@ export const GenesisAccountMap_MapEntry = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<GenesisAccountMap_MapEntry>, I>>(
-    object: I
-  ): GenesisAccountMap_MapEntry {
+  fromPartial<I extends Exact<DeepPartial<GenesisAccountMap_MapEntry>, I>>(object: I): GenesisAccountMap_MapEntry {
     const message = createBaseGenesisAccountMap_MapEntry();
     message.key = object.key ?? "";
     message.value = object.value ?? "";
@@ -1049,15 +933,9 @@ function createBaseAccountMap(): AccountMap {
 }
 
 export const AccountMap = {
-  encode(
-    message: AccountMap,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: AccountMap, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     Object.entries(message.map).forEach(([key, value]) => {
-      AccountMap_MapEntry.encode(
-        { key: key as any, value },
-        writer.uint32(10).fork()
-      ).ldelim();
+      AccountMap_MapEntry.encode({ key: key as any, value }, writer.uint32(10).fork()).ldelim();
     });
     return writer;
   },
@@ -1086,13 +964,10 @@ export const AccountMap = {
   fromJSON(object: any): AccountMap {
     return {
       map: isObject(object.map)
-        ? Object.entries(object.map).reduce<{ [key: string]: string }>(
-            (acc, [key, value]) => {
-              acc[key] = String(value);
-              return acc;
-            },
-            {}
-          )
+        ? Object.entries(object.map).reduce<{ [key: string]: string }>((acc, [key, value]) => {
+          acc[key] = String(value);
+          return acc;
+        }, {})
         : {},
     };
   },
@@ -1108,13 +983,9 @@ export const AccountMap = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<AccountMap>, I>>(
-    object: I
-  ): AccountMap {
+  fromPartial<I extends Exact<DeepPartial<AccountMap>, I>>(object: I): AccountMap {
     const message = createBaseAccountMap();
-    message.map = Object.entries(object.map ?? {}).reduce<{
-      [key: string]: string;
-    }>((acc, [key, value]) => {
+    message.map = Object.entries(object.map ?? {}).reduce<{ [key: string]: string }>((acc, [key, value]) => {
       if (value !== undefined) {
         acc[key] = String(value);
       }
@@ -1129,10 +1000,7 @@ function createBaseAccountMap_MapEntry(): AccountMap_MapEntry {
 }
 
 export const AccountMap_MapEntry = {
-  encode(
-    message: AccountMap_MapEntry,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: AccountMap_MapEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.key !== "") {
       writer.uint32(10).string(message.key);
     }
@@ -1164,10 +1032,7 @@ export const AccountMap_MapEntry = {
   },
 
   fromJSON(object: any): AccountMap_MapEntry {
-    return {
-      key: isSet(object.key) ? String(object.key) : "",
-      value: isSet(object.value) ? String(object.value) : "",
-    };
+    return { key: isSet(object.key) ? String(object.key) : "", value: isSet(object.value) ? String(object.value) : "" };
   },
 
   toJSON(message: AccountMap_MapEntry): unknown {
@@ -1177,9 +1042,7 @@ export const AccountMap_MapEntry = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<AccountMap_MapEntry>, I>>(
-    object: I
-  ): AccountMap_MapEntry {
+  fromPartial<I extends Exact<DeepPartial<AccountMap_MapEntry>, I>>(object: I): AccountMap_MapEntry {
     const message = createBaseAccountMap_MapEntry();
     message.key = object.key ?? "";
     message.value = object.value ?? "";
@@ -1192,10 +1055,7 @@ function createBaseWithdrawalInfoDocs(): WithdrawalInfoDocs {
 }
 
 export const WithdrawalInfoDocs = {
-  encode(
-    message: WithdrawalInfoDocs,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: WithdrawalInfoDocs, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.docsList) {
       WithdrawalInfoDoc.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -1210,9 +1070,7 @@ export const WithdrawalInfoDocs = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.docsList.push(
-            WithdrawalInfoDoc.decode(reader, reader.uint32())
-          );
+          message.docsList.push(WithdrawalInfoDoc.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -1224,30 +1082,23 @@ export const WithdrawalInfoDocs = {
 
   fromJSON(object: any): WithdrawalInfoDocs {
     return {
-      docsList: Array.isArray(object?.docsList)
-        ? object.docsList.map((e: any) => WithdrawalInfoDoc.fromJSON(e))
-        : [],
+      docsList: Array.isArray(object?.docsList) ? object.docsList.map((e: any) => WithdrawalInfoDoc.fromJSON(e)) : [],
     };
   },
 
   toJSON(message: WithdrawalInfoDocs): unknown {
     const obj: any = {};
     if (message.docsList) {
-      obj.docsList = message.docsList.map((e) =>
-        e ? WithdrawalInfoDoc.toJSON(e) : undefined
-      );
+      obj.docsList = message.docsList.map((e) => e ? WithdrawalInfoDoc.toJSON(e) : undefined);
     } else {
       obj.docsList = [];
     }
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<WithdrawalInfoDocs>, I>>(
-    object: I
-  ): WithdrawalInfoDocs {
+  fromPartial<I extends Exact<DeepPartial<WithdrawalInfoDocs>, I>>(object: I): WithdrawalInfoDocs {
     const message = createBaseWithdrawalInfoDocs();
-    message.docsList =
-      object.docsList?.map((e) => WithdrawalInfoDoc.fromPartial(e)) || [];
+    message.docsList = object.docsList?.map((e) => WithdrawalInfoDoc.fromPartial(e)) || [];
     return message;
   },
 };
@@ -1257,10 +1108,7 @@ function createBaseClaims(): Claims {
 }
 
 export const Claims = {
-  encode(
-    message: Claims,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: Claims, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.claimsList) {
       Claim.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -1287,18 +1135,14 @@ export const Claims = {
 
   fromJSON(object: any): Claims {
     return {
-      claimsList: Array.isArray(object?.claimsList)
-        ? object.claimsList.map((e: any) => Claim.fromJSON(e))
-        : [],
+      claimsList: Array.isArray(object?.claimsList) ? object.claimsList.map((e: any) => Claim.fromJSON(e)) : [],
     };
   },
 
   toJSON(message: Claims): unknown {
     const obj: any = {};
     if (message.claimsList) {
-      obj.claimsList = message.claimsList.map((e) =>
-        e ? Claim.toJSON(e) : undefined
-      );
+      obj.claimsList = message.claimsList.map((e) => e ? Claim.toJSON(e) : undefined);
     } else {
       obj.claimsList = [];
     }
@@ -1307,8 +1151,7 @@ export const Claims = {
 
   fromPartial<I extends Exact<DeepPartial<Claims>, I>>(object: I): Claims {
     const message = createBaseClaims();
-    message.claimsList =
-      object.claimsList?.map((e) => Claim.fromPartial(e)) || [];
+    message.claimsList = object.claimsList?.map((e) => Claim.fromPartial(e)) || [];
     return message;
   },
 };
@@ -1317,64 +1160,57 @@ declare var self: any | undefined;
 declare var window: any | undefined;
 declare var global: any | undefined;
 var globalThis: any = (() => {
-  if (typeof globalThis !== "undefined") return globalThis;
-  if (typeof self !== "undefined") return self;
-  if (typeof window !== "undefined") return window;
-  if (typeof global !== "undefined") return global;
+  if (typeof globalThis !== "undefined") {
+    return globalThis;
+  }
+  if (typeof self !== "undefined") {
+    return self;
+  }
+  if (typeof window !== "undefined") {
+    return window;
+  }
+  if (typeof global !== "undefined") {
+    return global;
+  }
   throw "Unable to locate global object";
 })();
 
-const atob: (b64: string) => string =
-  globalThis.atob ||
-  ((b64) => globalThis.Buffer.from(b64, "base64").toString("binary"));
 function bytesFromBase64(b64: string): Uint8Array {
-  const bin = atob(b64);
-  const arr = new Uint8Array(bin.length);
-  for (let i = 0; i < bin.length; ++i) {
-    arr[i] = bin.charCodeAt(i);
+  if (globalThis.Buffer) {
+    return Uint8Array.from(globalThis.Buffer.from(b64, "base64"));
+  } else {
+    const bin = globalThis.atob(b64);
+    const arr = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; ++i) {
+      arr[i] = bin.charCodeAt(i);
+    }
+    return arr;
   }
-  return arr;
 }
 
-const btoa: (bin: string) => string =
-  globalThis.btoa ||
-  ((bin) => globalThis.Buffer.from(bin, "binary").toString("base64"));
 function base64FromBytes(arr: Uint8Array): string {
-  const bin: string[] = [];
-  arr.forEach((byte) => {
-    bin.push(String.fromCharCode(byte));
-  });
-  return btoa(bin.join(""));
+  if (globalThis.Buffer) {
+    return globalThis.Buffer.from(arr).toString("base64");
+  } else {
+    const bin: string[] = [];
+    arr.forEach((byte) => {
+      bin.push(String.fromCharCode(byte));
+    });
+    return globalThis.btoa(bin.join(""));
+  }
 }
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Long
-  ? string | number | Long
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
-        never
-      >;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;

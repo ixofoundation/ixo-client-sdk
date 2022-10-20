@@ -1,14 +1,14 @@
 /* eslint-disable */
 import Long from "long";
-import * as _m0 from "protobufjs/minimal";
+import _m0 from "protobufjs/minimal";
 import {
-  UpdateProjectStatusDoc,
   CreateAgentDoc,
-  UpdateAgentDoc,
   CreateClaimDoc,
   CreateEvaluationDoc,
+  UpdateAgentDoc,
+  UpdateProjectStatusDoc,
   WithdrawFundsDoc,
-} from "../project/project";
+} from "./project";
 
 export const protobufPackage = "project";
 
@@ -19,10 +19,12 @@ export interface MsgCreateProject {
   projectDid: string;
   pubKey: string;
   data: Uint8Array;
+  projectAddress: string;
 }
 
 /** MsgCreateProjectResponse defines the Msg/CreateProject response type. */
-export interface MsgCreateProjectResponse {}
+export interface MsgCreateProjectResponse {
+}
 
 /** MsgUpdateProjectStatus defines a message for updating a project's current status. */
 export interface MsgUpdateProjectStatus {
@@ -30,10 +32,12 @@ export interface MsgUpdateProjectStatus {
   senderDid: string;
   projectDid: string;
   data?: UpdateProjectStatusDoc;
+  projectAddress: string;
 }
 
 /** MsgUpdateProjectStatusResponse defines the Msg/UpdateProjectStatus response type. */
-export interface MsgUpdateProjectStatusResponse {}
+export interface MsgUpdateProjectStatusResponse {
+}
 
 /** MsgCreateAgent defines a message for creating an agent on a project. */
 export interface MsgCreateAgent {
@@ -41,10 +45,12 @@ export interface MsgCreateAgent {
   senderDid: string;
   projectDid: string;
   data?: CreateAgentDoc;
+  projectAddress: string;
 }
 
 /** MsgCreateAgentResponse defines the Msg/CreateAgent response type. */
-export interface MsgCreateAgentResponse {}
+export interface MsgCreateAgentResponse {
+}
 
 /** MsgUpdateAgent defines a message for updating an agent on a project. */
 export interface MsgUpdateAgent {
@@ -52,10 +58,12 @@ export interface MsgUpdateAgent {
   senderDid: string;
   projectDid: string;
   data?: UpdateAgentDoc;
+  projectAddress: string;
 }
 
 /** MsgUpdateAgentResponse defines the Msg/UpdateAgent response type. */
-export interface MsgUpdateAgentResponse {}
+export interface MsgUpdateAgentResponse {
+}
 
 /** MsgCreateClaim defines a message for creating a claim on a project. */
 export interface MsgCreateClaim {
@@ -63,10 +71,12 @@ export interface MsgCreateClaim {
   senderDid: string;
   projectDid: string;
   data?: CreateClaimDoc;
+  projectAddress: string;
 }
 
 /** MsgCreateClaimResponse defines the Msg/CreateClaim response type. */
-export interface MsgCreateClaimResponse {}
+export interface MsgCreateClaimResponse {
+}
 
 /** MsgCreateEvaluation defines a message for creating an evaluation for a specific claim on a project. */
 export interface MsgCreateEvaluation {
@@ -74,19 +84,23 @@ export interface MsgCreateEvaluation {
   senderDid: string;
   projectDid: string;
   data?: CreateEvaluationDoc;
+  projectAddress: string;
 }
 
 /** MsgCreateEvaluationResponse defines the Msg/CreateEvaluation response type. */
-export interface MsgCreateEvaluationResponse {}
+export interface MsgCreateEvaluationResponse {
+}
 
 /** MsgWithdrawFunds defines a message for project agents to withdraw their funds from a project. */
 export interface MsgWithdrawFunds {
   senderDid: string;
   data?: WithdrawFundsDoc;
+  senderAddress: string;
 }
 
 /** MsgWithdrawFundsResponse defines the Msg/WithdrawFunds response type. */
-export interface MsgWithdrawFundsResponse {}
+export interface MsgWithdrawFundsResponse {
+}
 
 /** MsgUpdateProjectDoc defines a message for updating a project's data. */
 export interface MsgUpdateProjectDoc {
@@ -94,26 +108,19 @@ export interface MsgUpdateProjectDoc {
   senderDid: string;
   projectDid: string;
   data: Uint8Array;
+  projectAddress: string;
 }
 
 /** MsgUpdateProjectDocResponse defines the Msg/UpdateProjectDoc response type. */
-export interface MsgUpdateProjectDocResponse {}
+export interface MsgUpdateProjectDocResponse {
+}
 
 function createBaseMsgCreateProject(): MsgCreateProject {
-  return {
-    txHash: "",
-    senderDid: "",
-    projectDid: "",
-    pubKey: "",
-    data: new Uint8Array(),
-  };
+  return { txHash: "", senderDid: "", projectDid: "", pubKey: "", data: new Uint8Array(), projectAddress: "" };
 }
 
 export const MsgCreateProject = {
-  encode(
-    message: MsgCreateProject,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgCreateProject, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.txHash !== "") {
       writer.uint32(10).string(message.txHash);
     }
@@ -128,6 +135,9 @@ export const MsgCreateProject = {
     }
     if (message.data.length !== 0) {
       writer.uint32(42).bytes(message.data);
+    }
+    if (message.projectAddress !== "") {
+      writer.uint32(50).string(message.projectAddress);
     }
     return writer;
   },
@@ -154,6 +164,9 @@ export const MsgCreateProject = {
         case 5:
           message.data = reader.bytes();
           break;
+        case 6:
+          message.projectAddress = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -168,9 +181,8 @@ export const MsgCreateProject = {
       senderDid: isSet(object.senderDid) ? String(object.senderDid) : "",
       projectDid: isSet(object.projectDid) ? String(object.projectDid) : "",
       pubKey: isSet(object.pubKey) ? String(object.pubKey) : "",
-      data: isSet(object.data)
-        ? bytesFromBase64(object.data)
-        : new Uint8Array(),
+      data: isSet(object.data) ? bytesFromBase64(object.data) : new Uint8Array(),
+      projectAddress: isSet(object.projectAddress) ? String(object.projectAddress) : "",
     };
   },
 
@@ -181,21 +193,19 @@ export const MsgCreateProject = {
     message.projectDid !== undefined && (obj.projectDid = message.projectDid);
     message.pubKey !== undefined && (obj.pubKey = message.pubKey);
     message.data !== undefined &&
-      (obj.data = base64FromBytes(
-        message.data !== undefined ? message.data : new Uint8Array()
-      ));
+      (obj.data = base64FromBytes(message.data !== undefined ? message.data : new Uint8Array()));
+    message.projectAddress !== undefined && (obj.projectAddress = message.projectAddress);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgCreateProject>, I>>(
-    object: I
-  ): MsgCreateProject {
+  fromPartial<I extends Exact<DeepPartial<MsgCreateProject>, I>>(object: I): MsgCreateProject {
     const message = createBaseMsgCreateProject();
     message.txHash = object.txHash ?? "";
     message.senderDid = object.senderDid ?? "";
     message.projectDid = object.projectDid ?? "";
     message.pubKey = object.pubKey ?? "";
     message.data = object.data ?? new Uint8Array();
+    message.projectAddress = object.projectAddress ?? "";
     return message;
   },
 };
@@ -205,17 +215,11 @@ function createBaseMsgCreateProjectResponse(): MsgCreateProjectResponse {
 }
 
 export const MsgCreateProjectResponse = {
-  encode(
-    _: MsgCreateProjectResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: MsgCreateProjectResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgCreateProjectResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateProjectResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreateProjectResponse();
@@ -239,23 +243,18 @@ export const MsgCreateProjectResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgCreateProjectResponse>, I>>(
-    _: I
-  ): MsgCreateProjectResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgCreateProjectResponse>, I>>(_: I): MsgCreateProjectResponse {
     const message = createBaseMsgCreateProjectResponse();
     return message;
   },
 };
 
 function createBaseMsgUpdateProjectStatus(): MsgUpdateProjectStatus {
-  return { txHash: "", senderDid: "", projectDid: "", data: undefined };
+  return { txHash: "", senderDid: "", projectDid: "", data: undefined, projectAddress: "" };
 }
 
 export const MsgUpdateProjectStatus = {
-  encode(
-    message: MsgUpdateProjectStatus,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgUpdateProjectStatus, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.txHash !== "") {
       writer.uint32(10).string(message.txHash);
     }
@@ -266,18 +265,15 @@ export const MsgUpdateProjectStatus = {
       writer.uint32(26).string(message.projectDid);
     }
     if (message.data !== undefined) {
-      UpdateProjectStatusDoc.encode(
-        message.data,
-        writer.uint32(34).fork()
-      ).ldelim();
+      UpdateProjectStatusDoc.encode(message.data, writer.uint32(34).fork()).ldelim();
+    }
+    if (message.projectAddress !== "") {
+      writer.uint32(42).string(message.projectAddress);
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgUpdateProjectStatus {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateProjectStatus {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateProjectStatus();
@@ -296,6 +292,9 @@ export const MsgUpdateProjectStatus = {
         case 4:
           message.data = UpdateProjectStatusDoc.decode(reader, reader.uint32());
           break;
+        case 5:
+          message.projectAddress = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -309,9 +308,8 @@ export const MsgUpdateProjectStatus = {
       txHash: isSet(object.txHash) ? String(object.txHash) : "",
       senderDid: isSet(object.senderDid) ? String(object.senderDid) : "",
       projectDid: isSet(object.projectDid) ? String(object.projectDid) : "",
-      data: isSet(object.data)
-        ? UpdateProjectStatusDoc.fromJSON(object.data)
-        : undefined,
+      data: isSet(object.data) ? UpdateProjectStatusDoc.fromJSON(object.data) : undefined,
+      projectAddress: isSet(object.projectAddress) ? String(object.projectAddress) : "",
     };
   },
 
@@ -320,24 +318,20 @@ export const MsgUpdateProjectStatus = {
     message.txHash !== undefined && (obj.txHash = message.txHash);
     message.senderDid !== undefined && (obj.senderDid = message.senderDid);
     message.projectDid !== undefined && (obj.projectDid = message.projectDid);
-    message.data !== undefined &&
-      (obj.data = message.data
-        ? UpdateProjectStatusDoc.toJSON(message.data)
-        : undefined);
+    message.data !== undefined && (obj.data = message.data ? UpdateProjectStatusDoc.toJSON(message.data) : undefined);
+    message.projectAddress !== undefined && (obj.projectAddress = message.projectAddress);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgUpdateProjectStatus>, I>>(
-    object: I
-  ): MsgUpdateProjectStatus {
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateProjectStatus>, I>>(object: I): MsgUpdateProjectStatus {
     const message = createBaseMsgUpdateProjectStatus();
     message.txHash = object.txHash ?? "";
     message.senderDid = object.senderDid ?? "";
     message.projectDid = object.projectDid ?? "";
-    message.data =
-      object.data !== undefined && object.data !== null
-        ? UpdateProjectStatusDoc.fromPartial(object.data)
-        : undefined;
+    message.data = (object.data !== undefined && object.data !== null)
+      ? UpdateProjectStatusDoc.fromPartial(object.data)
+      : undefined;
+    message.projectAddress = object.projectAddress ?? "";
     return message;
   },
 };
@@ -347,17 +341,11 @@ function createBaseMsgUpdateProjectStatusResponse(): MsgUpdateProjectStatusRespo
 }
 
 export const MsgUpdateProjectStatusResponse = {
-  encode(
-    _: MsgUpdateProjectStatusResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: MsgUpdateProjectStatusResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgUpdateProjectStatusResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateProjectStatusResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateProjectStatusResponse();
@@ -381,23 +369,18 @@ export const MsgUpdateProjectStatusResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgUpdateProjectStatusResponse>, I>>(
-    _: I
-  ): MsgUpdateProjectStatusResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateProjectStatusResponse>, I>>(_: I): MsgUpdateProjectStatusResponse {
     const message = createBaseMsgUpdateProjectStatusResponse();
     return message;
   },
 };
 
 function createBaseMsgCreateAgent(): MsgCreateAgent {
-  return { txHash: "", senderDid: "", projectDid: "", data: undefined };
+  return { txHash: "", senderDid: "", projectDid: "", data: undefined, projectAddress: "" };
 }
 
 export const MsgCreateAgent = {
-  encode(
-    message: MsgCreateAgent,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgCreateAgent, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.txHash !== "") {
       writer.uint32(10).string(message.txHash);
     }
@@ -409,6 +392,9 @@ export const MsgCreateAgent = {
     }
     if (message.data !== undefined) {
       CreateAgentDoc.encode(message.data, writer.uint32(34).fork()).ldelim();
+    }
+    if (message.projectAddress !== "") {
+      writer.uint32(42).string(message.projectAddress);
     }
     return writer;
   },
@@ -432,6 +418,9 @@ export const MsgCreateAgent = {
         case 4:
           message.data = CreateAgentDoc.decode(reader, reader.uint32());
           break;
+        case 5:
+          message.projectAddress = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -445,9 +434,8 @@ export const MsgCreateAgent = {
       txHash: isSet(object.txHash) ? String(object.txHash) : "",
       senderDid: isSet(object.senderDid) ? String(object.senderDid) : "",
       projectDid: isSet(object.projectDid) ? String(object.projectDid) : "",
-      data: isSet(object.data)
-        ? CreateAgentDoc.fromJSON(object.data)
-        : undefined,
+      data: isSet(object.data) ? CreateAgentDoc.fromJSON(object.data) : undefined,
+      projectAddress: isSet(object.projectAddress) ? String(object.projectAddress) : "",
     };
   },
 
@@ -456,24 +444,20 @@ export const MsgCreateAgent = {
     message.txHash !== undefined && (obj.txHash = message.txHash);
     message.senderDid !== undefined && (obj.senderDid = message.senderDid);
     message.projectDid !== undefined && (obj.projectDid = message.projectDid);
-    message.data !== undefined &&
-      (obj.data = message.data
-        ? CreateAgentDoc.toJSON(message.data)
-        : undefined);
+    message.data !== undefined && (obj.data = message.data ? CreateAgentDoc.toJSON(message.data) : undefined);
+    message.projectAddress !== undefined && (obj.projectAddress = message.projectAddress);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgCreateAgent>, I>>(
-    object: I
-  ): MsgCreateAgent {
+  fromPartial<I extends Exact<DeepPartial<MsgCreateAgent>, I>>(object: I): MsgCreateAgent {
     const message = createBaseMsgCreateAgent();
     message.txHash = object.txHash ?? "";
     message.senderDid = object.senderDid ?? "";
     message.projectDid = object.projectDid ?? "";
-    message.data =
-      object.data !== undefined && object.data !== null
-        ? CreateAgentDoc.fromPartial(object.data)
-        : undefined;
+    message.data = (object.data !== undefined && object.data !== null)
+      ? CreateAgentDoc.fromPartial(object.data)
+      : undefined;
+    message.projectAddress = object.projectAddress ?? "";
     return message;
   },
 };
@@ -483,17 +467,11 @@ function createBaseMsgCreateAgentResponse(): MsgCreateAgentResponse {
 }
 
 export const MsgCreateAgentResponse = {
-  encode(
-    _: MsgCreateAgentResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: MsgCreateAgentResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgCreateAgentResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateAgentResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreateAgentResponse();
@@ -517,23 +495,18 @@ export const MsgCreateAgentResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgCreateAgentResponse>, I>>(
-    _: I
-  ): MsgCreateAgentResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgCreateAgentResponse>, I>>(_: I): MsgCreateAgentResponse {
     const message = createBaseMsgCreateAgentResponse();
     return message;
   },
 };
 
 function createBaseMsgUpdateAgent(): MsgUpdateAgent {
-  return { txHash: "", senderDid: "", projectDid: "", data: undefined };
+  return { txHash: "", senderDid: "", projectDid: "", data: undefined, projectAddress: "" };
 }
 
 export const MsgUpdateAgent = {
-  encode(
-    message: MsgUpdateAgent,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgUpdateAgent, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.txHash !== "") {
       writer.uint32(10).string(message.txHash);
     }
@@ -545,6 +518,9 @@ export const MsgUpdateAgent = {
     }
     if (message.data !== undefined) {
       UpdateAgentDoc.encode(message.data, writer.uint32(34).fork()).ldelim();
+    }
+    if (message.projectAddress !== "") {
+      writer.uint32(42).string(message.projectAddress);
     }
     return writer;
   },
@@ -568,6 +544,9 @@ export const MsgUpdateAgent = {
         case 4:
           message.data = UpdateAgentDoc.decode(reader, reader.uint32());
           break;
+        case 5:
+          message.projectAddress = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -581,9 +560,8 @@ export const MsgUpdateAgent = {
       txHash: isSet(object.txHash) ? String(object.txHash) : "",
       senderDid: isSet(object.senderDid) ? String(object.senderDid) : "",
       projectDid: isSet(object.projectDid) ? String(object.projectDid) : "",
-      data: isSet(object.data)
-        ? UpdateAgentDoc.fromJSON(object.data)
-        : undefined,
+      data: isSet(object.data) ? UpdateAgentDoc.fromJSON(object.data) : undefined,
+      projectAddress: isSet(object.projectAddress) ? String(object.projectAddress) : "",
     };
   },
 
@@ -592,24 +570,20 @@ export const MsgUpdateAgent = {
     message.txHash !== undefined && (obj.txHash = message.txHash);
     message.senderDid !== undefined && (obj.senderDid = message.senderDid);
     message.projectDid !== undefined && (obj.projectDid = message.projectDid);
-    message.data !== undefined &&
-      (obj.data = message.data
-        ? UpdateAgentDoc.toJSON(message.data)
-        : undefined);
+    message.data !== undefined && (obj.data = message.data ? UpdateAgentDoc.toJSON(message.data) : undefined);
+    message.projectAddress !== undefined && (obj.projectAddress = message.projectAddress);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgUpdateAgent>, I>>(
-    object: I
-  ): MsgUpdateAgent {
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateAgent>, I>>(object: I): MsgUpdateAgent {
     const message = createBaseMsgUpdateAgent();
     message.txHash = object.txHash ?? "";
     message.senderDid = object.senderDid ?? "";
     message.projectDid = object.projectDid ?? "";
-    message.data =
-      object.data !== undefined && object.data !== null
-        ? UpdateAgentDoc.fromPartial(object.data)
-        : undefined;
+    message.data = (object.data !== undefined && object.data !== null)
+      ? UpdateAgentDoc.fromPartial(object.data)
+      : undefined;
+    message.projectAddress = object.projectAddress ?? "";
     return message;
   },
 };
@@ -619,17 +593,11 @@ function createBaseMsgUpdateAgentResponse(): MsgUpdateAgentResponse {
 }
 
 export const MsgUpdateAgentResponse = {
-  encode(
-    _: MsgUpdateAgentResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: MsgUpdateAgentResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgUpdateAgentResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateAgentResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateAgentResponse();
@@ -653,23 +621,18 @@ export const MsgUpdateAgentResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgUpdateAgentResponse>, I>>(
-    _: I
-  ): MsgUpdateAgentResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateAgentResponse>, I>>(_: I): MsgUpdateAgentResponse {
     const message = createBaseMsgUpdateAgentResponse();
     return message;
   },
 };
 
 function createBaseMsgCreateClaim(): MsgCreateClaim {
-  return { txHash: "", senderDid: "", projectDid: "", data: undefined };
+  return { txHash: "", senderDid: "", projectDid: "", data: undefined, projectAddress: "" };
 }
 
 export const MsgCreateClaim = {
-  encode(
-    message: MsgCreateClaim,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgCreateClaim, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.txHash !== "") {
       writer.uint32(10).string(message.txHash);
     }
@@ -681,6 +644,9 @@ export const MsgCreateClaim = {
     }
     if (message.data !== undefined) {
       CreateClaimDoc.encode(message.data, writer.uint32(34).fork()).ldelim();
+    }
+    if (message.projectAddress !== "") {
+      writer.uint32(42).string(message.projectAddress);
     }
     return writer;
   },
@@ -704,6 +670,9 @@ export const MsgCreateClaim = {
         case 4:
           message.data = CreateClaimDoc.decode(reader, reader.uint32());
           break;
+        case 5:
+          message.projectAddress = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -717,9 +686,8 @@ export const MsgCreateClaim = {
       txHash: isSet(object.txHash) ? String(object.txHash) : "",
       senderDid: isSet(object.senderDid) ? String(object.senderDid) : "",
       projectDid: isSet(object.projectDid) ? String(object.projectDid) : "",
-      data: isSet(object.data)
-        ? CreateClaimDoc.fromJSON(object.data)
-        : undefined,
+      data: isSet(object.data) ? CreateClaimDoc.fromJSON(object.data) : undefined,
+      projectAddress: isSet(object.projectAddress) ? String(object.projectAddress) : "",
     };
   },
 
@@ -728,24 +696,20 @@ export const MsgCreateClaim = {
     message.txHash !== undefined && (obj.txHash = message.txHash);
     message.senderDid !== undefined && (obj.senderDid = message.senderDid);
     message.projectDid !== undefined && (obj.projectDid = message.projectDid);
-    message.data !== undefined &&
-      (obj.data = message.data
-        ? CreateClaimDoc.toJSON(message.data)
-        : undefined);
+    message.data !== undefined && (obj.data = message.data ? CreateClaimDoc.toJSON(message.data) : undefined);
+    message.projectAddress !== undefined && (obj.projectAddress = message.projectAddress);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgCreateClaim>, I>>(
-    object: I
-  ): MsgCreateClaim {
+  fromPartial<I extends Exact<DeepPartial<MsgCreateClaim>, I>>(object: I): MsgCreateClaim {
     const message = createBaseMsgCreateClaim();
     message.txHash = object.txHash ?? "";
     message.senderDid = object.senderDid ?? "";
     message.projectDid = object.projectDid ?? "";
-    message.data =
-      object.data !== undefined && object.data !== null
-        ? CreateClaimDoc.fromPartial(object.data)
-        : undefined;
+    message.data = (object.data !== undefined && object.data !== null)
+      ? CreateClaimDoc.fromPartial(object.data)
+      : undefined;
+    message.projectAddress = object.projectAddress ?? "";
     return message;
   },
 };
@@ -755,17 +719,11 @@ function createBaseMsgCreateClaimResponse(): MsgCreateClaimResponse {
 }
 
 export const MsgCreateClaimResponse = {
-  encode(
-    _: MsgCreateClaimResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: MsgCreateClaimResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgCreateClaimResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateClaimResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreateClaimResponse();
@@ -789,23 +747,18 @@ export const MsgCreateClaimResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgCreateClaimResponse>, I>>(
-    _: I
-  ): MsgCreateClaimResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgCreateClaimResponse>, I>>(_: I): MsgCreateClaimResponse {
     const message = createBaseMsgCreateClaimResponse();
     return message;
   },
 };
 
 function createBaseMsgCreateEvaluation(): MsgCreateEvaluation {
-  return { txHash: "", senderDid: "", projectDid: "", data: undefined };
+  return { txHash: "", senderDid: "", projectDid: "", data: undefined, projectAddress: "" };
 }
 
 export const MsgCreateEvaluation = {
-  encode(
-    message: MsgCreateEvaluation,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgCreateEvaluation, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.txHash !== "") {
       writer.uint32(10).string(message.txHash);
     }
@@ -816,10 +769,10 @@ export const MsgCreateEvaluation = {
       writer.uint32(26).string(message.projectDid);
     }
     if (message.data !== undefined) {
-      CreateEvaluationDoc.encode(
-        message.data,
-        writer.uint32(34).fork()
-      ).ldelim();
+      CreateEvaluationDoc.encode(message.data, writer.uint32(34).fork()).ldelim();
+    }
+    if (message.projectAddress !== "") {
+      writer.uint32(42).string(message.projectAddress);
     }
     return writer;
   },
@@ -843,6 +796,9 @@ export const MsgCreateEvaluation = {
         case 4:
           message.data = CreateEvaluationDoc.decode(reader, reader.uint32());
           break;
+        case 5:
+          message.projectAddress = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -856,9 +812,8 @@ export const MsgCreateEvaluation = {
       txHash: isSet(object.txHash) ? String(object.txHash) : "",
       senderDid: isSet(object.senderDid) ? String(object.senderDid) : "",
       projectDid: isSet(object.projectDid) ? String(object.projectDid) : "",
-      data: isSet(object.data)
-        ? CreateEvaluationDoc.fromJSON(object.data)
-        : undefined,
+      data: isSet(object.data) ? CreateEvaluationDoc.fromJSON(object.data) : undefined,
+      projectAddress: isSet(object.projectAddress) ? String(object.projectAddress) : "",
     };
   },
 
@@ -867,24 +822,20 @@ export const MsgCreateEvaluation = {
     message.txHash !== undefined && (obj.txHash = message.txHash);
     message.senderDid !== undefined && (obj.senderDid = message.senderDid);
     message.projectDid !== undefined && (obj.projectDid = message.projectDid);
-    message.data !== undefined &&
-      (obj.data = message.data
-        ? CreateEvaluationDoc.toJSON(message.data)
-        : undefined);
+    message.data !== undefined && (obj.data = message.data ? CreateEvaluationDoc.toJSON(message.data) : undefined);
+    message.projectAddress !== undefined && (obj.projectAddress = message.projectAddress);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgCreateEvaluation>, I>>(
-    object: I
-  ): MsgCreateEvaluation {
+  fromPartial<I extends Exact<DeepPartial<MsgCreateEvaluation>, I>>(object: I): MsgCreateEvaluation {
     const message = createBaseMsgCreateEvaluation();
     message.txHash = object.txHash ?? "";
     message.senderDid = object.senderDid ?? "";
     message.projectDid = object.projectDid ?? "";
-    message.data =
-      object.data !== undefined && object.data !== null
-        ? CreateEvaluationDoc.fromPartial(object.data)
-        : undefined;
+    message.data = (object.data !== undefined && object.data !== null)
+      ? CreateEvaluationDoc.fromPartial(object.data)
+      : undefined;
+    message.projectAddress = object.projectAddress ?? "";
     return message;
   },
 };
@@ -894,17 +845,11 @@ function createBaseMsgCreateEvaluationResponse(): MsgCreateEvaluationResponse {
 }
 
 export const MsgCreateEvaluationResponse = {
-  encode(
-    _: MsgCreateEvaluationResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: MsgCreateEvaluationResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgCreateEvaluationResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateEvaluationResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreateEvaluationResponse();
@@ -928,28 +873,26 @@ export const MsgCreateEvaluationResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgCreateEvaluationResponse>, I>>(
-    _: I
-  ): MsgCreateEvaluationResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgCreateEvaluationResponse>, I>>(_: I): MsgCreateEvaluationResponse {
     const message = createBaseMsgCreateEvaluationResponse();
     return message;
   },
 };
 
 function createBaseMsgWithdrawFunds(): MsgWithdrawFunds {
-  return { senderDid: "", data: undefined };
+  return { senderDid: "", data: undefined, senderAddress: "" };
 }
 
 export const MsgWithdrawFunds = {
-  encode(
-    message: MsgWithdrawFunds,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgWithdrawFunds, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.senderDid !== "") {
       writer.uint32(10).string(message.senderDid);
     }
     if (message.data !== undefined) {
       WithdrawFundsDoc.encode(message.data, writer.uint32(18).fork()).ldelim();
+    }
+    if (message.senderAddress !== "") {
+      writer.uint32(42).string(message.senderAddress);
     }
     return writer;
   },
@@ -967,6 +910,9 @@ export const MsgWithdrawFunds = {
         case 2:
           message.data = WithdrawFundsDoc.decode(reader, reader.uint32());
           break;
+        case 5:
+          message.senderAddress = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -978,31 +924,26 @@ export const MsgWithdrawFunds = {
   fromJSON(object: any): MsgWithdrawFunds {
     return {
       senderDid: isSet(object.senderDid) ? String(object.senderDid) : "",
-      data: isSet(object.data)
-        ? WithdrawFundsDoc.fromJSON(object.data)
-        : undefined,
+      data: isSet(object.data) ? WithdrawFundsDoc.fromJSON(object.data) : undefined,
+      senderAddress: isSet(object.senderAddress) ? String(object.senderAddress) : "",
     };
   },
 
   toJSON(message: MsgWithdrawFunds): unknown {
     const obj: any = {};
     message.senderDid !== undefined && (obj.senderDid = message.senderDid);
-    message.data !== undefined &&
-      (obj.data = message.data
-        ? WithdrawFundsDoc.toJSON(message.data)
-        : undefined);
+    message.data !== undefined && (obj.data = message.data ? WithdrawFundsDoc.toJSON(message.data) : undefined);
+    message.senderAddress !== undefined && (obj.senderAddress = message.senderAddress);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgWithdrawFunds>, I>>(
-    object: I
-  ): MsgWithdrawFunds {
+  fromPartial<I extends Exact<DeepPartial<MsgWithdrawFunds>, I>>(object: I): MsgWithdrawFunds {
     const message = createBaseMsgWithdrawFunds();
     message.senderDid = object.senderDid ?? "";
-    message.data =
-      object.data !== undefined && object.data !== null
-        ? WithdrawFundsDoc.fromPartial(object.data)
-        : undefined;
+    message.data = (object.data !== undefined && object.data !== null)
+      ? WithdrawFundsDoc.fromPartial(object.data)
+      : undefined;
+    message.senderAddress = object.senderAddress ?? "";
     return message;
   },
 };
@@ -1012,17 +953,11 @@ function createBaseMsgWithdrawFundsResponse(): MsgWithdrawFundsResponse {
 }
 
 export const MsgWithdrawFundsResponse = {
-  encode(
-    _: MsgWithdrawFundsResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: MsgWithdrawFundsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgWithdrawFundsResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgWithdrawFundsResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgWithdrawFundsResponse();
@@ -1046,23 +981,18 @@ export const MsgWithdrawFundsResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgWithdrawFundsResponse>, I>>(
-    _: I
-  ): MsgWithdrawFundsResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgWithdrawFundsResponse>, I>>(_: I): MsgWithdrawFundsResponse {
     const message = createBaseMsgWithdrawFundsResponse();
     return message;
   },
 };
 
 function createBaseMsgUpdateProjectDoc(): MsgUpdateProjectDoc {
-  return { txHash: "", senderDid: "", projectDid: "", data: new Uint8Array() };
+  return { txHash: "", senderDid: "", projectDid: "", data: new Uint8Array(), projectAddress: "" };
 }
 
 export const MsgUpdateProjectDoc = {
-  encode(
-    message: MsgUpdateProjectDoc,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgUpdateProjectDoc, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.txHash !== "") {
       writer.uint32(10).string(message.txHash);
     }
@@ -1074,6 +1004,9 @@ export const MsgUpdateProjectDoc = {
     }
     if (message.data.length !== 0) {
       writer.uint32(34).bytes(message.data);
+    }
+    if (message.projectAddress !== "") {
+      writer.uint32(42).string(message.projectAddress);
     }
     return writer;
   },
@@ -1097,6 +1030,9 @@ export const MsgUpdateProjectDoc = {
         case 4:
           message.data = reader.bytes();
           break;
+        case 5:
+          message.projectAddress = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1110,9 +1046,8 @@ export const MsgUpdateProjectDoc = {
       txHash: isSet(object.txHash) ? String(object.txHash) : "",
       senderDid: isSet(object.senderDid) ? String(object.senderDid) : "",
       projectDid: isSet(object.projectDid) ? String(object.projectDid) : "",
-      data: isSet(object.data)
-        ? bytesFromBase64(object.data)
-        : new Uint8Array(),
+      data: isSet(object.data) ? bytesFromBase64(object.data) : new Uint8Array(),
+      projectAddress: isSet(object.projectAddress) ? String(object.projectAddress) : "",
     };
   },
 
@@ -1122,20 +1057,18 @@ export const MsgUpdateProjectDoc = {
     message.senderDid !== undefined && (obj.senderDid = message.senderDid);
     message.projectDid !== undefined && (obj.projectDid = message.projectDid);
     message.data !== undefined &&
-      (obj.data = base64FromBytes(
-        message.data !== undefined ? message.data : new Uint8Array()
-      ));
+      (obj.data = base64FromBytes(message.data !== undefined ? message.data : new Uint8Array()));
+    message.projectAddress !== undefined && (obj.projectAddress = message.projectAddress);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgUpdateProjectDoc>, I>>(
-    object: I
-  ): MsgUpdateProjectDoc {
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateProjectDoc>, I>>(object: I): MsgUpdateProjectDoc {
     const message = createBaseMsgUpdateProjectDoc();
     message.txHash = object.txHash ?? "";
     message.senderDid = object.senderDid ?? "";
     message.projectDid = object.projectDid ?? "";
     message.data = object.data ?? new Uint8Array();
+    message.projectAddress = object.projectAddress ?? "";
     return message;
   },
 };
@@ -1145,17 +1078,11 @@ function createBaseMsgUpdateProjectDocResponse(): MsgUpdateProjectDocResponse {
 }
 
 export const MsgUpdateProjectDocResponse = {
-  encode(
-    _: MsgUpdateProjectDocResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: MsgUpdateProjectDocResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgUpdateProjectDocResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateProjectDocResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateProjectDocResponse();
@@ -1179,9 +1106,7 @@ export const MsgUpdateProjectDocResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgUpdateProjectDocResponse>, I>>(
-    _: I
-  ): MsgUpdateProjectDocResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateProjectDocResponse>, I>>(_: I): MsgUpdateProjectDocResponse {
     const message = createBaseMsgUpdateProjectDocResponse();
     return message;
   },
@@ -1192,9 +1117,7 @@ export interface Msg {
   /** CreateProject defines a method for creating a project. */
   CreateProject(request: MsgCreateProject): Promise<MsgCreateProjectResponse>;
   /** UpdateProjectStatus defines a method for updating a project's current status. */
-  UpdateProjectStatus(
-    request: MsgUpdateProjectStatus
-  ): Promise<MsgUpdateProjectStatusResponse>;
+  UpdateProjectStatus(request: MsgUpdateProjectStatus): Promise<MsgUpdateProjectStatusResponse>;
   /** CreateAgent defines a method for creating an agent on a project. */
   CreateAgent(request: MsgCreateAgent): Promise<MsgCreateAgentResponse>;
   /** UpdateAgent defines a method for updating an agent on a project. */
@@ -1202,20 +1125,18 @@ export interface Msg {
   /** CreateClaim defines a method for creating a claim on a project. */
   CreateClaim(request: MsgCreateClaim): Promise<MsgCreateClaimResponse>;
   /** CreateEvaluation defines a method for creating an evaluation for a specific claim on a project. */
-  CreateEvaluation(
-    request: MsgCreateEvaluation
-  ): Promise<MsgCreateEvaluationResponse>;
+  CreateEvaluation(request: MsgCreateEvaluation): Promise<MsgCreateEvaluationResponse>;
   /** WithdrawFunds defines a method for project agents to withdraw their funds from a project. */
   WithdrawFunds(request: MsgWithdrawFunds): Promise<MsgWithdrawFundsResponse>;
   /** UpdateProjectDoc defines a method for updating a project's data. */
-  UpdateProjectDoc(
-    request: MsgUpdateProjectDoc
-  ): Promise<MsgUpdateProjectDocResponse>;
+  UpdateProjectDoc(request: MsgUpdateProjectDoc): Promise<MsgUpdateProjectDocResponse>;
 }
 
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
-  constructor(rpc: Rpc) {
+  private readonly service: string;
+  constructor(rpc: Rpc, opts?: { service?: string }) {
+    this.service = opts?.service || "project.Msg";
     this.rpc = rpc;
     this.CreateProject = this.CreateProject.bind(this);
     this.UpdateProjectStatus = this.UpdateProjectStatus.bind(this);
@@ -1228,149 +1149,112 @@ export class MsgClientImpl implements Msg {
   }
   CreateProject(request: MsgCreateProject): Promise<MsgCreateProjectResponse> {
     const data = MsgCreateProject.encode(request).finish();
-    const promise = this.rpc.request("project.Msg", "CreateProject", data);
-    return promise.then((data) =>
-      MsgCreateProjectResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request(this.service, "CreateProject", data);
+    return promise.then((data) => MsgCreateProjectResponse.decode(new _m0.Reader(data)));
   }
 
-  UpdateProjectStatus(
-    request: MsgUpdateProjectStatus
-  ): Promise<MsgUpdateProjectStatusResponse> {
+  UpdateProjectStatus(request: MsgUpdateProjectStatus): Promise<MsgUpdateProjectStatusResponse> {
     const data = MsgUpdateProjectStatus.encode(request).finish();
-    const promise = this.rpc.request(
-      "project.Msg",
-      "UpdateProjectStatus",
-      data
-    );
-    return promise.then((data) =>
-      MsgUpdateProjectStatusResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request(this.service, "UpdateProjectStatus", data);
+    return promise.then((data) => MsgUpdateProjectStatusResponse.decode(new _m0.Reader(data)));
   }
 
   CreateAgent(request: MsgCreateAgent): Promise<MsgCreateAgentResponse> {
     const data = MsgCreateAgent.encode(request).finish();
-    const promise = this.rpc.request("project.Msg", "CreateAgent", data);
-    return promise.then((data) =>
-      MsgCreateAgentResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request(this.service, "CreateAgent", data);
+    return promise.then((data) => MsgCreateAgentResponse.decode(new _m0.Reader(data)));
   }
 
   UpdateAgent(request: MsgUpdateAgent): Promise<MsgUpdateAgentResponse> {
     const data = MsgUpdateAgent.encode(request).finish();
-    const promise = this.rpc.request("project.Msg", "UpdateAgent", data);
-    return promise.then((data) =>
-      MsgUpdateAgentResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request(this.service, "UpdateAgent", data);
+    return promise.then((data) => MsgUpdateAgentResponse.decode(new _m0.Reader(data)));
   }
 
   CreateClaim(request: MsgCreateClaim): Promise<MsgCreateClaimResponse> {
     const data = MsgCreateClaim.encode(request).finish();
-    const promise = this.rpc.request("project.Msg", "CreateClaim", data);
-    return promise.then((data) =>
-      MsgCreateClaimResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request(this.service, "CreateClaim", data);
+    return promise.then((data) => MsgCreateClaimResponse.decode(new _m0.Reader(data)));
   }
 
-  CreateEvaluation(
-    request: MsgCreateEvaluation
-  ): Promise<MsgCreateEvaluationResponse> {
+  CreateEvaluation(request: MsgCreateEvaluation): Promise<MsgCreateEvaluationResponse> {
     const data = MsgCreateEvaluation.encode(request).finish();
-    const promise = this.rpc.request("project.Msg", "CreateEvaluation", data);
-    return promise.then((data) =>
-      MsgCreateEvaluationResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request(this.service, "CreateEvaluation", data);
+    return promise.then((data) => MsgCreateEvaluationResponse.decode(new _m0.Reader(data)));
   }
 
   WithdrawFunds(request: MsgWithdrawFunds): Promise<MsgWithdrawFundsResponse> {
     const data = MsgWithdrawFunds.encode(request).finish();
-    const promise = this.rpc.request("project.Msg", "WithdrawFunds", data);
-    return promise.then((data) =>
-      MsgWithdrawFundsResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request(this.service, "WithdrawFunds", data);
+    return promise.then((data) => MsgWithdrawFundsResponse.decode(new _m0.Reader(data)));
   }
 
-  UpdateProjectDoc(
-    request: MsgUpdateProjectDoc
-  ): Promise<MsgUpdateProjectDocResponse> {
+  UpdateProjectDoc(request: MsgUpdateProjectDoc): Promise<MsgUpdateProjectDocResponse> {
     const data = MsgUpdateProjectDoc.encode(request).finish();
-    const promise = this.rpc.request("project.Msg", "UpdateProjectDoc", data);
-    return promise.then((data) =>
-      MsgUpdateProjectDocResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request(this.service, "UpdateProjectDoc", data);
+    return promise.then((data) => MsgUpdateProjectDocResponse.decode(new _m0.Reader(data)));
   }
 }
 
 interface Rpc {
-  request(
-    service: string,
-    method: string,
-    data: Uint8Array
-  ): Promise<Uint8Array>;
+  request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
 }
 
 declare var self: any | undefined;
 declare var window: any | undefined;
 declare var global: any | undefined;
 var globalThis: any = (() => {
-  if (typeof globalThis !== "undefined") return globalThis;
-  if (typeof self !== "undefined") return self;
-  if (typeof window !== "undefined") return window;
-  if (typeof global !== "undefined") return global;
+  if (typeof globalThis !== "undefined") {
+    return globalThis;
+  }
+  if (typeof self !== "undefined") {
+    return self;
+  }
+  if (typeof window !== "undefined") {
+    return window;
+  }
+  if (typeof global !== "undefined") {
+    return global;
+  }
   throw "Unable to locate global object";
 })();
 
-const atob: (b64: string) => string =
-  globalThis.atob ||
-  ((b64) => globalThis.Buffer.from(b64, "base64").toString("binary"));
 function bytesFromBase64(b64: string): Uint8Array {
-  const bin = atob(b64);
-  const arr = new Uint8Array(bin.length);
-  for (let i = 0; i < bin.length; ++i) {
-    arr[i] = bin.charCodeAt(i);
+  if (globalThis.Buffer) {
+    return Uint8Array.from(globalThis.Buffer.from(b64, "base64"));
+  } else {
+    const bin = globalThis.atob(b64);
+    const arr = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; ++i) {
+      arr[i] = bin.charCodeAt(i);
+    }
+    return arr;
   }
-  return arr;
 }
 
-const btoa: (bin: string) => string =
-  globalThis.btoa ||
-  ((bin) => globalThis.Buffer.from(bin, "binary").toString("base64"));
 function base64FromBytes(arr: Uint8Array): string {
-  const bin: string[] = [];
-  arr.forEach((byte) => {
-    bin.push(String.fromCharCode(byte));
-  });
-  return btoa(bin.join(""));
+  if (globalThis.Buffer) {
+    return globalThis.Buffer.from(arr).toString("base64");
+  } else {
+    const bin: string[] = [];
+    arr.forEach((byte) => {
+      bin.push(String.fromCharCode(byte));
+    });
+    return globalThis.btoa(bin.join(""));
+  }
 }
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Long
-  ? string | number | Long
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
-        never
-      >;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;

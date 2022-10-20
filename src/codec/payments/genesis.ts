@@ -1,11 +1,7 @@
 /* eslint-disable */
 import Long from "long";
-import * as _m0 from "protobufjs/minimal";
-import {
-  PaymentTemplate,
-  PaymentContract,
-  Subscription,
-} from "../payments/payments";
+import _m0 from "protobufjs/minimal";
+import { PaymentContract, PaymentTemplate, Subscription } from "./payments";
 
 export const protobufPackage = "payments";
 
@@ -21,10 +17,7 @@ function createBaseGenesisState(): GenesisState {
 }
 
 export const GenesisState = {
-  encode(
-    message: GenesisState,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: GenesisState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.paymentTemplates) {
       PaymentTemplate.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -45,19 +38,13 @@ export const GenesisState = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.paymentTemplates.push(
-            PaymentTemplate.decode(reader, reader.uint32())
-          );
+          message.paymentTemplates.push(PaymentTemplate.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.paymentContracts.push(
-            PaymentContract.decode(reader, reader.uint32())
-          );
+          message.paymentContracts.push(PaymentContract.decode(reader, reader.uint32()));
           break;
         case 3:
-          message.subscriptions.push(
-            Subscription.decode(reader, reader.uint32())
-          );
+          message.subscriptions.push(Subscription.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -84,71 +71,43 @@ export const GenesisState = {
   toJSON(message: GenesisState): unknown {
     const obj: any = {};
     if (message.paymentTemplates) {
-      obj.paymentTemplates = message.paymentTemplates.map((e) =>
-        e ? PaymentTemplate.toJSON(e) : undefined
-      );
+      obj.paymentTemplates = message.paymentTemplates.map((e) => e ? PaymentTemplate.toJSON(e) : undefined);
     } else {
       obj.paymentTemplates = [];
     }
     if (message.paymentContracts) {
-      obj.paymentContracts = message.paymentContracts.map((e) =>
-        e ? PaymentContract.toJSON(e) : undefined
-      );
+      obj.paymentContracts = message.paymentContracts.map((e) => e ? PaymentContract.toJSON(e) : undefined);
     } else {
       obj.paymentContracts = [];
     }
     if (message.subscriptions) {
-      obj.subscriptions = message.subscriptions.map((e) =>
-        e ? Subscription.toJSON(e) : undefined
-      );
+      obj.subscriptions = message.subscriptions.map((e) => e ? Subscription.toJSON(e) : undefined);
     } else {
       obj.subscriptions = [];
     }
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<GenesisState>, I>>(
-    object: I
-  ): GenesisState {
+  fromPartial<I extends Exact<DeepPartial<GenesisState>, I>>(object: I): GenesisState {
     const message = createBaseGenesisState();
-    message.paymentTemplates =
-      object.paymentTemplates?.map((e) => PaymentTemplate.fromPartial(e)) || [];
-    message.paymentContracts =
-      object.paymentContracts?.map((e) => PaymentContract.fromPartial(e)) || [];
-    message.subscriptions =
-      object.subscriptions?.map((e) => Subscription.fromPartial(e)) || [];
+    message.paymentTemplates = object.paymentTemplates?.map((e) => PaymentTemplate.fromPartial(e)) || [];
+    message.paymentContracts = object.paymentContracts?.map((e) => PaymentContract.fromPartial(e)) || [];
+    message.subscriptions = object.subscriptions?.map((e) => Subscription.fromPartial(e)) || [];
     return message;
   },
 };
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Long
-  ? string | number | Long
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
-        never
-      >;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;

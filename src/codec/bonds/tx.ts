@@ -1,8 +1,8 @@
 /* eslint-disable */
 import Long from "long";
-import * as _m0 from "protobufjs/minimal";
+import _m0 from "protobufjs/minimal";
 import { Coin } from "../cosmos/coin";
-import { FunctionParam } from "../bonds/bonds";
+import { FunctionParam } from "./bonds";
 
 export const protobufPackage = "bonds";
 
@@ -30,10 +30,12 @@ export interface MsgCreateBond {
   alphaBond: boolean;
   batchBlocks: string;
   outcomePayment: string;
+  creatorAddress: string;
 }
 
 /** MsgCreateBondResponse defines the Msg/CreateBond response type. */
-export interface MsgCreateBondResponse {}
+export interface MsgCreateBondResponse {
+}
 
 /** MsgEditBond defines a message for editing an existing bond. */
 export interface MsgEditBond {
@@ -44,29 +46,35 @@ export interface MsgEditBond {
   sanityRate: string;
   sanityMarginPercentage: string;
   editorDid: string;
+  editorAddress: string;
 }
 
 /** MsgEditBondResponse defines the Msg/EditBond response type. */
-export interface MsgEditBondResponse {}
+export interface MsgEditBondResponse {
+}
 
 /** MsgSetNextAlpha defines a message for editing a bond's alpha parameter. */
 export interface MsgSetNextAlpha {
   bondDid: string;
   alpha: string;
   editorDid: string;
+  editorAddress: string;
 }
 
-export interface MsgSetNextAlphaResponse {}
+export interface MsgSetNextAlphaResponse {
+}
 
 /** MsgUpdateBondState defines a message for updating a bond's current state. */
 export interface MsgUpdateBondState {
   bondDid: string;
   state: string;
   editorDid: string;
+  editorAddress: string;
 }
 
 /** MsgUpdateBondStateResponse defines the Msg/UpdateBondState response type. */
-export interface MsgUpdateBondStateResponse {}
+export interface MsgUpdateBondStateResponse {
+}
 
 /** MsgBuy defines a message for buying from a bond. */
 export interface MsgBuy {
@@ -74,20 +82,24 @@ export interface MsgBuy {
   amount?: Coin;
   maxPrices: Coin[];
   bondDid: string;
+  buyerAddress: string;
 }
 
 /** MsgBuyResponse defines the Msg/Buy response type. */
-export interface MsgBuyResponse {}
+export interface MsgBuyResponse {
+}
 
 /** MsgSell defines a message for selling from a bond. */
 export interface MsgSell {
   sellerDid: string;
   amount?: Coin;
   bondDid: string;
+  sellerAddress: string;
 }
 
 /** MsgSellResponse defines the Msg/Sell response type. */
-export interface MsgSellResponse {}
+export interface MsgSellResponse {
+}
 
 /** MsgSwap defines a message for swapping from one reserve bond token to another. */
 export interface MsgSwap {
@@ -95,39 +107,47 @@ export interface MsgSwap {
   bondDid: string;
   from?: Coin;
   toToken: string;
+  swapperAddress: string;
 }
 
 /** MsgSwapResponse defines the Msg/Swap response type. */
-export interface MsgSwapResponse {}
+export interface MsgSwapResponse {
+}
 
 /** MsgMakeOutcomePayment defines a message for making an outcome payment to a bond. */
 export interface MsgMakeOutcomePayment {
   senderDid: string;
   amount: string;
   bondDid: string;
+  senderAddress: string;
 }
 
 /** MsgMakeOutcomePaymentResponse defines the Msg/MakeOutcomePayment response type. */
-export interface MsgMakeOutcomePaymentResponse {}
+export interface MsgMakeOutcomePaymentResponse {
+}
 
 /** MsgWithdrawShare defines a message for withdrawing a share from a bond that is in the SETTLE stage. */
 export interface MsgWithdrawShare {
   recipientDid: string;
   bondDid: string;
+  recipientAddress: string;
 }
 
 /** MsgWithdrawShareResponse defines the Msg/WithdrawShare response type. */
-export interface MsgWithdrawShareResponse {}
+export interface MsgWithdrawShareResponse {
+}
 
 /** MsgWithdrawReserve defines a message for withdrawing reserve from a bond. */
 export interface MsgWithdrawReserve {
   withdrawerDid: string;
   amount: Coin[];
   bondDid: string;
+  withdrawerAddress: string;
 }
 
 /** MsgWithdrawReserveResponse defines the Msg/WithdrawReserve response type. */
-export interface MsgWithdrawReserveResponse {}
+export interface MsgWithdrawReserveResponse {
+}
 
 function createBaseMsgCreateBond(): MsgCreateBond {
   return {
@@ -153,14 +173,12 @@ function createBaseMsgCreateBond(): MsgCreateBond {
     alphaBond: false,
     batchBlocks: "",
     outcomePayment: "",
+    creatorAddress: "",
   };
 }
 
 export const MsgCreateBond = {
-  encode(
-    message: MsgCreateBond,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgCreateBond, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.bondDid !== "") {
       writer.uint32(10).string(message.bondDid);
     }
@@ -227,6 +245,9 @@ export const MsgCreateBond = {
     if (message.outcomePayment !== "") {
       writer.uint32(178).string(message.outcomePayment);
     }
+    if (message.creatorAddress !== "") {
+      writer.uint32(186).string(message.creatorAddress);
+    }
     return writer;
   },
 
@@ -253,9 +274,7 @@ export const MsgCreateBond = {
           message.functionType = reader.string();
           break;
         case 6:
-          message.functionParameters.push(
-            FunctionParam.decode(reader, reader.uint32())
-          );
+          message.functionParameters.push(FunctionParam.decode(reader, reader.uint32()));
           break;
         case 7:
           message.creatorDid = reader.string();
@@ -282,9 +301,7 @@ export const MsgCreateBond = {
           message.maxSupply = Coin.decode(reader, reader.uint32());
           break;
         case 15:
-          message.orderQuantityLimits.push(
-            Coin.decode(reader, reader.uint32())
-          );
+          message.orderQuantityLimits.push(Coin.decode(reader, reader.uint32()));
           break;
         case 16:
           message.sanityRate = reader.string();
@@ -307,6 +324,9 @@ export const MsgCreateBond = {
         case 22:
           message.outcomePayment = reader.string();
           break;
+        case 23:
+          message.creatorAddress = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -321,48 +341,29 @@ export const MsgCreateBond = {
       token: isSet(object.token) ? String(object.token) : "",
       name: isSet(object.name) ? String(object.name) : "",
       description: isSet(object.description) ? String(object.description) : "",
-      functionType: isSet(object.functionType)
-        ? String(object.functionType)
-        : "",
+      functionType: isSet(object.functionType) ? String(object.functionType) : "",
       functionParameters: Array.isArray(object?.functionParameters)
         ? object.functionParameters.map((e: any) => FunctionParam.fromJSON(e))
         : [],
       creatorDid: isSet(object.creatorDid) ? String(object.creatorDid) : "",
-      controllerDid: isSet(object.controllerDid)
-        ? String(object.controllerDid)
-        : "",
-      reserveTokens: Array.isArray(object?.reserveTokens)
-        ? object.reserveTokens.map((e: any) => String(e))
-        : [],
-      txFeePercentage: isSet(object.txFeePercentage)
-        ? String(object.txFeePercentage)
-        : "",
-      exitFeePercentage: isSet(object.exitFeePercentage)
-        ? String(object.exitFeePercentage)
-        : "",
+      controllerDid: isSet(object.controllerDid) ? String(object.controllerDid) : "",
+      reserveTokens: Array.isArray(object?.reserveTokens) ? object.reserveTokens.map((e: any) => String(e)) : [],
+      txFeePercentage: isSet(object.txFeePercentage) ? String(object.txFeePercentage) : "",
+      exitFeePercentage: isSet(object.exitFeePercentage) ? String(object.exitFeePercentage) : "",
       feeAddress: isSet(object.feeAddress) ? String(object.feeAddress) : "",
-      reserveWithdrawalAddress: isSet(object.reserveWithdrawalAddress)
-        ? String(object.reserveWithdrawalAddress)
-        : "",
-      maxSupply: isSet(object.maxSupply)
-        ? Coin.fromJSON(object.maxSupply)
-        : undefined,
+      reserveWithdrawalAddress: isSet(object.reserveWithdrawalAddress) ? String(object.reserveWithdrawalAddress) : "",
+      maxSupply: isSet(object.maxSupply) ? Coin.fromJSON(object.maxSupply) : undefined,
       orderQuantityLimits: Array.isArray(object?.orderQuantityLimits)
         ? object.orderQuantityLimits.map((e: any) => Coin.fromJSON(e))
         : [],
       sanityRate: isSet(object.sanityRate) ? String(object.sanityRate) : "",
-      sanityMarginPercentage: isSet(object.sanityMarginPercentage)
-        ? String(object.sanityMarginPercentage)
-        : "",
+      sanityMarginPercentage: isSet(object.sanityMarginPercentage) ? String(object.sanityMarginPercentage) : "",
       allowSells: isSet(object.allowSells) ? Boolean(object.allowSells) : false,
-      allowReserveWithdrawals: isSet(object.allowReserveWithdrawals)
-        ? Boolean(object.allowReserveWithdrawals)
-        : false,
+      allowReserveWithdrawals: isSet(object.allowReserveWithdrawals) ? Boolean(object.allowReserveWithdrawals) : false,
       alphaBond: isSet(object.alphaBond) ? Boolean(object.alphaBond) : false,
       batchBlocks: isSet(object.batchBlocks) ? String(object.batchBlocks) : "",
-      outcomePayment: isSet(object.outcomePayment)
-        ? String(object.outcomePayment)
-        : "",
+      outcomePayment: isSet(object.outcomePayment) ? String(object.outcomePayment) : "",
+      creatorAddress: isSet(object.creatorAddress) ? String(object.creatorAddress) : "",
     };
   },
 
@@ -371,68 +372,49 @@ export const MsgCreateBond = {
     message.bondDid !== undefined && (obj.bondDid = message.bondDid);
     message.token !== undefined && (obj.token = message.token);
     message.name !== undefined && (obj.name = message.name);
-    message.description !== undefined &&
-      (obj.description = message.description);
-    message.functionType !== undefined &&
-      (obj.functionType = message.functionType);
+    message.description !== undefined && (obj.description = message.description);
+    message.functionType !== undefined && (obj.functionType = message.functionType);
     if (message.functionParameters) {
-      obj.functionParameters = message.functionParameters.map((e) =>
-        e ? FunctionParam.toJSON(e) : undefined
-      );
+      obj.functionParameters = message.functionParameters.map((e) => e ? FunctionParam.toJSON(e) : undefined);
     } else {
       obj.functionParameters = [];
     }
     message.creatorDid !== undefined && (obj.creatorDid = message.creatorDid);
-    message.controllerDid !== undefined &&
-      (obj.controllerDid = message.controllerDid);
+    message.controllerDid !== undefined && (obj.controllerDid = message.controllerDid);
     if (message.reserveTokens) {
       obj.reserveTokens = message.reserveTokens.map((e) => e);
     } else {
       obj.reserveTokens = [];
     }
-    message.txFeePercentage !== undefined &&
-      (obj.txFeePercentage = message.txFeePercentage);
-    message.exitFeePercentage !== undefined &&
-      (obj.exitFeePercentage = message.exitFeePercentage);
+    message.txFeePercentage !== undefined && (obj.txFeePercentage = message.txFeePercentage);
+    message.exitFeePercentage !== undefined && (obj.exitFeePercentage = message.exitFeePercentage);
     message.feeAddress !== undefined && (obj.feeAddress = message.feeAddress);
-    message.reserveWithdrawalAddress !== undefined &&
-      (obj.reserveWithdrawalAddress = message.reserveWithdrawalAddress);
-    message.maxSupply !== undefined &&
-      (obj.maxSupply = message.maxSupply
-        ? Coin.toJSON(message.maxSupply)
-        : undefined);
+    message.reserveWithdrawalAddress !== undefined && (obj.reserveWithdrawalAddress = message.reserveWithdrawalAddress);
+    message.maxSupply !== undefined && (obj.maxSupply = message.maxSupply ? Coin.toJSON(message.maxSupply) : undefined);
     if (message.orderQuantityLimits) {
-      obj.orderQuantityLimits = message.orderQuantityLimits.map((e) =>
-        e ? Coin.toJSON(e) : undefined
-      );
+      obj.orderQuantityLimits = message.orderQuantityLimits.map((e) => e ? Coin.toJSON(e) : undefined);
     } else {
       obj.orderQuantityLimits = [];
     }
     message.sanityRate !== undefined && (obj.sanityRate = message.sanityRate);
-    message.sanityMarginPercentage !== undefined &&
-      (obj.sanityMarginPercentage = message.sanityMarginPercentage);
+    message.sanityMarginPercentage !== undefined && (obj.sanityMarginPercentage = message.sanityMarginPercentage);
     message.allowSells !== undefined && (obj.allowSells = message.allowSells);
-    message.allowReserveWithdrawals !== undefined &&
-      (obj.allowReserveWithdrawals = message.allowReserveWithdrawals);
+    message.allowReserveWithdrawals !== undefined && (obj.allowReserveWithdrawals = message.allowReserveWithdrawals);
     message.alphaBond !== undefined && (obj.alphaBond = message.alphaBond);
-    message.batchBlocks !== undefined &&
-      (obj.batchBlocks = message.batchBlocks);
-    message.outcomePayment !== undefined &&
-      (obj.outcomePayment = message.outcomePayment);
+    message.batchBlocks !== undefined && (obj.batchBlocks = message.batchBlocks);
+    message.outcomePayment !== undefined && (obj.outcomePayment = message.outcomePayment);
+    message.creatorAddress !== undefined && (obj.creatorAddress = message.creatorAddress);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgCreateBond>, I>>(
-    object: I
-  ): MsgCreateBond {
+  fromPartial<I extends Exact<DeepPartial<MsgCreateBond>, I>>(object: I): MsgCreateBond {
     const message = createBaseMsgCreateBond();
     message.bondDid = object.bondDid ?? "";
     message.token = object.token ?? "";
     message.name = object.name ?? "";
     message.description = object.description ?? "";
     message.functionType = object.functionType ?? "";
-    message.functionParameters =
-      object.functionParameters?.map((e) => FunctionParam.fromPartial(e)) || [];
+    message.functionParameters = object.functionParameters?.map((e) => FunctionParam.fromPartial(e)) || [];
     message.creatorDid = object.creatorDid ?? "";
     message.controllerDid = object.controllerDid ?? "";
     message.reserveTokens = object.reserveTokens?.map((e) => e) || [];
@@ -440,12 +422,10 @@ export const MsgCreateBond = {
     message.exitFeePercentage = object.exitFeePercentage ?? "";
     message.feeAddress = object.feeAddress ?? "";
     message.reserveWithdrawalAddress = object.reserveWithdrawalAddress ?? "";
-    message.maxSupply =
-      object.maxSupply !== undefined && object.maxSupply !== null
-        ? Coin.fromPartial(object.maxSupply)
-        : undefined;
-    message.orderQuantityLimits =
-      object.orderQuantityLimits?.map((e) => Coin.fromPartial(e)) || [];
+    message.maxSupply = (object.maxSupply !== undefined && object.maxSupply !== null)
+      ? Coin.fromPartial(object.maxSupply)
+      : undefined;
+    message.orderQuantityLimits = object.orderQuantityLimits?.map((e) => Coin.fromPartial(e)) || [];
     message.sanityRate = object.sanityRate ?? "";
     message.sanityMarginPercentage = object.sanityMarginPercentage ?? "";
     message.allowSells = object.allowSells ?? false;
@@ -453,6 +433,7 @@ export const MsgCreateBond = {
     message.alphaBond = object.alphaBond ?? false;
     message.batchBlocks = object.batchBlocks ?? "";
     message.outcomePayment = object.outcomePayment ?? "";
+    message.creatorAddress = object.creatorAddress ?? "";
     return message;
   },
 };
@@ -462,17 +443,11 @@ function createBaseMsgCreateBondResponse(): MsgCreateBondResponse {
 }
 
 export const MsgCreateBondResponse = {
-  encode(
-    _: MsgCreateBondResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: MsgCreateBondResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgCreateBondResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateBondResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreateBondResponse();
@@ -496,9 +471,7 @@ export const MsgCreateBondResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgCreateBondResponse>, I>>(
-    _: I
-  ): MsgCreateBondResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgCreateBondResponse>, I>>(_: I): MsgCreateBondResponse {
     const message = createBaseMsgCreateBondResponse();
     return message;
   },
@@ -513,14 +486,12 @@ function createBaseMsgEditBond(): MsgEditBond {
     sanityRate: "",
     sanityMarginPercentage: "",
     editorDid: "",
+    editorAddress: "",
   };
 }
 
 export const MsgEditBond = {
-  encode(
-    message: MsgEditBond,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgEditBond, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.bondDid !== "") {
       writer.uint32(10).string(message.bondDid);
     }
@@ -541,6 +512,9 @@ export const MsgEditBond = {
     }
     if (message.editorDid !== "") {
       writer.uint32(58).string(message.editorDid);
+    }
+    if (message.editorAddress !== "") {
+      writer.uint32(66).string(message.editorAddress);
     }
     return writer;
   },
@@ -573,6 +547,9 @@ export const MsgEditBond = {
         case 7:
           message.editorDid = reader.string();
           break;
+        case 8:
+          message.editorAddress = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -586,14 +563,11 @@ export const MsgEditBond = {
       bondDid: isSet(object.bondDid) ? String(object.bondDid) : "",
       name: isSet(object.name) ? String(object.name) : "",
       description: isSet(object.description) ? String(object.description) : "",
-      orderQuantityLimits: isSet(object.orderQuantityLimits)
-        ? String(object.orderQuantityLimits)
-        : "",
+      orderQuantityLimits: isSet(object.orderQuantityLimits) ? String(object.orderQuantityLimits) : "",
       sanityRate: isSet(object.sanityRate) ? String(object.sanityRate) : "",
-      sanityMarginPercentage: isSet(object.sanityMarginPercentage)
-        ? String(object.sanityMarginPercentage)
-        : "",
+      sanityMarginPercentage: isSet(object.sanityMarginPercentage) ? String(object.sanityMarginPercentage) : "",
       editorDid: isSet(object.editorDid) ? String(object.editorDid) : "",
+      editorAddress: isSet(object.editorAddress) ? String(object.editorAddress) : "",
     };
   },
 
@@ -601,20 +575,16 @@ export const MsgEditBond = {
     const obj: any = {};
     message.bondDid !== undefined && (obj.bondDid = message.bondDid);
     message.name !== undefined && (obj.name = message.name);
-    message.description !== undefined &&
-      (obj.description = message.description);
-    message.orderQuantityLimits !== undefined &&
-      (obj.orderQuantityLimits = message.orderQuantityLimits);
+    message.description !== undefined && (obj.description = message.description);
+    message.orderQuantityLimits !== undefined && (obj.orderQuantityLimits = message.orderQuantityLimits);
     message.sanityRate !== undefined && (obj.sanityRate = message.sanityRate);
-    message.sanityMarginPercentage !== undefined &&
-      (obj.sanityMarginPercentage = message.sanityMarginPercentage);
+    message.sanityMarginPercentage !== undefined && (obj.sanityMarginPercentage = message.sanityMarginPercentage);
     message.editorDid !== undefined && (obj.editorDid = message.editorDid);
+    message.editorAddress !== undefined && (obj.editorAddress = message.editorAddress);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgEditBond>, I>>(
-    object: I
-  ): MsgEditBond {
+  fromPartial<I extends Exact<DeepPartial<MsgEditBond>, I>>(object: I): MsgEditBond {
     const message = createBaseMsgEditBond();
     message.bondDid = object.bondDid ?? "";
     message.name = object.name ?? "";
@@ -623,6 +593,7 @@ export const MsgEditBond = {
     message.sanityRate = object.sanityRate ?? "";
     message.sanityMarginPercentage = object.sanityMarginPercentage ?? "";
     message.editorDid = object.editorDid ?? "";
+    message.editorAddress = object.editorAddress ?? "";
     return message;
   },
 };
@@ -632,10 +603,7 @@ function createBaseMsgEditBondResponse(): MsgEditBondResponse {
 }
 
 export const MsgEditBondResponse = {
-  encode(
-    _: MsgEditBondResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: MsgEditBondResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
@@ -663,23 +631,18 @@ export const MsgEditBondResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgEditBondResponse>, I>>(
-    _: I
-  ): MsgEditBondResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgEditBondResponse>, I>>(_: I): MsgEditBondResponse {
     const message = createBaseMsgEditBondResponse();
     return message;
   },
 };
 
 function createBaseMsgSetNextAlpha(): MsgSetNextAlpha {
-  return { bondDid: "", alpha: "", editorDid: "" };
+  return { bondDid: "", alpha: "", editorDid: "", editorAddress: "" };
 }
 
 export const MsgSetNextAlpha = {
-  encode(
-    message: MsgSetNextAlpha,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgSetNextAlpha, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.bondDid !== "") {
       writer.uint32(10).string(message.bondDid);
     }
@@ -688,6 +651,9 @@ export const MsgSetNextAlpha = {
     }
     if (message.editorDid !== "") {
       writer.uint32(26).string(message.editorDid);
+    }
+    if (message.editorAddress !== "") {
+      writer.uint32(34).string(message.editorAddress);
     }
     return writer;
   },
@@ -708,6 +674,9 @@ export const MsgSetNextAlpha = {
         case 3:
           message.editorDid = reader.string();
           break;
+        case 4:
+          message.editorAddress = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -721,6 +690,7 @@ export const MsgSetNextAlpha = {
       bondDid: isSet(object.bondDid) ? String(object.bondDid) : "",
       alpha: isSet(object.alpha) ? String(object.alpha) : "",
       editorDid: isSet(object.editorDid) ? String(object.editorDid) : "",
+      editorAddress: isSet(object.editorAddress) ? String(object.editorAddress) : "",
     };
   },
 
@@ -729,16 +699,16 @@ export const MsgSetNextAlpha = {
     message.bondDid !== undefined && (obj.bondDid = message.bondDid);
     message.alpha !== undefined && (obj.alpha = message.alpha);
     message.editorDid !== undefined && (obj.editorDid = message.editorDid);
+    message.editorAddress !== undefined && (obj.editorAddress = message.editorAddress);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgSetNextAlpha>, I>>(
-    object: I
-  ): MsgSetNextAlpha {
+  fromPartial<I extends Exact<DeepPartial<MsgSetNextAlpha>, I>>(object: I): MsgSetNextAlpha {
     const message = createBaseMsgSetNextAlpha();
     message.bondDid = object.bondDid ?? "";
     message.alpha = object.alpha ?? "";
     message.editorDid = object.editorDid ?? "";
+    message.editorAddress = object.editorAddress ?? "";
     return message;
   },
 };
@@ -748,17 +718,11 @@ function createBaseMsgSetNextAlphaResponse(): MsgSetNextAlphaResponse {
 }
 
 export const MsgSetNextAlphaResponse = {
-  encode(
-    _: MsgSetNextAlphaResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: MsgSetNextAlphaResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgSetNextAlphaResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetNextAlphaResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetNextAlphaResponse();
@@ -782,23 +746,18 @@ export const MsgSetNextAlphaResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgSetNextAlphaResponse>, I>>(
-    _: I
-  ): MsgSetNextAlphaResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgSetNextAlphaResponse>, I>>(_: I): MsgSetNextAlphaResponse {
     const message = createBaseMsgSetNextAlphaResponse();
     return message;
   },
 };
 
 function createBaseMsgUpdateBondState(): MsgUpdateBondState {
-  return { bondDid: "", state: "", editorDid: "" };
+  return { bondDid: "", state: "", editorDid: "", editorAddress: "" };
 }
 
 export const MsgUpdateBondState = {
-  encode(
-    message: MsgUpdateBondState,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgUpdateBondState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.bondDid !== "") {
       writer.uint32(10).string(message.bondDid);
     }
@@ -807,6 +766,9 @@ export const MsgUpdateBondState = {
     }
     if (message.editorDid !== "") {
       writer.uint32(26).string(message.editorDid);
+    }
+    if (message.editorAddress !== "") {
+      writer.uint32(34).string(message.editorAddress);
     }
     return writer;
   },
@@ -827,6 +789,9 @@ export const MsgUpdateBondState = {
         case 3:
           message.editorDid = reader.string();
           break;
+        case 4:
+          message.editorAddress = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -840,6 +805,7 @@ export const MsgUpdateBondState = {
       bondDid: isSet(object.bondDid) ? String(object.bondDid) : "",
       state: isSet(object.state) ? String(object.state) : "",
       editorDid: isSet(object.editorDid) ? String(object.editorDid) : "",
+      editorAddress: isSet(object.editorAddress) ? String(object.editorAddress) : "",
     };
   },
 
@@ -848,16 +814,16 @@ export const MsgUpdateBondState = {
     message.bondDid !== undefined && (obj.bondDid = message.bondDid);
     message.state !== undefined && (obj.state = message.state);
     message.editorDid !== undefined && (obj.editorDid = message.editorDid);
+    message.editorAddress !== undefined && (obj.editorAddress = message.editorAddress);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgUpdateBondState>, I>>(
-    object: I
-  ): MsgUpdateBondState {
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateBondState>, I>>(object: I): MsgUpdateBondState {
     const message = createBaseMsgUpdateBondState();
     message.bondDid = object.bondDid ?? "";
     message.state = object.state ?? "";
     message.editorDid = object.editorDid ?? "";
+    message.editorAddress = object.editorAddress ?? "";
     return message;
   },
 };
@@ -867,17 +833,11 @@ function createBaseMsgUpdateBondStateResponse(): MsgUpdateBondStateResponse {
 }
 
 export const MsgUpdateBondStateResponse = {
-  encode(
-    _: MsgUpdateBondStateResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: MsgUpdateBondStateResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgUpdateBondStateResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateBondStateResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateBondStateResponse();
@@ -901,23 +861,18 @@ export const MsgUpdateBondStateResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgUpdateBondStateResponse>, I>>(
-    _: I
-  ): MsgUpdateBondStateResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateBondStateResponse>, I>>(_: I): MsgUpdateBondStateResponse {
     const message = createBaseMsgUpdateBondStateResponse();
     return message;
   },
 };
 
 function createBaseMsgBuy(): MsgBuy {
-  return { buyerDid: "", amount: undefined, maxPrices: [], bondDid: "" };
+  return { buyerDid: "", amount: undefined, maxPrices: [], bondDid: "", buyerAddress: "" };
 }
 
 export const MsgBuy = {
-  encode(
-    message: MsgBuy,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgBuy, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.buyerDid !== "") {
       writer.uint32(10).string(message.buyerDid);
     }
@@ -929,6 +884,9 @@ export const MsgBuy = {
     }
     if (message.bondDid !== "") {
       writer.uint32(34).string(message.bondDid);
+    }
+    if (message.buyerAddress !== "") {
+      writer.uint32(42).string(message.buyerAddress);
     }
     return writer;
   },
@@ -952,6 +910,9 @@ export const MsgBuy = {
         case 4:
           message.bondDid = reader.string();
           break;
+        case 5:
+          message.buyerAddress = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -964,38 +925,35 @@ export const MsgBuy = {
     return {
       buyerDid: isSet(object.buyerDid) ? String(object.buyerDid) : "",
       amount: isSet(object.amount) ? Coin.fromJSON(object.amount) : undefined,
-      maxPrices: Array.isArray(object?.maxPrices)
-        ? object.maxPrices.map((e: any) => Coin.fromJSON(e))
-        : [],
+      maxPrices: Array.isArray(object?.maxPrices) ? object.maxPrices.map((e: any) => Coin.fromJSON(e)) : [],
       bondDid: isSet(object.bondDid) ? String(object.bondDid) : "",
+      buyerAddress: isSet(object.buyerAddress) ? String(object.buyerAddress) : "",
     };
   },
 
   toJSON(message: MsgBuy): unknown {
     const obj: any = {};
     message.buyerDid !== undefined && (obj.buyerDid = message.buyerDid);
-    message.amount !== undefined &&
-      (obj.amount = message.amount ? Coin.toJSON(message.amount) : undefined);
+    message.amount !== undefined && (obj.amount = message.amount ? Coin.toJSON(message.amount) : undefined);
     if (message.maxPrices) {
-      obj.maxPrices = message.maxPrices.map((e) =>
-        e ? Coin.toJSON(e) : undefined
-      );
+      obj.maxPrices = message.maxPrices.map((e) => e ? Coin.toJSON(e) : undefined);
     } else {
       obj.maxPrices = [];
     }
     message.bondDid !== undefined && (obj.bondDid = message.bondDid);
+    message.buyerAddress !== undefined && (obj.buyerAddress = message.buyerAddress);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<MsgBuy>, I>>(object: I): MsgBuy {
     const message = createBaseMsgBuy();
     message.buyerDid = object.buyerDid ?? "";
-    message.amount =
-      object.amount !== undefined && object.amount !== null
-        ? Coin.fromPartial(object.amount)
-        : undefined;
+    message.amount = (object.amount !== undefined && object.amount !== null)
+      ? Coin.fromPartial(object.amount)
+      : undefined;
     message.maxPrices = object.maxPrices?.map((e) => Coin.fromPartial(e)) || [];
     message.bondDid = object.bondDid ?? "";
+    message.buyerAddress = object.buyerAddress ?? "";
     return message;
   },
 };
@@ -1005,10 +963,7 @@ function createBaseMsgBuyResponse(): MsgBuyResponse {
 }
 
 export const MsgBuyResponse = {
-  encode(
-    _: MsgBuyResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: MsgBuyResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
@@ -1036,23 +991,18 @@ export const MsgBuyResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgBuyResponse>, I>>(
-    _: I
-  ): MsgBuyResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgBuyResponse>, I>>(_: I): MsgBuyResponse {
     const message = createBaseMsgBuyResponse();
     return message;
   },
 };
 
 function createBaseMsgSell(): MsgSell {
-  return { sellerDid: "", amount: undefined, bondDid: "" };
+  return { sellerDid: "", amount: undefined, bondDid: "", sellerAddress: "" };
 }
 
 export const MsgSell = {
-  encode(
-    message: MsgSell,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgSell, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.sellerDid !== "") {
       writer.uint32(10).string(message.sellerDid);
     }
@@ -1061,6 +1011,9 @@ export const MsgSell = {
     }
     if (message.bondDid !== "") {
       writer.uint32(26).string(message.bondDid);
+    }
+    if (message.sellerAddress !== "") {
+      writer.uint32(34).string(message.sellerAddress);
     }
     return writer;
   },
@@ -1081,6 +1034,9 @@ export const MsgSell = {
         case 3:
           message.bondDid = reader.string();
           break;
+        case 4:
+          message.sellerAddress = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1094,26 +1050,27 @@ export const MsgSell = {
       sellerDid: isSet(object.sellerDid) ? String(object.sellerDid) : "",
       amount: isSet(object.amount) ? Coin.fromJSON(object.amount) : undefined,
       bondDid: isSet(object.bondDid) ? String(object.bondDid) : "",
+      sellerAddress: isSet(object.sellerAddress) ? String(object.sellerAddress) : "",
     };
   },
 
   toJSON(message: MsgSell): unknown {
     const obj: any = {};
     message.sellerDid !== undefined && (obj.sellerDid = message.sellerDid);
-    message.amount !== undefined &&
-      (obj.amount = message.amount ? Coin.toJSON(message.amount) : undefined);
+    message.amount !== undefined && (obj.amount = message.amount ? Coin.toJSON(message.amount) : undefined);
     message.bondDid !== undefined && (obj.bondDid = message.bondDid);
+    message.sellerAddress !== undefined && (obj.sellerAddress = message.sellerAddress);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<MsgSell>, I>>(object: I): MsgSell {
     const message = createBaseMsgSell();
     message.sellerDid = object.sellerDid ?? "";
-    message.amount =
-      object.amount !== undefined && object.amount !== null
-        ? Coin.fromPartial(object.amount)
-        : undefined;
+    message.amount = (object.amount !== undefined && object.amount !== null)
+      ? Coin.fromPartial(object.amount)
+      : undefined;
     message.bondDid = object.bondDid ?? "";
+    message.sellerAddress = object.sellerAddress ?? "";
     return message;
   },
 };
@@ -1123,10 +1080,7 @@ function createBaseMsgSellResponse(): MsgSellResponse {
 }
 
 export const MsgSellResponse = {
-  encode(
-    _: MsgSellResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: MsgSellResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
@@ -1154,23 +1108,18 @@ export const MsgSellResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgSellResponse>, I>>(
-    _: I
-  ): MsgSellResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgSellResponse>, I>>(_: I): MsgSellResponse {
     const message = createBaseMsgSellResponse();
     return message;
   },
 };
 
 function createBaseMsgSwap(): MsgSwap {
-  return { swapperDid: "", bondDid: "", from: undefined, toToken: "" };
+  return { swapperDid: "", bondDid: "", from: undefined, toToken: "", swapperAddress: "" };
 }
 
 export const MsgSwap = {
-  encode(
-    message: MsgSwap,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgSwap, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.swapperDid !== "") {
       writer.uint32(10).string(message.swapperDid);
     }
@@ -1182,6 +1131,9 @@ export const MsgSwap = {
     }
     if (message.toToken !== "") {
       writer.uint32(34).string(message.toToken);
+    }
+    if (message.swapperAddress !== "") {
+      writer.uint32(42).string(message.swapperAddress);
     }
     return writer;
   },
@@ -1205,6 +1157,9 @@ export const MsgSwap = {
         case 4:
           message.toToken = reader.string();
           break;
+        case 5:
+          message.swapperAddress = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1219,6 +1174,7 @@ export const MsgSwap = {
       bondDid: isSet(object.bondDid) ? String(object.bondDid) : "",
       from: isSet(object.from) ? Coin.fromJSON(object.from) : undefined,
       toToken: isSet(object.toToken) ? String(object.toToken) : "",
+      swapperAddress: isSet(object.swapperAddress) ? String(object.swapperAddress) : "",
     };
   },
 
@@ -1226,9 +1182,9 @@ export const MsgSwap = {
     const obj: any = {};
     message.swapperDid !== undefined && (obj.swapperDid = message.swapperDid);
     message.bondDid !== undefined && (obj.bondDid = message.bondDid);
-    message.from !== undefined &&
-      (obj.from = message.from ? Coin.toJSON(message.from) : undefined);
+    message.from !== undefined && (obj.from = message.from ? Coin.toJSON(message.from) : undefined);
     message.toToken !== undefined && (obj.toToken = message.toToken);
+    message.swapperAddress !== undefined && (obj.swapperAddress = message.swapperAddress);
     return obj;
   },
 
@@ -1236,11 +1192,9 @@ export const MsgSwap = {
     const message = createBaseMsgSwap();
     message.swapperDid = object.swapperDid ?? "";
     message.bondDid = object.bondDid ?? "";
-    message.from =
-      object.from !== undefined && object.from !== null
-        ? Coin.fromPartial(object.from)
-        : undefined;
+    message.from = (object.from !== undefined && object.from !== null) ? Coin.fromPartial(object.from) : undefined;
     message.toToken = object.toToken ?? "";
+    message.swapperAddress = object.swapperAddress ?? "";
     return message;
   },
 };
@@ -1250,10 +1204,7 @@ function createBaseMsgSwapResponse(): MsgSwapResponse {
 }
 
 export const MsgSwapResponse = {
-  encode(
-    _: MsgSwapResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: MsgSwapResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
@@ -1281,23 +1232,18 @@ export const MsgSwapResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgSwapResponse>, I>>(
-    _: I
-  ): MsgSwapResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgSwapResponse>, I>>(_: I): MsgSwapResponse {
     const message = createBaseMsgSwapResponse();
     return message;
   },
 };
 
 function createBaseMsgMakeOutcomePayment(): MsgMakeOutcomePayment {
-  return { senderDid: "", amount: "", bondDid: "" };
+  return { senderDid: "", amount: "", bondDid: "", senderAddress: "" };
 }
 
 export const MsgMakeOutcomePayment = {
-  encode(
-    message: MsgMakeOutcomePayment,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgMakeOutcomePayment, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.senderDid !== "") {
       writer.uint32(10).string(message.senderDid);
     }
@@ -1307,13 +1253,13 @@ export const MsgMakeOutcomePayment = {
     if (message.bondDid !== "") {
       writer.uint32(26).string(message.bondDid);
     }
+    if (message.senderAddress !== "") {
+      writer.uint32(34).string(message.senderAddress);
+    }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgMakeOutcomePayment {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgMakeOutcomePayment {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgMakeOutcomePayment();
@@ -1329,6 +1275,9 @@ export const MsgMakeOutcomePayment = {
         case 3:
           message.bondDid = reader.string();
           break;
+        case 4:
+          message.senderAddress = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1342,6 +1291,7 @@ export const MsgMakeOutcomePayment = {
       senderDid: isSet(object.senderDid) ? String(object.senderDid) : "",
       amount: isSet(object.amount) ? String(object.amount) : "",
       bondDid: isSet(object.bondDid) ? String(object.bondDid) : "",
+      senderAddress: isSet(object.senderAddress) ? String(object.senderAddress) : "",
     };
   },
 
@@ -1350,16 +1300,16 @@ export const MsgMakeOutcomePayment = {
     message.senderDid !== undefined && (obj.senderDid = message.senderDid);
     message.amount !== undefined && (obj.amount = message.amount);
     message.bondDid !== undefined && (obj.bondDid = message.bondDid);
+    message.senderAddress !== undefined && (obj.senderAddress = message.senderAddress);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgMakeOutcomePayment>, I>>(
-    object: I
-  ): MsgMakeOutcomePayment {
+  fromPartial<I extends Exact<DeepPartial<MsgMakeOutcomePayment>, I>>(object: I): MsgMakeOutcomePayment {
     const message = createBaseMsgMakeOutcomePayment();
     message.senderDid = object.senderDid ?? "";
     message.amount = object.amount ?? "";
     message.bondDid = object.bondDid ?? "";
+    message.senderAddress = object.senderAddress ?? "";
     return message;
   },
 };
@@ -1369,17 +1319,11 @@ function createBaseMsgMakeOutcomePaymentResponse(): MsgMakeOutcomePaymentRespons
 }
 
 export const MsgMakeOutcomePaymentResponse = {
-  encode(
-    _: MsgMakeOutcomePaymentResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: MsgMakeOutcomePaymentResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgMakeOutcomePaymentResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgMakeOutcomePaymentResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgMakeOutcomePaymentResponse();
@@ -1403,28 +1347,26 @@ export const MsgMakeOutcomePaymentResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgMakeOutcomePaymentResponse>, I>>(
-    _: I
-  ): MsgMakeOutcomePaymentResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgMakeOutcomePaymentResponse>, I>>(_: I): MsgMakeOutcomePaymentResponse {
     const message = createBaseMsgMakeOutcomePaymentResponse();
     return message;
   },
 };
 
 function createBaseMsgWithdrawShare(): MsgWithdrawShare {
-  return { recipientDid: "", bondDid: "" };
+  return { recipientDid: "", bondDid: "", recipientAddress: "" };
 }
 
 export const MsgWithdrawShare = {
-  encode(
-    message: MsgWithdrawShare,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgWithdrawShare, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.recipientDid !== "") {
       writer.uint32(10).string(message.recipientDid);
     }
     if (message.bondDid !== "") {
       writer.uint32(18).string(message.bondDid);
+    }
+    if (message.recipientAddress !== "") {
+      writer.uint32(26).string(message.recipientAddress);
     }
     return writer;
   },
@@ -1442,6 +1384,9 @@ export const MsgWithdrawShare = {
         case 2:
           message.bondDid = reader.string();
           break;
+        case 3:
+          message.recipientAddress = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1452,27 +1397,25 @@ export const MsgWithdrawShare = {
 
   fromJSON(object: any): MsgWithdrawShare {
     return {
-      recipientDid: isSet(object.recipientDid)
-        ? String(object.recipientDid)
-        : "",
+      recipientDid: isSet(object.recipientDid) ? String(object.recipientDid) : "",
       bondDid: isSet(object.bondDid) ? String(object.bondDid) : "",
+      recipientAddress: isSet(object.recipientAddress) ? String(object.recipientAddress) : "",
     };
   },
 
   toJSON(message: MsgWithdrawShare): unknown {
     const obj: any = {};
-    message.recipientDid !== undefined &&
-      (obj.recipientDid = message.recipientDid);
+    message.recipientDid !== undefined && (obj.recipientDid = message.recipientDid);
     message.bondDid !== undefined && (obj.bondDid = message.bondDid);
+    message.recipientAddress !== undefined && (obj.recipientAddress = message.recipientAddress);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgWithdrawShare>, I>>(
-    object: I
-  ): MsgWithdrawShare {
+  fromPartial<I extends Exact<DeepPartial<MsgWithdrawShare>, I>>(object: I): MsgWithdrawShare {
     const message = createBaseMsgWithdrawShare();
     message.recipientDid = object.recipientDid ?? "";
     message.bondDid = object.bondDid ?? "";
+    message.recipientAddress = object.recipientAddress ?? "";
     return message;
   },
 };
@@ -1482,17 +1425,11 @@ function createBaseMsgWithdrawShareResponse(): MsgWithdrawShareResponse {
 }
 
 export const MsgWithdrawShareResponse = {
-  encode(
-    _: MsgWithdrawShareResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: MsgWithdrawShareResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgWithdrawShareResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgWithdrawShareResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgWithdrawShareResponse();
@@ -1516,23 +1453,18 @@ export const MsgWithdrawShareResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgWithdrawShareResponse>, I>>(
-    _: I
-  ): MsgWithdrawShareResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgWithdrawShareResponse>, I>>(_: I): MsgWithdrawShareResponse {
     const message = createBaseMsgWithdrawShareResponse();
     return message;
   },
 };
 
 function createBaseMsgWithdrawReserve(): MsgWithdrawReserve {
-  return { withdrawerDid: "", amount: [], bondDid: "" };
+  return { withdrawerDid: "", amount: [], bondDid: "", withdrawerAddress: "" };
 }
 
 export const MsgWithdrawReserve = {
-  encode(
-    message: MsgWithdrawReserve,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgWithdrawReserve, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.withdrawerDid !== "") {
       writer.uint32(10).string(message.withdrawerDid);
     }
@@ -1541,6 +1473,9 @@ export const MsgWithdrawReserve = {
     }
     if (message.bondDid !== "") {
       writer.uint32(26).string(message.bondDid);
+    }
+    if (message.withdrawerAddress !== "") {
+      writer.uint32(34).string(message.withdrawerAddress);
     }
     return writer;
   },
@@ -1561,6 +1496,9 @@ export const MsgWithdrawReserve = {
         case 3:
           message.bondDid = reader.string();
           break;
+        case 4:
+          message.withdrawerAddress = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1571,36 +1509,32 @@ export const MsgWithdrawReserve = {
 
   fromJSON(object: any): MsgWithdrawReserve {
     return {
-      withdrawerDid: isSet(object.withdrawerDid)
-        ? String(object.withdrawerDid)
-        : "",
-      amount: Array.isArray(object?.amount)
-        ? object.amount.map((e: any) => Coin.fromJSON(e))
-        : [],
+      withdrawerDid: isSet(object.withdrawerDid) ? String(object.withdrawerDid) : "",
+      amount: Array.isArray(object?.amount) ? object.amount.map((e: any) => Coin.fromJSON(e)) : [],
       bondDid: isSet(object.bondDid) ? String(object.bondDid) : "",
+      withdrawerAddress: isSet(object.withdrawerAddress) ? String(object.withdrawerAddress) : "",
     };
   },
 
   toJSON(message: MsgWithdrawReserve): unknown {
     const obj: any = {};
-    message.withdrawerDid !== undefined &&
-      (obj.withdrawerDid = message.withdrawerDid);
+    message.withdrawerDid !== undefined && (obj.withdrawerDid = message.withdrawerDid);
     if (message.amount) {
-      obj.amount = message.amount.map((e) => (e ? Coin.toJSON(e) : undefined));
+      obj.amount = message.amount.map((e) => e ? Coin.toJSON(e) : undefined);
     } else {
       obj.amount = [];
     }
     message.bondDid !== undefined && (obj.bondDid = message.bondDid);
+    message.withdrawerAddress !== undefined && (obj.withdrawerAddress = message.withdrawerAddress);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgWithdrawReserve>, I>>(
-    object: I
-  ): MsgWithdrawReserve {
+  fromPartial<I extends Exact<DeepPartial<MsgWithdrawReserve>, I>>(object: I): MsgWithdrawReserve {
     const message = createBaseMsgWithdrawReserve();
     message.withdrawerDid = object.withdrawerDid ?? "";
     message.amount = object.amount?.map((e) => Coin.fromPartial(e)) || [];
     message.bondDid = object.bondDid ?? "";
+    message.withdrawerAddress = object.withdrawerAddress ?? "";
     return message;
   },
 };
@@ -1610,17 +1544,11 @@ function createBaseMsgWithdrawReserveResponse(): MsgWithdrawReserveResponse {
 }
 
 export const MsgWithdrawReserveResponse = {
-  encode(
-    _: MsgWithdrawReserveResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: MsgWithdrawReserveResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgWithdrawReserveResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgWithdrawReserveResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgWithdrawReserveResponse();
@@ -1644,9 +1572,7 @@ export const MsgWithdrawReserveResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgWithdrawReserveResponse>, I>>(
-    _: I
-  ): MsgWithdrawReserveResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgWithdrawReserveResponse>, I>>(_: I): MsgWithdrawReserveResponse {
     const message = createBaseMsgWithdrawReserveResponse();
     return message;
   },
@@ -1661,9 +1587,7 @@ export interface Msg {
   /** SetNextAlpha defines a method for editing a bond's alpha parameter. */
   SetNextAlpha(request: MsgSetNextAlpha): Promise<MsgSetNextAlphaResponse>;
   /** UpdateBondState defines a method for updating a bond's current state. */
-  UpdateBondState(
-    request: MsgUpdateBondState
-  ): Promise<MsgUpdateBondStateResponse>;
+  UpdateBondState(request: MsgUpdateBondState): Promise<MsgUpdateBondStateResponse>;
   /** Buy defines a method for buying from a bond. */
   Buy(request: MsgBuy): Promise<MsgBuyResponse>;
   /** Sell defines a method for selling from a bond. */
@@ -1671,20 +1595,18 @@ export interface Msg {
   /** Swap defines a method for swapping from one reserve bond token to another. */
   Swap(request: MsgSwap): Promise<MsgSwapResponse>;
   /** MakeOutcomePayment defines a method for making an outcome payment to a bond. */
-  MakeOutcomePayment(
-    request: MsgMakeOutcomePayment
-  ): Promise<MsgMakeOutcomePaymentResponse>;
+  MakeOutcomePayment(request: MsgMakeOutcomePayment): Promise<MsgMakeOutcomePaymentResponse>;
   /** WithdrawShare defines a method for withdrawing a share from a bond that is in the SETTLE stage. */
   WithdrawShare(request: MsgWithdrawShare): Promise<MsgWithdrawShareResponse>;
   /** WithdrawReserve defines a method for withdrawing reserve from a bond. */
-  WithdrawReserve(
-    request: MsgWithdrawReserve
-  ): Promise<MsgWithdrawReserveResponse>;
+  WithdrawReserve(request: MsgWithdrawReserve): Promise<MsgWithdrawReserveResponse>;
 }
 
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
-  constructor(rpc: Rpc) {
+  private readonly service: string;
+  constructor(rpc: Rpc, opts?: { service?: string }) {
+    this.service = opts?.service || "bonds.Msg";
     this.rpc = rpc;
     this.CreateBond = this.CreateBond.bind(this);
     this.EditBond = this.EditBond.bind(this);
@@ -1699,121 +1621,80 @@ export class MsgClientImpl implements Msg {
   }
   CreateBond(request: MsgCreateBond): Promise<MsgCreateBondResponse> {
     const data = MsgCreateBond.encode(request).finish();
-    const promise = this.rpc.request("bonds.Msg", "CreateBond", data);
-    return promise.then((data) =>
-      MsgCreateBondResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request(this.service, "CreateBond", data);
+    return promise.then((data) => MsgCreateBondResponse.decode(new _m0.Reader(data)));
   }
 
   EditBond(request: MsgEditBond): Promise<MsgEditBondResponse> {
     const data = MsgEditBond.encode(request).finish();
-    const promise = this.rpc.request("bonds.Msg", "EditBond", data);
-    return promise.then((data) =>
-      MsgEditBondResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request(this.service, "EditBond", data);
+    return promise.then((data) => MsgEditBondResponse.decode(new _m0.Reader(data)));
   }
 
   SetNextAlpha(request: MsgSetNextAlpha): Promise<MsgSetNextAlphaResponse> {
     const data = MsgSetNextAlpha.encode(request).finish();
-    const promise = this.rpc.request("bonds.Msg", "SetNextAlpha", data);
-    return promise.then((data) =>
-      MsgSetNextAlphaResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request(this.service, "SetNextAlpha", data);
+    return promise.then((data) => MsgSetNextAlphaResponse.decode(new _m0.Reader(data)));
   }
 
-  UpdateBondState(
-    request: MsgUpdateBondState
-  ): Promise<MsgUpdateBondStateResponse> {
+  UpdateBondState(request: MsgUpdateBondState): Promise<MsgUpdateBondStateResponse> {
     const data = MsgUpdateBondState.encode(request).finish();
-    const promise = this.rpc.request("bonds.Msg", "UpdateBondState", data);
-    return promise.then((data) =>
-      MsgUpdateBondStateResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request(this.service, "UpdateBondState", data);
+    return promise.then((data) => MsgUpdateBondStateResponse.decode(new _m0.Reader(data)));
   }
 
   Buy(request: MsgBuy): Promise<MsgBuyResponse> {
     const data = MsgBuy.encode(request).finish();
-    const promise = this.rpc.request("bonds.Msg", "Buy", data);
+    const promise = this.rpc.request(this.service, "Buy", data);
     return promise.then((data) => MsgBuyResponse.decode(new _m0.Reader(data)));
   }
 
   Sell(request: MsgSell): Promise<MsgSellResponse> {
     const data = MsgSell.encode(request).finish();
-    const promise = this.rpc.request("bonds.Msg", "Sell", data);
+    const promise = this.rpc.request(this.service, "Sell", data);
     return promise.then((data) => MsgSellResponse.decode(new _m0.Reader(data)));
   }
 
   Swap(request: MsgSwap): Promise<MsgSwapResponse> {
     const data = MsgSwap.encode(request).finish();
-    const promise = this.rpc.request("bonds.Msg", "Swap", data);
+    const promise = this.rpc.request(this.service, "Swap", data);
     return promise.then((data) => MsgSwapResponse.decode(new _m0.Reader(data)));
   }
 
-  MakeOutcomePayment(
-    request: MsgMakeOutcomePayment
-  ): Promise<MsgMakeOutcomePaymentResponse> {
+  MakeOutcomePayment(request: MsgMakeOutcomePayment): Promise<MsgMakeOutcomePaymentResponse> {
     const data = MsgMakeOutcomePayment.encode(request).finish();
-    const promise = this.rpc.request("bonds.Msg", "MakeOutcomePayment", data);
-    return promise.then((data) =>
-      MsgMakeOutcomePaymentResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request(this.service, "MakeOutcomePayment", data);
+    return promise.then((data) => MsgMakeOutcomePaymentResponse.decode(new _m0.Reader(data)));
   }
 
   WithdrawShare(request: MsgWithdrawShare): Promise<MsgWithdrawShareResponse> {
     const data = MsgWithdrawShare.encode(request).finish();
-    const promise = this.rpc.request("bonds.Msg", "WithdrawShare", data);
-    return promise.then((data) =>
-      MsgWithdrawShareResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request(this.service, "WithdrawShare", data);
+    return promise.then((data) => MsgWithdrawShareResponse.decode(new _m0.Reader(data)));
   }
 
-  WithdrawReserve(
-    request: MsgWithdrawReserve
-  ): Promise<MsgWithdrawReserveResponse> {
+  WithdrawReserve(request: MsgWithdrawReserve): Promise<MsgWithdrawReserveResponse> {
     const data = MsgWithdrawReserve.encode(request).finish();
-    const promise = this.rpc.request("bonds.Msg", "WithdrawReserve", data);
-    return promise.then((data) =>
-      MsgWithdrawReserveResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request(this.service, "WithdrawReserve", data);
+    return promise.then((data) => MsgWithdrawReserveResponse.decode(new _m0.Reader(data)));
   }
 }
 
 interface Rpc {
-  request(
-    service: string,
-    method: string,
-    data: Uint8Array
-  ): Promise<Uint8Array>;
+  request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
 }
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Long
-  ? string | number | Long
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
-        never
-      >;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;
