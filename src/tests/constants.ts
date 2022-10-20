@@ -3,10 +3,13 @@
 import { serializeSignDoc } from '@cosmjs/amino';
 import { sha256 } from '@cosmjs/crypto';
 import { toUtf8, Bech32, toBase64 } from '@cosmjs/encoding';
+import { OfflineDirectSigner } from '@cosmjs/proto-signing';
 import { decode } from 'bs58';
 import sovrin from 'sovrin-did';
 import { SigningStargateClient } from '../utils/customClient';
 import { accountFromAny } from '../utils/EdAccountHandler';
+
+const RPC_URL = process.env.RPC_URL || 'https://de56-102-182-65-22.sa.ngrok.io' || 'https://devnet.ixo.earth/rpc/';
 
 const getEdClient = () => {
 	const mnemonic = 'creek obvious bamboo ozone dwarf above hill muscle image fossil drastic toy';
@@ -30,14 +33,36 @@ const getEdClient = () => {
 				},
 			];
 		},
-		async signAmino(signerAddress: any, signDoc: any) {
+		// async signAmino(signerAddress: any, signDoc: any) {
+		// 	const account = (await this.getAccounts()).find(({ address }) => address === signerAddress);
+
+		// 	if (!account) throw new Error(`Address ${signerAddress} not found in wallet`);
+
+		// 	const fullSignature = sovrin.signMessage(serializeSignDoc(signDoc), didDoc.secret.signKey, didDoc.verifyKey);
+		// 	const signatureBase64 = toBase64(fullSignature.slice(0, 64));
+		// 	const pub_keyBase64 = decode(didDoc.verifyKey);
+		// 	return {
+		// 		signed: signDoc,
+
+		// 		signature: {
+		// 			signature: signatureBase64,
+
+		// 			pub_key: {
+		// 				type: 'tendermint/PubKeyEd25519',
+		// 				value: toBase64(pub_keyBase64).toString(),
+		// 			},
+		// 		},
+		// 	};
+		// },
+		async signDirect(signerAddress: any, signDoc: any) {
 			const account = (await this.getAccounts()).find(({ address }) => address === signerAddress);
 
 			if (!account) throw new Error(`Address ${signerAddress} not found in wallet`);
 
-			const fullSignature = sovrin.signMessage(serializeSignDoc(signDoc), didDoc.secret.signKey, didDoc.verifyKey);
+			const fullSignature = sovrin.signMessage(signDoc, didDoc.secret.signKey, didDoc.verifyKey);
 			const signatureBase64 = toBase64(fullSignature.slice(0, 64));
 			const pub_keyBase64 = decode(didDoc.verifyKey);
+
 			return {
 				signed: signDoc,
 
@@ -60,7 +85,7 @@ export const edClient = getEdClient();
 
 export const createClient = async (myRegistry): Promise<SigningStargateClient> => {
 	return await SigningStargateClient.connectWithSigner(
-		process.env.RPC_URL, // Replace with your own RPC endpoint
+		RPC_URL, // Replace with your own RPC endpoint
 		// @ts-ignore
 		edClient,
 		{
