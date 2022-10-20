@@ -1,46 +1,57 @@
 import { assertIsDeliverTxSuccess } from '@cosmjs/stargate';
 import { Buy, CreateBond, EditBond, MakeOutcomePayment, Sell, SetNextAlpha, Swap, UpdateBondState, WithdrawReserve, WithdrawShare } from './Bond';
+import { BankSendTrx } from './Cosmos';
 import { AddCredential, AddDid } from './Dids';
 import { CreatePaymentContract, CreatePaymentTemplate, CreateSubscription, EffectPayment, GrantDiscount, RevokeDiscount, SetPaymentContractAuthorization } from './Payments';
 import { CreateAgent, CreateClaim, CreateEvaluation, CreateProject, UpdateAgent, UpdateProjectDoc, UpdateProjectStatus, WithdrawFunds } from './Projects';
 
-// testing for dids
-describe('Testing the Dids module', () => {
-	// test('should return a created Did txhash', async () => {
-	// 	expect(assertIsDeliverTxSuccess(await AddDid())).toBeTruthy();
-	// });
+// testing for cosmos modules
+describe('Testing the cosmos bank module', () => {
+	test('send trx', async () => {
+		expect(assertIsDeliverTxSuccess(await BankSendTrx())).toBeTruthy();
+	});
 	// test("should return a created Credential txhash", async () => {
 	//   expect(assertIsDeliverTxSuccess(await AddCredential())).toBeTruthy();
 	// });
 });
 
+// testing for iid
+// describe('Testing the iid module', () => {
+// test('test', async () => {
+// 	expect(assertIsDeliverTxSuccess(await AddDid())).toBeTruthy();
+// });
+// test("should return a created Credential txhash", async () => {
+//   expect(assertIsDeliverTxSuccess(await AddCredential())).toBeTruthy();
+// });
+// });
+
 // testing for projects
-describe('Testing the Projects module', () => {
-	test('should return a created project txhash', async () => {
-		expect(assertIsDeliverTxSuccess(await CreateProject())).toBeTruthy();
-	});
-	// test("should return a updated project txhash", async () => {
-	//   expect(assertIsDeliverTxSuccess(await UpdateProjectStatus())).toBeTruthy();
-	// });
-	// test("should return a created agent txhash", async () => {
-	//   expect(assertIsDeliverTxSuccess(await CreateAgent())).toBeTruthy();
-	// });
-	// test("should return a updated project txhash", async () => {
-	//   expect(assertIsDeliverTxSuccess(await UpdateAgent())).toBeTruthy();
-	// });
-	// test("should return a created claim txhash", async () => {
-	//   expect(assertIsDeliverTxSuccess(await CreateClaim())).toBeTruthy();
-	// });
-	// test("should return a created evaluation txhash", async () => {
-	//   expect(assertIsDeliverTxSuccess(await CreateEvaluation())).toBeTruthy();
-	// });
-	// test("should return a withdrawFunds txhash", async () => {
-	//   expect(assertIsDeliverTxSuccess(await WithdrawFunds())).toBeTruthy();
-	// });
-	// test("should return a updated projectDoc txhash", async () => {
-	//   expect(assertIsDeliverTxSuccess(await UpdateProjectDoc())).toBeTruthy();
-	// });
-});
+// describe('Testing the Projects module', () => {
+// test('should return a created project txhash', async () => {
+// 	expect(assertIsDeliverTxSuccess(await CreateProject())).toBeTruthy();
+// });
+// test("should return a updated project txhash", async () => {
+//   expect(assertIsDeliverTxSuccess(await UpdateProjectStatus())).toBeTruthy();
+// });
+// test("should return a created agent txhash", async () => {
+//   expect(assertIsDeliverTxSuccess(await CreateAgent())).toBeTruthy();
+// });
+// test("should return a updated project txhash", async () => {
+//   expect(assertIsDeliverTxSuccess(await UpdateAgent())).toBeTruthy();
+// });
+// test("should return a created claim txhash", async () => {
+//   expect(assertIsDeliverTxSuccess(await CreateClaim())).toBeTruthy();
+// });
+// test("should return a created evaluation txhash", async () => {
+//   expect(assertIsDeliverTxSuccess(await CreateEvaluation())).toBeTruthy();
+// });
+// test("should return a withdrawFunds txhash", async () => {
+//   expect(assertIsDeliverTxSuccess(await WithdrawFunds())).toBeTruthy();
+// });
+// test("should return a updated projectDoc txhash", async () => {
+//   expect(assertIsDeliverTxSuccess(await UpdateProjectDoc())).toBeTruthy();
+// });
+// });
 
 // testing for bonds
 // describe("Testing the Bonds module", () => {

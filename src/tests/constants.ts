@@ -1,15 +1,16 @@
 /* eslint-disable eslint-comments/disable-enable-pair */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { serializeSignDoc } from '@cosmjs/amino';
-import { sha256 } from '@cosmjs/crypto';
+import { encodeSecp256k1Signature, serializeSignDoc } from '@cosmjs/amino';
+import { Ed25519, Secp256k1, sha256 } from '@cosmjs/crypto';
 import { toUtf8, Bech32, toBase64 } from '@cosmjs/encoding';
-import { OfflineDirectSigner } from '@cosmjs/proto-signing';
+import { makeSignBytes, OfflineDirectSigner } from '@cosmjs/proto-signing';
 import { decode } from 'bs58';
 import sovrin from 'sovrin-did';
 import { SigningStargateClient } from '../utils/customClient';
 import { accountFromAny } from '../utils/EdAccountHandler';
 
-const RPC_URL = process.env.RPC_URL || 'https://de56-102-182-65-22.sa.ngrok.io' || 'https://devnet.ixo.earth/rpc/';
+// const RPC_URL = process.env.RPC_URL || 'https://de56-102-182-65-22.sa.ngrok.io' || 'https://devnet.ixo.earth/rpc/';
+const RPC_URL = 'https://testnet.ixo.earth/rpc/';
 
 const getEdClient = () => {
 	const mnemonic = 'creek obvious bamboo ozone dwarf above hill muscle image fossil drastic toy';
@@ -59,16 +60,18 @@ const getEdClient = () => {
 
 			if (!account) throw new Error(`Address ${signerAddress} not found in wallet`);
 
-			const fullSignature = sovrin.signMessage(signDoc, didDoc.secret.signKey, didDoc.verifyKey);
-			const signatureBase64 = toBase64(fullSignature.slice(0, 64));
+			const { privkey, pubkey } = account;
 			const pub_keyBase64 = decode(didDoc.verifyKey);
-
+			const signBytes = makeSignBytes(signDoc);
+			const hashedMessage = sha256(signBytes);
+			const signature = await Ed25519.createSignature(hashedMessage, await Ed25519.makeKeypair(sha256(toUtf8(mnemonic)).slice(0, 32)));
+			const signatureBase64 = toBase64(signature.slice(0, 64));
+			// const signatureBytes = new Uint8Array([...signature.r(32), ...signature.s(32)]);
+			// const stdSignature = encodeSecp256k1Signature(pubkey, signatureBytes);
 			return {
 				signed: signDoc,
-
 				signature: {
 					signature: signatureBase64,
-
 					pub_key: {
 						type: 'tendermint/PubKeyEd25519',
 						value: toBase64(pub_keyBase64).toString(),
