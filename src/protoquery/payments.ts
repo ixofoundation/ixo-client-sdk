@@ -111,7 +111,8 @@ export async function QueryPaymentSubscription(
 export async function TransactionSetPaymentContractAuthorisation(
   paymentContractId: string,
   payerDid: string,
-  authorised: false
+  authorised: false,
+  payerAddress: string
 ): Promise<MsgSetPaymentContractAuthorisationResponse> {
   const { msgqueryService } = await initializerpcclient();
 
@@ -120,6 +121,7 @@ export async function TransactionSetPaymentContractAuthorisation(
       paymentContractId,
       payerDid,
       authorised,
+      payerAddress: payerAddress,
     });
 
   return transactionResult;
@@ -127,6 +129,7 @@ export async function TransactionSetPaymentContractAuthorisation(
 
 export async function TransactionCreatePaymentTemplate(
   creatorDid: string,
+  creatorAddress: string,
   paymentTemplate?: PaymentTemplate
 ): Promise<MsgSetPaymentContractAuthorisationResponse> {
   const { msgqueryService } = await initializerpcclient();
@@ -134,6 +137,7 @@ export async function TransactionCreatePaymentTemplate(
   const transactionResult = await msgqueryService.CreatePaymentTemplate({
     creatorDid,
     paymentTemplate,
+    creatorAddress: creatorAddress,
   });
 
   return transactionResult;
@@ -146,7 +150,8 @@ export async function TransactionCreatePaymentContract(
   payer: string,
   recipients: DistributionShare[],
   canDeauthorise: boolean,
-  discountId: string
+  discountId: string,
+  creatorAddress: string
 ): Promise<MsgSetPaymentContractAuthorisationResponse> {
   const { msgqueryService } = await initializerpcclient();
 
@@ -158,6 +163,7 @@ export async function TransactionCreatePaymentContract(
     recipients,
     canDeauthorise,
     discountId,
+    creatorAddress: creatorAddress,
   });
 
   return transactionResult;
@@ -168,6 +174,7 @@ export async function TransactionCreateSubscription(
   subscriptionId: string,
   paymentContractId: string,
   maxPeriods: string,
+  creatorAddress: string,
   period?: any
 ): Promise<MsgCreateSubscriptionResponse> {
   const { msgqueryService } = await initializerpcclient();
@@ -178,6 +185,7 @@ export async function TransactionCreateSubscription(
     paymentContractId,
     maxPeriods,
     period,
+    creatorAddress: creatorAddress,
   });
 
   return transactionResult;
@@ -187,7 +195,8 @@ export async function TransactionGrantDiscount(
   senderDid: string,
   paymentContractId: string,
   discountId: string,
-  recipient: string
+  recipient: string,
+  senderAddress: string
 ): Promise<MsgCreateSubscriptionResponse> {
   const { msgqueryService } = await initializerpcclient();
 
@@ -196,6 +205,7 @@ export async function TransactionGrantDiscount(
     paymentContractId,
     discountId,
     recipient,
+    senderAddress: senderAddress,
   });
 
   return transactionResult;
@@ -204,7 +214,8 @@ export async function TransactionGrantDiscount(
 export async function TransactionRevokeDiscount(
   senderDid: string,
   paymentContractId: string,
-  holder: string
+  holder: string,
+  senderAddress: string
 ): Promise<MsgCreateSubscriptionResponse> {
   const { msgqueryService } = await initializerpcclient();
 
@@ -212,6 +223,7 @@ export async function TransactionRevokeDiscount(
     senderDid,
     paymentContractId,
     holder,
+    senderAddress: senderAddress,
   });
 
   return transactionResult;
@@ -219,13 +231,15 @@ export async function TransactionRevokeDiscount(
 
 export async function TransactionEffectPayment(
   senderDid: string,
-  paymentContractId: string
+  paymentContractId: string,
+  senderAddress: string
 ): Promise<MsgEffectPaymentResponse> {
   const { msgqueryService } = await initializerpcclient();
 
   const transactionResult = await msgqueryService.EffectPayment({
     senderDid,
     paymentContractId,
+    senderAddress: senderAddress,
   });
 
   return transactionResult;
