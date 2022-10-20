@@ -11,12 +11,12 @@ const RPC_URL = 'https://devnet.ixo.earth/rpc/';
 // const RPC_URL = 'https://testnet.ixo.earth/rpc/';
 
 // const clientType = 'secp';
-const clientType = 'ed';
+const offlineWalletType = 'ed';
 
 // const mnemonic = 'creek obvious bamboo ozone dwarf above hill muscle image fossil drastic toy';
 const mnemonic = 'basket mechanic myself capable shoe then home magic cream edge seminar artefact';
 
-export const client = clientType === 'ed' ? getEdClient(mnemonic) : getSecpClient(mnemonic);
+export const offlineWallet = offlineWalletType === 'ed' ? getEdClient(mnemonic) : getSecpClient(mnemonic);
 
 export const createClient = async (myRegistry): Promise<SigningStargateClient> => {
 	return await SigningStargateClient.connectWithSigner(
