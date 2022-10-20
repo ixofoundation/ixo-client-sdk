@@ -6,7 +6,7 @@ import { defaultRegistryTypes as defaultStargateTypes } from '@cosmjs/stargate';
 import { MsgSend } from '../codec/external/cosmos/bank/v1beta1/tx';
 import { Coin } from '../codec/cosmos/coin';
 
-const toAddress = '';
+const toAddress = 'ixo1ky7wad4d7gjtcy5yklc83geev76cudcevmnhhn';
 
 export const BankSendTrx = async () => {
 	const myRegistry = new Registry(defaultStargateTypes);
