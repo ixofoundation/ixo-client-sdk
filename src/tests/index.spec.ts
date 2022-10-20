@@ -1,18 +1,25 @@
-import { assertIsDeliverTxSuccess } from '@cosmjs/stargate';
+import { assertIsDeliverTxSuccess, DeliverTxResponse } from '@cosmjs/stargate';
 import { Buy, CreateBond, EditBond, MakeOutcomePayment, Sell, SetNextAlpha, Swap, UpdateBondState, WithdrawReserve, WithdrawShare } from './Bond';
 import { BankSendTrx } from './Cosmos';
 import { AddCredential, AddDid } from './Dids';
 import { CreatePaymentContract, CreatePaymentTemplate, CreateSubscription, EffectPayment, GrantDiscount, RevokeDiscount, SetPaymentContractAuthorization } from './Payments';
 import { CreateAgent, CreateClaim, CreateEvaluation, CreateProject, UpdateAgent, UpdateProjectDoc, UpdateProjectStatus, WithdrawFunds } from './Projects';
 
+const checkSuccess = (res: DeliverTxResponse) => {
+	let isSuccess = true;
+	try {
+		assertIsDeliverTxSuccess(res);
+	} catch (error) {
+		isSuccess = false;
+	}
+	expect(isSuccess).toBeTruthy();
+};
+
 // testing for cosmos modules
 describe('Testing the cosmos bank module', () => {
 	test('send trx', async () => {
-		expect(assertIsDeliverTxSuccess(await BankSendTrx())).toBeTruthy();
+		checkSuccess(await BankSendTrx());
 	});
-	// test("should return a created Credential txhash", async () => {
-	//   expect(assertIsDeliverTxSuccess(await AddCredential())).toBeTruthy();
-	// });
 });
 
 // testing for iid

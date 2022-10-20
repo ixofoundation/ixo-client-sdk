@@ -19,7 +19,7 @@ export const BankSendTrx = async () => {
 		value: MsgSend.fromPartial({
 			fromAddress: myAddress,
 			toAddress,
-			amount: [Coin.fromPartial({ amount: '100000', denom: 'uixo' })],
+			amount: [Coin.fromPartial({ amount: '1000000', denom: 'uixo' })],
 		}),
 	};
 

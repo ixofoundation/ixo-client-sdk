@@ -1,4 +1,5 @@
-import { SigningStargateClient } from '../utils/customClient';
+import { SigningStargateClient as CustomSigningStargateClient } from '../utils/customClient';
+import { SigningStargateClient } from '@cosmjs/stargate';
 import { accountFromAny } from '../utils/EdAccountHandler';
 import { getEdClient } from './edClient';
 import { getSecpClient } from './secpClient';
@@ -7,14 +8,18 @@ import { getSecpClient } from './secpClient';
 const RPC_URL = 'https://devnet.ixo.earth/rpc/';
 // const RPC_URL = 'https://testnet.ixo.earth/rpc/';
 
+// const keyType = 'ed'
+const keyType = 'secp';
+
 // const mnemonic = 'creek obvious bamboo ozone dwarf above hill muscle image fossil drastic toy';
 const mnemonic = 'basket mechanic myself capable shoe then home magic cream edge seminar artefact';
 
-export const offlineWallet = getSecpClient(mnemonic);
-// export const offlineWallet = getEdClient(mnemonic);
+// @ts-ignore
+export const offlineWallet = keyType === 'ed' ? getEdClient(mnemonic) : getSecpClient(mnemonic);
 
 export const createClient = async (myRegistry): Promise<SigningStargateClient> => {
-	return await SigningStargateClient.connectWithSigner(
+	// @ts-ignore
+	return await (keyType === 'ed' ? CustomSigningStargateClient : SigningStargateClient).connectWithSigner(
 		RPC_URL, // Replace with your own RPC endpoint
 		// @ts-ignore
 		offlineWallet,
