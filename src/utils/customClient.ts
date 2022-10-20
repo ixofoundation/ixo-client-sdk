@@ -94,37 +94,6 @@ export interface SigningStargateClientOptions extends StargateClientOptions {
 
 function createDefaultTypes(prefix: string): AminoConverters {
 	return {
-		//payments
-		...CreatePaymentTemplateAminoConverters(),
-		...CreatePaymentContractAminoConverters(),
-		...CreateSubscriptionAminoConverters(),
-		...GrantDiscountAminoConverters(),
-		...RevokeDiscountAminoConverters(),
-		...EffectPaymentAminoConverters(),
-		//
-		//projects
-		...UpdateProjectDocAminoConverters(),
-		...WithdrawFundsAminoConverters(),
-		...CreateEvaluationAminoConverters(),
-		...CreateClaimAminoConverters(),
-		...UpdateAgentAminoConverters(),
-		...CreateAgentAminoConverters(),
-		...UpdateProjectStatusAminoConverters(),
-		...createProjectAminoConverters(),
-		//
-		...AddCredentialAminoConverters(),
-		...WithdrawReserveAminoConverters(),
-		...WithdrawShareAminoConverters(),
-		...MakeOutcomePaymentAminoConverters(),
-		...SwapAminoConverters(),
-		...SellAminoConverters(),
-		...BuyAminoConverters(),
-		...UpdateBondStateAminoConverters(),
-		...NextAlphaAminoConverters(),
-		...EditBondAminoConverters(),
-		...AddDidAminoConverters(),
-		...createBondAminoConverters(),
-		...createProjectAminoConverters(),
 		...createAuthzAminoConverters(),
 		...createBankAminoConverters(),
 		...createDistributionAminoConverters(),
