@@ -1,5 +1,3 @@
-/* eslint-disable eslint-comments/disable-enable-pair */
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { Ed25519, sha256 } from '@cosmjs/crypto';
 import { toUtf8, Bech32, toBase64 } from '@cosmjs/encoding';
 import { makeSignBytes } from '@cosmjs/proto-signing';

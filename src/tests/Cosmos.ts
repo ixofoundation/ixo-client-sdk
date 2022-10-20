@@ -1,5 +1,3 @@
-/* eslint-disable eslint-comments/disable-enable-pair */
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { Registry } from '@cosmjs/proto-signing';
 import { createClient, fee, offlineWallet } from './constants';
 import { defaultRegistryTypes as defaultStargateTypes } from '@cosmjs/stargate';
