@@ -1,5 +1,5 @@
 import { SigningStargateClient as CustomSigningStargateClient } from '../utils/customClient';
-import { SigningStargateClient } from '@cosmjs/stargate';
+import { assertIsDeliverTxSuccess, DeliverTxResponse, SigningStargateClient } from '@cosmjs/stargate';
 import { accountFromAny } from '../utils/EdAccountHandler';
 import { getEdClient } from './edClient';
 import { getSecpClient } from './secpClient';
@@ -8,8 +8,8 @@ import { getSecpClient } from './secpClient';
 const RPC_URL = 'https://devnet.ixo.earth/rpc/';
 // const RPC_URL = 'https://testnet.ixo.earth/rpc/';
 
-const keyType = 'ed';
-// const keyType = 'secp';
+// const keyType = 'ed';
+const keyType = 'secp';
 
 // const mnemonic = 'creek obvious bamboo ozone dwarf above hill muscle image fossil drastic toy';
 const mnemonic = 'basket mechanic myself capable shoe then home magic cream edge seminar artefact';
@@ -38,4 +38,21 @@ export const fee = {
 		},
 	],
 	gas: '3000000',
+};
+
+export const checkSuccess = (res: DeliverTxResponse) => {
+	let isSuccess = true;
+	try {
+		assertIsDeliverTxSuccess(res);
+	} catch (error) {
+		console.log({ error });
+		isSuccess = false;
+	}
+	expect(isSuccess).toBeTruthy();
+};
+
+export const testMsg = (message: string, action: () => Promise<DeliverTxResponse>) => {
+	return test(message, async () => {
+		checkSuccess(await action());
+	});
 };

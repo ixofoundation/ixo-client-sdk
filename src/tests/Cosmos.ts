@@ -11,7 +11,6 @@ export const BankSendTrx = async () => {
 
 	const ad = await offlineWallet.getAccounts();
 	const myAddress = ad[0].address;
-
 	const client = await createClient(myRegistry);
 
 	const message = {

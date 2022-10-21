@@ -1,30 +1,13 @@
 import { Registry } from '@cosmjs/proto-signing';
 import { Coin } from '../codec/cosmos/coin';
-import { Discount, DistributionShare, PaymentTemplate } from '../codec/payments/payments';
+import { BlockPeriod, DistributionShare, PaymentTemplate } from '../codec/payments/payments';
 import { MsgCreatePaymentContract, MsgCreatePaymentTemplate, MsgCreateSubscription, MsgEffectPayment, MsgGrantDiscount, MsgRevokeDiscount, MsgSetPaymentContractAuthorisation } from '../codec/payments/tx';
 import { createClient, offlineWallet, fee } from './constants';
 
-export const SetPaymentContractAuthorization = async () => {
-	const myRegistry = new Registry();
-	myRegistry.register('/payments.MsgSetPaymentContractAuthorisation', MsgSetPaymentContractAuthorisation); // Replace with your own type URL and Msg class
-
-	const ad = await offlineWallet.getAccounts();
-
-	const client = await createClient(myRegistry);
-	const myAddress = ad[0].address;
-
-	const message = {
-		typeUrl: '/payments.MsgSetPaymentContractAuthorisation',
-		value: MsgSetPaymentContractAuthorisation.fromPartial({
-			paymentContractId: '',
-			payerDid: '',
-			authorised: false,
-		}),
-	};
-
-	const response = await client.signAndBroadcast(myAddress, [message], fee);
-	return response;
-};
+const paymentTemplateId = 'payment:template:oracle-fee';
+const paymentContractId = 'payment:contract:oracle-fee1';
+const paymentSubscripionId = 'payment:subscription:oracle-fee1';
+const paymentContractRecipient = { address: 'ixo107pmtx9wyndup8f9lgj6d7dnfq5kuf3sapg0vx', percentage: '100' };
 
 export const CreatePaymentTemplate = async () => {
 	const myRegistry = new Registry();
@@ -41,7 +24,7 @@ export const CreatePaymentTemplate = async () => {
 			creatorDid: did,
 			creatorAddress: myAddress,
 			paymentTemplate: PaymentTemplate.fromPartial({
-				id: 'payment:template:oracle-fee',
+				id: paymentTemplateId,
 				paymentAmount: [
 					Coin.fromPartial({
 						denom: 'uixo',
@@ -74,21 +57,44 @@ export const CreatePaymentContract = async () => {
 	myRegistry.register('/payments.MsgCreatePaymentContract', MsgCreatePaymentContract); // Replace with your own type URL and Msg class
 
 	const ad = await offlineWallet.getAccounts();
-
 	const client = await createClient(myRegistry);
-
 	const myAddress = ad[0].address;
+	const did = offlineWallet.did;
 
 	const message = {
 		typeUrl: '/payments.MsgCreatePaymentContract',
 		value: MsgCreatePaymentContract.fromPartial({
-			creatorDid: '',
-			paymentTemplateId: '',
-			paymentContractId: '',
-			payer: '',
-			recipients: [DistributionShare.fromPartial({ address: '', percentage: '' })],
-			canDeauthorise: false,
-			discountId: '',
+			creatorDid: did,
+			paymentTemplateId: paymentTemplateId,
+			paymentContractId: paymentContractId,
+			payer: myAddress,
+			recipients: [DistributionShare.fromPartial(paymentContractRecipient)],
+			discountId: '0',
+			canDeauthorise: true,
+			creatorAddress: myAddress,
+		}),
+	};
+
+	const response = await client.signAndBroadcast(myAddress, [message], fee);
+	return response;
+};
+
+export const SetPaymentContractAuthorization = async () => {
+	const myRegistry = new Registry();
+	myRegistry.register('/payments.MsgSetPaymentContractAuthorisation', MsgSetPaymentContractAuthorisation); // Replace with your own type URL and Msg class
+
+	const ad = await offlineWallet.getAccounts();
+	const client = await createClient(myRegistry);
+	const myAddress = ad[0].address;
+	const did = offlineWallet.did;
+
+	const message = {
+		typeUrl: '/payments.MsgSetPaymentContractAuthorisation',
+		value: MsgSetPaymentContractAuthorisation.fromPartial({
+			paymentContractId: paymentContractId,
+			payerDid: did,
+			authorised: true,
+			payerAddress: myAddress,
 		}),
 	};
 
@@ -101,22 +107,20 @@ export const CreateSubscription = async () => {
 	myRegistry.register('/payments.MsgCreateSubscription', MsgCreateSubscription); // Replace with your own type URL and Msg class
 
 	const ad = await offlineWallet.getAccounts();
-
 	const client = await createClient(myRegistry);
-
 	const myAddress = ad[0].address;
-	const test = new Uint8Array();
+	const did = offlineWallet.did;
+
 	const message = {
 		typeUrl: '/payments.MsgCreateSubscription',
 		value: MsgCreateSubscription.fromPartial({
-			creatorDid: '',
-			subscriptionId: '',
-			paymentContractId: '',
-			maxPeriods: '',
-			period: {
-				typeUrl: '',
-				value: test,
-			},
+			creatorDid: did,
+			subscriptionId: paymentSubscripionId,
+			paymentContractId: paymentContractId,
+			maxPeriods: '3',
+			// @ts-ignore
+			period: BlockPeriod.fromPartial({ periodLength: '3', periodStartBlock: '5' }),
+			creatorAddress: myAddress,
 		}),
 	};
 
@@ -129,18 +133,18 @@ export const GrantDiscount = async () => {
 	myRegistry.register('/payments.MsgGrantDiscount', MsgGrantDiscount); // Replace with your own type URL and Msg class
 
 	const ad = await offlineWallet.getAccounts();
-
 	const client = await createClient(myRegistry);
-
 	const myAddress = ad[0].address;
+	const did = offlineWallet.did;
 
 	const message = {
 		typeUrl: '/payments.MsgGrantDiscount',
 		value: MsgGrantDiscount.fromPartial({
-			senderDid: '',
-			paymentContractId: '',
-			discountId: '',
-			recipient: '',
+			senderDid: did,
+			paymentContractId: paymentContractId,
+			discountId: '0',
+			recipient: paymentContractRecipient.address,
+			senderAddress: myAddress,
 		}),
 	};
 
@@ -153,17 +157,17 @@ export const RevokeDiscount = async () => {
 	myRegistry.register('/payments.MsgRevokeDiscount', MsgRevokeDiscount); // Replace with your own type URL and Msg class
 
 	const ad = await offlineWallet.getAccounts();
-
 	const client = await createClient(myRegistry);
-
 	const myAddress = ad[0].address;
+	const did = offlineWallet.did;
 
 	const message = {
 		typeUrl: '/payments.MsgRevokeDiscount',
 		value: MsgRevokeDiscount.fromPartial({
-			senderDid: '',
-			paymentContractId: '',
-			holder: '',
+			senderDid: did,
+			paymentContractId: paymentContractId,
+			holder: myAddress,
+			senderAddress: myAddress,
 		}),
 	};
 
@@ -176,16 +180,16 @@ export const EffectPayment = async () => {
 	myRegistry.register('/payments.MsgEffectPayment', MsgEffectPayment); // Replace with your own type URL and Msg class
 
 	const ad = await offlineWallet.getAccounts();
-
 	const client = await createClient(myRegistry);
-
 	const myAddress = ad[0].address;
+	const did = offlineWallet.did;
 
 	const message = {
 		typeUrl: '/payments.MsgEffectPayment',
 		value: MsgEffectPayment.fromPartial({
-			senderDid: '',
-			paymentContractId: '',
+			senderDid: did,
+			paymentContractId: paymentContractId,
+			senderAddress: myAddress,
 		}),
 	};
 

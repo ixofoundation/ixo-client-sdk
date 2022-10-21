@@ -5,17 +5,15 @@ import sovrin from 'sovrin-did';
 import { FunctionParam } from '../codec/bonds/bonds';
 import { MsgBuy, MsgCreateBond, MsgEditBond, MsgMakeOutcomePayment, MsgSell, MsgSetNextAlpha, MsgSwap, MsgUpdateBondState, MsgWithdrawReserve, MsgWithdrawShare } from '../codec/bonds/tx';
 import { Coin } from '../codec/external/cosmos/base/v1beta1/coin';
-import { createClient, edClient, fee } from './constants';
+import { createClient, offlineWallet, fee } from './constants';
 
 export const CreateBond = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/bonds.MsgCreateBond', MsgCreateBond); // Replace with your own type URL and Msg class
 
-	const ad = await edClient.getAccounts();
-
-	const client = await createClient(myRegistry);
-
+	const ad = await offlineWallet.getAccounts();
 	const myAddress = ad[0].address;
+	const client = await createClient(myRegistry);
 	const bondDID = sovrin.gen();
 
 	const message = {
@@ -24,8 +22,8 @@ export const CreateBond = async () => {
 			token: 'optimw8',
 			name: 'w-8 - Pilot Alpha Bond 2 - Optimistic',
 			description: 'Pilot Alpha Bond 1 - Optimistic Look a like',
-			creatorDid: edClient.didDoc.did,
-			controllerDid: edClient.didDoc.did,
+			creatorDid: offlineWallet.didDoc.did,
+			controllerDid: offlineWallet.didDoc.did,
 			functionType: 'augmented_function',
 			functionParameters: [
 				FunctionParam.fromPartial({
@@ -74,11 +72,9 @@ export const EditBond = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/bonds.MsgEditBond', MsgEditBond); // Replace with your own type URL and Msg class
 
-	const ad = await edClient.getAccounts();
-
-	const client = await createClient(myRegistry);
-
+	const ad = await offlineWallet.getAccounts();
 	const myAddress = ad[0].address;
+	const client = await createClient(myRegistry);
 	const bondDID = sovrin.gen();
 
 	const message = {
@@ -102,11 +98,9 @@ export const SetNextAlpha = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/bonds.MsgSetNextAlpha', MsgSetNextAlpha); // Replace with your own type URL and Msg class
 
-	const ad = await edClient.getAccounts();
-
-	const client = await createClient(myRegistry);
-
+	const ad = await offlineWallet.getAccounts();
 	const myAddress = ad[0].address;
+	const client = await createClient(myRegistry);
 	const bondDID = sovrin.gen();
 
 	const message = {
@@ -126,11 +120,9 @@ export const UpdateBondState = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/bonds.MsgUpdateBondState', MsgUpdateBondState); // Replace with your own type URL and Msg class
 
-	const ad = await edClient.getAccounts();
-
-	const client = await createClient(myRegistry);
-
+	const ad = await offlineWallet.getAccounts();
 	const myAddress = ad[0].address;
+	const client = await createClient(myRegistry);
 	const bondDID = sovrin.gen();
 
 	const message = {
@@ -150,11 +142,9 @@ export const Buy = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/bonds.MsgBuy', MsgBuy); // Replace with your own type URL and Msg class
 
-	const ad = await edClient.getAccounts();
-
-	const client = await createClient(myRegistry);
-
+	const ad = await offlineWallet.getAccounts();
 	const myAddress = ad[0].address;
+	const client = await createClient(myRegistry);
 	const bondDID = sovrin.gen();
 
 	const message = {
@@ -183,11 +173,9 @@ export const Sell = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/bonds.MsgSell', MsgSell); // Replace with your own type URL and Msg class
 
-	const ad = await edClient.getAccounts();
-
-	const client = await createClient(myRegistry);
-
+	const ad = await offlineWallet.getAccounts();
 	const myAddress = ad[0].address;
+	const client = await createClient(myRegistry);
 	const bondDID = sovrin.gen();
 
 	const message = {
@@ -211,11 +199,9 @@ export const Swap = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/bonds.MsgSwap', MsgSwap); // Replace with your own type URL and Msg class
 
-	const ad = await edClient.getAccounts();
-
-	const client = await createClient(myRegistry);
-
+	const ad = await offlineWallet.getAccounts();
 	const myAddress = ad[0].address;
+	const client = await createClient(myRegistry);
 	const bondDID = sovrin.gen();
 
 	const message = {
@@ -239,11 +225,9 @@ export const MakeOutcomePayment = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/bonds.MsgMakeOutcomePayment', MsgMakeOutcomePayment); // Replace with your own type URL and Msg class
 
-	const ad = await edClient.getAccounts();
-
-	const client = await createClient(myRegistry);
-
+	const ad = await offlineWallet.getAccounts();
 	const myAddress = ad[0].address;
+	const client = await createClient(myRegistry);
 	const bondDID = sovrin.gen();
 
 	const message = {
@@ -263,11 +247,9 @@ export const WithdrawShare = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/bonds.MsgWithdrawShare', MsgWithdrawShare); // Replace with your own type URL and Msg class
 
-	const ad = await edClient.getAccounts();
-
-	const client = await createClient(myRegistry);
-
+	const ad = await offlineWallet.getAccounts();
 	const myAddress = ad[0].address;
+	const client = await createClient(myRegistry);
 	const bondDID = sovrin.gen();
 
 	const message = {
@@ -286,11 +268,9 @@ export const WithdrawReserve = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/bonds.MsgWithdrawReserve', MsgWithdrawReserve); // Replace with your own type URL and Msg class
 
-	const ad = await edClient.getAccounts();
-
-	const client = await createClient(myRegistry);
-
+	const ad = await offlineWallet.getAccounts();
 	const myAddress = ad[0].address;
+	const client = await createClient(myRegistry);
 	const bondDID = sovrin.gen();
 
 	const message = {
