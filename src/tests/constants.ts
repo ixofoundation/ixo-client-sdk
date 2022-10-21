@@ -8,8 +8,8 @@ import { getSecpClient } from './secpClient';
 const RPC_URL = 'https://devnet.ixo.earth/rpc/';
 // const RPC_URL = 'https://testnet.ixo.earth/rpc/';
 
-// const keyType = 'ed'
-const keyType = 'secp';
+const keyType = 'ed';
+// const keyType = 'secp';
 
 // const mnemonic = 'creek obvious bamboo ozone dwarf above hill muscle image fossil drastic toy';
 const mnemonic = 'basket mechanic myself capable shoe then home magic cream edge seminar artefact';

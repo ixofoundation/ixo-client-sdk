@@ -1,14 +1,19 @@
 import { Ed25519, sha256 } from '@cosmjs/crypto';
-import { toUtf8, Bech32, toBase64 } from '@cosmjs/encoding';
+import { toUtf8, Bech32, toBase64, fromBase64 } from '@cosmjs/encoding';
 import { makeSignBytes } from '@cosmjs/proto-signing';
 import { decode } from 'bs58';
 import sovrin from 'sovrin-did';
 
 export const getEdClient = (mnemonic: string) => {
-	// Creating diddoc from MM - edkeys
 	const didDoc = sovrin.fromSeed(sha256(toUtf8(mnemonic)).slice(0, 32));
 
 	const edClient = {
+		mnemonic,
+		didDoc,
+		didPrefix: 'did:ixo:',
+		did: 'did:ixo:' + didDoc.did,
+		didSov: 'did:sov:' + didDoc.did,
+
 		async getAccounts() {
 			return [
 				{
@@ -24,12 +29,10 @@ export const getEdClient = (mnemonic: string) => {
 			if (!account) throw new Error(`Address ${signerAddress} not found in wallet`);
 
 			const keypair = await Ed25519.makeKeypair(sha256(toUtf8(mnemonic)).slice(0, 32));
-			console.log({ keypair });
 			const signBytes = makeSignBytes(signDoc);
-			const hashedMessage = sha256(signBytes);
-			const signatureArray = await Ed25519.createSignature(hashedMessage, keypair);
+			const signatureArray = await Ed25519.createSignature(signBytes, keypair);
 			const signatureBase64 = toBase64(signatureArray.slice(0, 64));
-			const verified = await Ed25519.verifySignature(signatureArray, hashedMessage, keypair.pubkey);
+			const verified = await Ed25519.verifySignature(signatureArray, signBytes, keypair.pubkey);
 			console.log({ verified });
 
 			return {

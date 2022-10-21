@@ -276,7 +276,6 @@ export class SigningStargateClient extends StargateClient {
 	}
 
 	private async signAmino(signerAddress: string, messages: readonly EncodeObject[], fee: StdFee, memo: string, { accountNumber, sequence, chainId }: SignerData): Promise<TxRaw> {
-		console.log('signAmino !!!!!!');
 		assert(!isOfflineDirectSigner(this.signer));
 		const accountFromSigner = (await this.signer.getAccounts()).find(account => account.address === signerAddress);
 		if (!accountFromSigner) {
@@ -310,7 +309,6 @@ export class SigningStargateClient extends StargateClient {
 	}
 
 	private async signDirect(signerAddress: string, messages: readonly EncodeObject[], fee: StdFee, memo: string, { accountNumber, sequence, chainId }: SignerData): Promise<TxRaw> {
-		console.log('signDirect !!!!!!');
 		assert(isOfflineDirectSigner(this.signer));
 		const accountFromSigner = (await this.signer.getAccounts()).find(account => account.address === signerAddress);
 		if (!accountFromSigner) {
@@ -320,7 +318,6 @@ export class SigningStargateClient extends StargateClient {
 			type: pubkeyType.ed25519,
 			value: toBase64(accountFromSigner.pubkey),
 		});
-		console.log(messages);
 		const txBodyEncodeObject: TxBodyEncodeObject = {
 			typeUrl: '/cosmos.tx.v1beta1.TxBody',
 			value: {
