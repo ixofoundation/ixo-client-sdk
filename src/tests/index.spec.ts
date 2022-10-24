@@ -1,56 +1,76 @@
-import { Buy, CreateBond, EditBond, MakeOutcomePayment, Sell, SetNextAlpha, Swap, UpdateBondState, WithdrawReserve, WithdrawShare } from './Bond';
 import { testMsg } from './constants';
-import { BankSendTrx } from './Cosmos';
-import { CreateEntity, TransferEntity, UpdateConfigEntity, UpdateEntity } from './Entity';
-import { CreateIidDoc } from './Iid';
-import { CreatePaymentContract, CreatePaymentTemplate, CreateSubscription, EffectPayment, GrantDiscount, RevokeDiscount, SetPaymentContractAuthorization } from './Payments';
-import { CreateAgent, CreateClaim, CreateEvaluation, CreateProject, UpdateAgent, UpdateProjectDoc, UpdateProjectStatus, WithdrawFunds } from './Projects';
+import * as Bond from './Bond';
+import * as Cosmos from './Cosmos';
+import * as Entity from './Entity';
+import * as Iid from './Iid';
+import * as Payments from './Payments';
+import * as Projects from './Projects';
 
 // describe('Testing the cosmos bank module', () => {
-// 	testMsg('/cosmos.bank.v1beta1.MsgSend', BankSendTrx);
+// 	testMsg('/cosmos.bank.v1beta1.MsgSend', Cosmos.BankSendTrx);
 // });
 
-// describe('Testing the iid module', () => {
-// 	testMsg('/iid.MsgCreateIidDocument', CreateIidDoc);
-// });
-
-// describe('Testing the entity module', () => {
-// 	testMsg('/entity.MsgCreateEntity', CreateEntity);
-// 	testMsg('/entity.MsgTransferEntity', TransferEntity);
-// 	testMsg('/entity.MsgUpdateEntity', UpdateEntity);
-// 	testMsg('/entity.MsgUpdateEntityConfig', UpdateConfigEntity);
-// });
-
-describe('Testing the Projects module', () => {
-	testMsg('/project.MsgCreateProject', CreateProject);
-	// testMsg('/project.MsgUpdateProjectStatus', UpdateProjectStatus);
-	// testMsg('/project.MsgCreateAgent', CreateAgent);
-	// testMsg('/project.MsgUpdateAgent', UpdateAgent);
-	// testMsg('/project.MsgCreateClaim', CreateClaim);
-	// testMsg('/project.MsgCreateEvaluation', CreateEvaluation);
-	// testMsg('/project.MsgWithdrawFunds', WithdrawFunds);
-	// testMsg('/project.MsgUpdateProjectDoc', UpdateProjectDoc);
+describe('Testing the iid module', () => {
+	// testMsg('/iid.MsgCreateIidDocument', Iid.CreateIidDoc);
+	// testMsg('/iid.MsgUpdateIidDocument', Iid.UpdateIidDoc);
+	// testMsg('/iid.MsgUpdateIidMeta', Iid.UpdateIidMeta);
+	// testMsg('/iid.MsgAddIidContext', Iid.AddIidContext);
+	// testMsg('/iid.MsgDeleteIidContext', Iid.DeleteIidContext);
+	// testMsg('/iid.MsgAddVerification', Iid.AddVerification);
+	// testMsg('/iid.MsgSetVerificationRelationships', Iid.SetVerificationRelationships);
+	// testMsg('/iid.MsgRevokeVerification', Iid.RevokeVerification);
+	// testMsg('/iid.MsgAddAccordedRight', Iid.AddAccordedRight);
+	// testMsg('/iid.MsgDeleteAccordedRight', Iid.DeleteAccordedRight);
+	// testMsg('/iid.MsgAddController', Iid.AddController);
+	// testMsg('/iid.MsgDeleteController', Iid.DeleteController);
+	// testMsg('/iid.MsgAddLinkedEntity', Iid.AddLinkedEntity);
+	// testMsg('/iid.MsgDeleteLinkedEntity', Iid.DeleteLinkedEntity);
+	// testMsg('/iid.MsgAddLinkedResource', Iid.AddLinkedResource);
+	// testMsg('/iid.MsgDeleteLinkedResource', Iid.DeleteLinkedResource);
+	// testMsg('/iid.MsgAddService', Iid.AddService);
+	// testMsg('/iid.MsgDeleteService', Iid.DeleteService);
 });
 
-// describe('Testing the Bonds module', () => {
-// 	testMsg('/bonds.MsgCreateBond', CreateBond);
-// 	testMsg('/bonds.MsgEditBond', EditBond);
-// 	testMsg('/bonds.MsgSetNextAlpha', SetNextAlpha);
-// 	testMsg('/bonds.MsgUpdateBondState', UpdateBondState);
-// 	testMsg('/bonds.MsgBuy', Buy);
-// 	testMsg('/bonds.MsgSell', Sell);
-// 	testMsg('/bonds.MsgSwap', Swap);
-// 	testMsg('/bonds.MsgMakeOutcomePayment', MakeOutcomePayment);
-// 	testMsg('/bonds.MsgWithdrawShare', WithdrawShare);
-// 	testMsg('/bonds.MsgWithdrawReserve', WithdrawReserve);
-// });
+describe('Testing the entity module', () => {
+	// testMsg('/entity.MsgCreateEntity', Entity.CreateEntity);
+	// 	testMsg('/entity.MsgTransferEntity', Entity.TransferEntity);
+	// 	testMsg('/entity.MsgUpdateEntity', Entity.UpdateEntity);
+	// 	testMsg('/entity.MsgUpdateEntityConfig', Entity.UpdateConfigEntity);
+});
 
-// describe('Testing the Payments module', () => {
-// 	testMsg('/payments.MsgCreatePaymentTemplate', CreatePaymentTemplate);
-// 	testMsg('/payments.MsgCreatePaymentContract', CreatePaymentContract);
-// 	testMsg('/payments.MsgSetPaymentContractAuthorisation', SetPaymentContractAuthorization);
-// 	testMsg('/payments.MsgCreateSubscription', CreateSubscription);
-// 	testMsg('/payments.MsgGrantDiscount', GrantDiscount);
-// 	testMsg('/payments.MsgRevokeDiscount', RevokeDiscount);
-// 	testMsg('/payments.MsgEffectPayment', EffectPayment);
-// });
+describe('Testing the Projects module', () => {
+	//  Broadcasting transaction failed with code 4 (codespace: ixo.lib.legacydid). Log: did not deducable from pubKey; expected: RYNx46QArfcySVLxs3Ump received: BPnJs1wMTHbQgFQhJUYsBM: did pubKey mismatch
+	// testMsg('/project.MsgCreateProject', Projects.CreateProject);
+	// 	testMsg('/project.MsgUpdateProjectStatus', Projects.UpdateProjectStatus);
+	// 	testMsg('/project.MsgCreateAgent', Projects.CreateAgent);
+	// 	testMsg('/project.MsgUpdateAgent', Projects.UpdateAgent);
+	// 	testMsg('/project.MsgCreateClaim', Projects.CreateClaim);
+	// 	testMsg('/project.MsgCreateEvaluation', Projects.CreateEvaluation);
+	// 	testMsg('/project.MsgWithdrawFunds', Projects.WithdrawFunds);
+	// 	testMsg('/project.MsgUpdateProjectDoc', Projects.UpdateProjectDoc);
+});
+
+describe('Testing the Bonds module', () => {
+	// Broadcasting transaction failed with code 2 (codespace: sdk). Log: math/big: cannot unmarshal "1.000000000000000000" into a *big.Int: tx parse error
+	// testMsg('/bonds.MsgCreateBond', Bond.CreateBond);
+	// 	testMsg('/bonds.MsgEditBond', Bond.EditBond);
+	// 	testMsg('/bonds.MsgSetNextAlpha', Bond.SetNextAlpha);
+	// 	testMsg('/bonds.MsgUpdateBondState', Bond.UpdateBondState);
+	// 	testMsg('/bonds.MsgBuy', Bond.Buy);
+	// 	testMsg('/bonds.MsgSell', Bond.Sell);
+	// 	testMsg('/bonds.MsgSwap', Bond.Swap);
+	// 	testMsg('/bonds.MsgMakeOutcomePayment', Bond.MakeOutcomePayment);
+	// 	testMsg('/bonds.MsgWithdrawShare', Bond.WithdrawShare);
+	// 	testMsg('/bonds.MsgWithdrawReserve', Bond.WithdrawReserve);
+});
+
+describe('Testing the Payments module', () => {
+	// testMsg('/payments.MsgCreatePaymentTemplate', Payments.CreatePaymentTemplate);
+	// Fails from here: Broadcasting transaction failed with code 3 (codespace: payments). Log: payment distribution percentages should add up to 100
+	// testMsg('/payments.MsgCreatePaymentContract', Payments.CreatePaymentContract);
+	// 	testMsg('/payments.MsgSetPaymentContractAuthorisation', Payments.SetPaymentContractAuthorization);
+	// 	testMsg('/payments.MsgCreateSubscription', Payments.CreateSubscription);
+	// 	testMsg('/payments.MsgGrantDiscount', Payments.GrantDiscount);
+	// 	testMsg('/payments.MsgRevokeDiscount', Payments.RevokeDiscount);
+	// 	testMsg('/payments.MsgEffectPayment', Payments.EffectPayment);
+});

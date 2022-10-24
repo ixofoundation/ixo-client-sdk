@@ -1,20 +1,42 @@
 import { Registry } from '@cosmjs/proto-signing';
+import base58 from 'bs58';
 import { MsgCreateEntity, MsgTransferEntity, MsgUpdateEntity, MsgUpdateEntityConfig } from '../codec/entity/tx';
-import { createClient, fee, offlineWallet } from './constants';
+import { VerificationMethod } from '../codec/iid/iid';
+import { Verification } from '../codec/iid/tx';
+import { JsonToArray } from '../protoquery';
+import { createClient, fee, offlineWallet, alice } from './constants';
 
 export const CreateEntity = async () => {
 	const myRegistry = new Registry();
-	myRegistry.register('/entity.MsgCreateEntity', MsgCreateEntity); // Replace with your own type URL and Msg class
+	myRegistry.register('/entity.MsgCreateEntity', MsgCreateEntity);
 
 	const ad = await offlineWallet.getAccounts();
 	const myAddress = ad[0].address;
+	const myPubKey = ad[0].pubkey;
 	const client = await createClient(myRegistry);
+	const did = offlineWallet.did;
 
 	const message = {
 		typeUrl: '/entity.MsgCreateEntity',
 		value: MsgCreateEntity.fromPartial({
 			entityType: 'asset',
 			entityStatus: 0,
+			controller: [did],
+			verification: [
+				Verification.fromPartial({
+					relationships: ['authentication'],
+					method: VerificationMethod.fromPartial({ id: did, type: 'EcdsaSecp256k1VerificationKey2019', publicKeyMultibase: base58.encode(myPubKey), controller: did }),
+				}),
+			],
+			accordedRight: [],
+			service: [],
+			linkedResource: [],
+			linkedEntity: [],
+			deactivated: false,
+			stage: 'stage',
+			ownerDid: did,
+			ownerAddress: myAddress,
+			data: JsonToArray(JSON.stringify({})),
 		}),
 	};
 
@@ -24,17 +46,20 @@ export const CreateEntity = async () => {
 
 export const TransferEntity = async () => {
 	const myRegistry = new Registry();
-	myRegistry.register('/entity.MsgTransferEntity', MsgTransferEntity); // Replace with your own type URL and Msg class
+	myRegistry.register('/entity.MsgTransferEntity', MsgTransferEntity);
 
 	const ad = await offlineWallet.getAccounts();
 	const myAddress = ad[0].address;
 	const client = await createClient(myRegistry);
+	const did = offlineWallet.did;
 
 	const message = {
 		typeUrl: '/entity.MsgTransferEntity',
 		value: MsgTransferEntity.fromPartial({
-			// entityType: 'asset',
-			// entityStatus: 0,
+			entityDid: '',
+			controllerDid: did,
+			controllerAddress: myAddress,
+			recipiantDid: alice.did,
 		}),
 	};
 
@@ -44,17 +69,19 @@ export const TransferEntity = async () => {
 
 export const UpdateEntity = async () => {
 	const myRegistry = new Registry();
-	myRegistry.register('/entity.MsgUpdateEntity', MsgUpdateEntity); // Replace with your own type URL and Msg class
+	myRegistry.register('/entity.MsgUpdateEntity', MsgUpdateEntity);
 
 	const ad = await offlineWallet.getAccounts();
 	const myAddress = ad[0].address;
 	const client = await createClient(myRegistry);
+	const did = offlineWallet.did;
 
 	const message = {
 		typeUrl: '/entity.MsgUpdateEntity',
 		value: MsgUpdateEntity.fromPartial({
-			// entityType: 'asset',
-			// entityStatus: 0,
+			status: 1,
+			controllerDid: did,
+			controllerAddress: myAddress,
 		}),
 	};
 
@@ -64,7 +91,7 @@ export const UpdateEntity = async () => {
 
 export const UpdateConfigEntity = async () => {
 	const myRegistry = new Registry();
-	myRegistry.register('/entity.MsgUpdateEntityConfig', MsgUpdateEntityConfig); // Replace with your own type URL and Msg class
+	myRegistry.register('/entity.MsgUpdateEntityConfig', MsgUpdateEntityConfig);
 
 	const ad = await offlineWallet.getAccounts();
 	const myAddress = ad[0].address;
@@ -73,8 +100,8 @@ export const UpdateConfigEntity = async () => {
 	const message = {
 		typeUrl: '/entity.MsgUpdateEntityConfig',
 		value: MsgUpdateEntityConfig.fromPartial({
-			// entityType: 'asset',
-			// entityStatus: 0,
+			nftContractAddress: '',
+			signer: myAddress,
 		}),
 	};
 

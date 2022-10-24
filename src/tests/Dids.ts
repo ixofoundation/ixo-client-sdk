@@ -5,7 +5,7 @@ import { createClient, offlineWallet, fee } from './constants';
 
 export const AddDid = async () => {
 	const myRegistry = new Registry();
-	myRegistry.register('/did.MsgAddDid', MsgAddDid); // Replace with your own type URL and Msg class
+	myRegistry.register('/did.MsgAddDid', MsgAddDid);
 
 	const ad = await offlineWallet.getAccounts();
 	const myAddress = ad[0].address;
@@ -25,7 +25,7 @@ export const AddDid = async () => {
 
 export const AddCredential = async () => {
 	const myRegistry = new Registry();
-	myRegistry.register('/did.MsgAddCredential', MsgAddCredential); // Replace with your own type URL and Msg class
+	myRegistry.register('/did.MsgAddCredential', MsgAddCredential);
 
 	const ad = await offlineWallet.getAccounts();
 	const myAddress = ad[0].address;

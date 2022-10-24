@@ -4,14 +4,14 @@ import { BlockPeriod, DistributionShare, PaymentTemplate } from '../codec/paymen
 import { MsgCreatePaymentContract, MsgCreatePaymentTemplate, MsgCreateSubscription, MsgEffectPayment, MsgGrantDiscount, MsgRevokeDiscount, MsgSetPaymentContractAuthorisation } from '../codec/payments/tx';
 import { createClient, offlineWallet, fee } from './constants';
 
-const paymentTemplateId = 'payment:template:oracle-fee';
-const paymentContractId = 'payment:contract:oracle-fee1';
-const paymentSubscripionId = 'payment:subscription:oracle-fee1';
-const paymentContractRecipient = { address: 'ixo107pmtx9wyndup8f9lgj6d7dnfq5kuf3sapg0vx', percentage: '100' };
+export const paymentTemplateId = 'payment:template:oracle-fee';
+export const paymentContractId = 'payment:contract:oracle-fee1';
+export const paymentSubscripionId = 'payment:subscription:oracle-fee1';
+export const paymentContractRecipient = { address: 'ixo107pmtx9wyndup8f9lgj6d7dnfq5kuf3sapg0vx', percentage: '100' };
 
 export const CreatePaymentTemplate = async () => {
 	const myRegistry = new Registry();
-	myRegistry.register('/payments.MsgCreatePaymentTemplate', MsgCreatePaymentTemplate); // Replace with your own type URL and Msg class
+	myRegistry.register('/payments.MsgCreatePaymentTemplate', MsgCreatePaymentTemplate);
 
 	const ad = await offlineWallet.getAccounts();
 	const myAddress = ad[0].address;
@@ -54,7 +54,7 @@ export const CreatePaymentTemplate = async () => {
 
 export const CreatePaymentContract = async () => {
 	const myRegistry = new Registry();
-	myRegistry.register('/payments.MsgCreatePaymentContract', MsgCreatePaymentContract); // Replace with your own type URL and Msg class
+	myRegistry.register('/payments.MsgCreatePaymentContract', MsgCreatePaymentContract);
 
 	const ad = await offlineWallet.getAccounts();
 	const client = await createClient(myRegistry);
@@ -81,7 +81,7 @@ export const CreatePaymentContract = async () => {
 
 export const SetPaymentContractAuthorization = async () => {
 	const myRegistry = new Registry();
-	myRegistry.register('/payments.MsgSetPaymentContractAuthorisation', MsgSetPaymentContractAuthorisation); // Replace with your own type URL and Msg class
+	myRegistry.register('/payments.MsgSetPaymentContractAuthorisation', MsgSetPaymentContractAuthorisation);
 
 	const ad = await offlineWallet.getAccounts();
 	const client = await createClient(myRegistry);
@@ -104,7 +104,7 @@ export const SetPaymentContractAuthorization = async () => {
 
 export const CreateSubscription = async () => {
 	const myRegistry = new Registry();
-	myRegistry.register('/payments.MsgCreateSubscription', MsgCreateSubscription); // Replace with your own type URL and Msg class
+	myRegistry.register('/payments.MsgCreateSubscription', MsgCreateSubscription);
 
 	const ad = await offlineWallet.getAccounts();
 	const client = await createClient(myRegistry);
@@ -130,7 +130,7 @@ export const CreateSubscription = async () => {
 
 export const GrantDiscount = async () => {
 	const myRegistry = new Registry();
-	myRegistry.register('/payments.MsgGrantDiscount', MsgGrantDiscount); // Replace with your own type URL and Msg class
+	myRegistry.register('/payments.MsgGrantDiscount', MsgGrantDiscount);
 
 	const ad = await offlineWallet.getAccounts();
 	const client = await createClient(myRegistry);
@@ -154,7 +154,7 @@ export const GrantDiscount = async () => {
 
 export const RevokeDiscount = async () => {
 	const myRegistry = new Registry();
-	myRegistry.register('/payments.MsgRevokeDiscount', MsgRevokeDiscount); // Replace with your own type URL and Msg class
+	myRegistry.register('/payments.MsgRevokeDiscount', MsgRevokeDiscount);
 
 	const ad = await offlineWallet.getAccounts();
 	const client = await createClient(myRegistry);
@@ -177,7 +177,7 @@ export const RevokeDiscount = async () => {
 
 export const EffectPayment = async () => {
 	const myRegistry = new Registry();
-	myRegistry.register('/payments.MsgEffectPayment', MsgEffectPayment); // Replace with your own type URL and Msg class
+	myRegistry.register('/payments.MsgEffectPayment', MsgEffectPayment);
 
 	const ad = await offlineWallet.getAccounts();
 	const client = await createClient(myRegistry);

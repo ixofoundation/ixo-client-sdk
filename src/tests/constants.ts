@@ -16,6 +16,8 @@ const mnemonic = 'basket mechanic myself capable shoe then home magic cream edge
 
 // @ts-ignore
 export const offlineWallet = keyType === 'ed' ? getEdClient(mnemonic) : getSecpClient(mnemonic);
+export const alice = getSecpClient('century exile seat unknown hello maze genre table whale hockey rubber begin');
+export const bob = getSecpClient('pilot direct attitude scene fog second word until tube dizzy unfold glad');
 
 export const createClient = async (myRegistry): Promise<SigningStargateClient> => {
 	// @ts-ignore
@@ -33,7 +35,7 @@ export const createClient = async (myRegistry): Promise<SigningStargateClient> =
 export const fee = {
 	amount: [
 		{
-			denom: 'uixo', // Use the appropriate fee denom for your chain
+			denom: 'uixo',
 			amount: '1000000',
 		},
 	],
