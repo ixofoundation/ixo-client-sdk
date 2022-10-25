@@ -2,27 +2,28 @@ import { Registry } from '@cosmjs/proto-signing';
 import { FunctionParam } from '../codec/bonds/bonds';
 import { MsgBuy, MsgCreateBond, MsgEditBond, MsgMakeOutcomePayment, MsgSell, MsgSetNextAlpha, MsgSwap, MsgUpdateBondState, MsgWithdrawReserve, MsgWithdrawShare } from '../codec/bonds/tx';
 import { Coin } from '../codec/external/cosmos/base/v1beta1/coin';
-import { createClient, offlineWallet, fee } from './constants';
-
-const bondDid = 'did:ixo:C2bFfs9g6VfFEissiCUuPK';
-const feeReserveAddress = 'ixo1tkq38dndpxmw6pe5dr07j0gp9ctxd0jsu2eu50';
-const bondToken = 'abc';
-const bondReserveToken = 'res';
+import { createClient, getUser } from './common';
+import { constants, fee, WalletUsers } from './constants';
 
 export const CreateBond = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/bonds.MsgCreateBond', MsgCreateBond);
-
-	const ad = await offlineWallet.getAccounts();
-	const myAddress = ad[0].address;
 	const client = await createClient(myRegistry);
-	const did = offlineWallet.did;
+
+	const tester = getUser();
+	const account = (await tester.getAccounts())[0];
+	const myAddress = account.address;
+	const did = tester.did;
+
+	const bond = getUser(WalletUsers.bond);
+	const bondDid = bond.did;
+	const feeReserveAddress = myAddress;
 
 	const message = {
 		typeUrl: '/bonds.MsgCreateBond',
 		value: MsgCreateBond.fromPartial({
 			bondDid: bondDid,
-			token: bondToken,
+			token: constants.bondToken,
 			name: 'A B C',
 			description: 'Description about A B C',
 			creatorDid: did,
@@ -31,34 +32,34 @@ export const CreateBond = async () => {
 			functionParameters: [
 				FunctionParam.fromPartial({
 					param: 'p0',
-					value: '1.000000000000000000',
+					value: '1000000000000000000',
 				}),
 				FunctionParam.fromPartial({
 					param: 'theta',
-					value: '0.000000000000000000',
+					value: '0',
 				}),
 				FunctionParam.fromPartial({
 					param: 'kappa',
-					value: '0.000000000000000000',
+					value: '1010000000000000000',
 				}),
 				FunctionParam.fromPartial({
 					param: 'd0',
-					value: '1.000000000000000000',
+					value: '1000000000000000000',
 				}),
 			],
-			reserveTokens: [bondReserveToken],
-			txFeePercentage: '0.000000000000000000',
-			exitFeePercentage: '0.000000000000000000',
+			reserveTokens: [constants.bondReserveToken],
+			txFeePercentage: '0',
+			exitFeePercentage: '0',
 			feeAddress: feeReserveAddress,
 			reserveWithdrawalAddress: feeReserveAddress,
 			maxSupply: Coin.fromPartial({
-				denom: 'abc',
+				denom: constants.bondToken,
 				amount: '1000000000000',
 			}),
 			orderQuantityLimits: [],
-			sanityRate: '0.000000000000000000',
-			sanityMarginPercentage: '0.000000000000000000',
-			allowSells: true,
+			sanityRate: '0',
+			sanityMarginPercentage: '0',
+			allowSells: false,
 			allowReserveWithdrawals: true,
 			alphaBond: true,
 			batchBlocks: '1',
@@ -74,21 +75,24 @@ export const CreateBond = async () => {
 export const EditBond = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/bonds.MsgEditBond', MsgEditBond);
-
-	const ad = await offlineWallet.getAccounts();
-	const myAddress = ad[0].address;
 	const client = await createClient(myRegistry);
-	const did = offlineWallet.did;
+
+	const tester = getUser();
+	const account = (await tester.getAccounts())[0];
+	const myAddress = account.address;
+	const did = tester.did;
+
+	const bond = getUser(WalletUsers.bond);
+	const bondDid = bond.did;
 
 	const message = {
 		typeUrl: '/bonds.MsgEditBond',
 		value: MsgEditBond.fromPartial({
 			bondDid: bondDid,
 			name: 'New A B C',
-			// description: '',
-			// orderQuantityLimits: '',
-			// sanityRate: '',
-			// sanityMarginPercentage: '',
+			description: 'Description about A B C',
+			sanityRate: '0',
+			sanityMarginPercentage: '0',
 			editorDid: did,
 			editorAddress: myAddress,
 		}),
@@ -101,17 +105,21 @@ export const EditBond = async () => {
 export const SetNextAlpha = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/bonds.MsgSetNextAlpha', MsgSetNextAlpha);
-
-	const ad = await offlineWallet.getAccounts();
-	const myAddress = ad[0].address;
 	const client = await createClient(myRegistry);
-	const did = offlineWallet.did;
+
+	const tester = getUser();
+	const account = (await tester.getAccounts())[0];
+	const myAddress = account.address;
+	const did = tester.did;
+
+	const bond = getUser(WalletUsers.bond);
+	const bondDid = bond.did;
 
 	const message = {
 		typeUrl: '/bonds.MsgSetNextAlpha',
 		value: MsgSetNextAlpha.fromPartial({
 			bondDid: bondDid,
-			alpha: '0.52',
+			alpha: '520000000000000000',
 			editorDid: did,
 			editorAddress: myAddress,
 		}),
@@ -124,11 +132,15 @@ export const SetNextAlpha = async () => {
 export const UpdateBondState = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/bonds.MsgUpdateBondState', MsgUpdateBondState);
-
-	const ad = await offlineWallet.getAccounts();
-	const myAddress = ad[0].address;
 	const client = await createClient(myRegistry);
-	const did = offlineWallet.did;
+
+	const tester = getUser();
+	const account = (await tester.getAccounts())[0];
+	const myAddress = account.address;
+	const did = tester.did;
+
+	const bond = getUser(WalletUsers.bond);
+	const bondDid = bond.did;
 
 	const message = {
 		typeUrl: '/bonds.MsgUpdateBondState',
@@ -147,11 +159,15 @@ export const UpdateBondState = async () => {
 export const Buy = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/bonds.MsgBuy', MsgBuy);
-
-	const ad = await offlineWallet.getAccounts();
-	const myAddress = ad[0].address;
 	const client = await createClient(myRegistry);
-	const did = offlineWallet.did;
+
+	const tester = getUser();
+	const account = (await tester.getAccounts())[0];
+	const myAddress = account.address;
+	const did = tester.did;
+
+	const bond = getUser(WalletUsers.bond);
+	const bondDid = bond.did;
 
 	const message = {
 		typeUrl: '/bonds.MsgBuy',
@@ -159,13 +175,13 @@ export const Buy = async () => {
 			buyerDid: did,
 			buyerAddress: myAddress,
 			amount: Coin.fromPartial({
-				denom: bondToken,
-				amount: '400000',
+				denom: constants.bondToken,
+				amount: '20000',
 			}),
 			maxPrices: [
 				Coin.fromPartial({
-					denom: bondReserveToken,
-					amount: '500000',
+					denom: constants.bondReserveToken,
+					amount: '1000000',
 				}),
 			],
 			bondDid: bondDid,
@@ -179,11 +195,15 @@ export const Buy = async () => {
 export const Sell = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/bonds.MsgSell', MsgSell);
-
-	const ad = await offlineWallet.getAccounts();
-	const myAddress = ad[0].address;
 	const client = await createClient(myRegistry);
-	const did = offlineWallet.did;
+
+	const tester = getUser();
+	const account = (await tester.getAccounts())[0];
+	const myAddress = account.address;
+	const did = tester.did;
+
+	const bond = getUser(WalletUsers.bond);
+	const bondDid = bond.did;
 
 	const message = {
 		typeUrl: '/bonds.MsgSell',
@@ -191,7 +211,7 @@ export const Sell = async () => {
 			sellerDid: did,
 			sellerAddress: myAddress,
 			amount: Coin.fromPartial({
-				denom: bondToken,
+				denom: constants.bondToken,
 				amount: '200000',
 			}),
 			bondDid: bondDid,
@@ -206,11 +226,15 @@ export const Sell = async () => {
 export const Swap = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/bonds.MsgSwap', MsgSwap);
-
-	const ad = await offlineWallet.getAccounts();
-	const myAddress = ad[0].address;
 	const client = await createClient(myRegistry);
-	const did = offlineWallet.did;
+
+	const tester = getUser();
+	const account = (await tester.getAccounts())[0];
+	const myAddress = account.address;
+	const did = tester.did;
+
+	const bond = getUser(WalletUsers.bond);
+	const bondDid = bond.did;
 
 	const message = {
 		typeUrl: '/bonds.MsgSwap',
@@ -233,18 +257,22 @@ export const Swap = async () => {
 export const MakeOutcomePayment = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/bonds.MsgMakeOutcomePayment', MsgMakeOutcomePayment);
-
-	const ad = await offlineWallet.getAccounts();
-	const myAddress = ad[0].address;
 	const client = await createClient(myRegistry);
-	const did = offlineWallet.did;
+
+	const tester = getUser();
+	const account = (await tester.getAccounts())[0];
+	const myAddress = account.address;
+	const did = tester.did;
+
+	const bond = getUser(WalletUsers.bond);
+	const bondDid = bond.did;
 
 	const message = {
 		typeUrl: '/bonds.MsgMakeOutcomePayment',
 		value: MsgMakeOutcomePayment.fromPartial({
 			senderDid: did,
 			senderAddress: myAddress,
-			amount: '50000000',
+			amount: '1000',
 			bondDid: bondDid,
 		}),
 	};
@@ -256,11 +284,15 @@ export const MakeOutcomePayment = async () => {
 export const WithdrawShare = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/bonds.MsgWithdrawShare', MsgWithdrawShare);
-
-	const ad = await offlineWallet.getAccounts();
-	const myAddress = ad[0].address;
 	const client = await createClient(myRegistry);
-	const did = offlineWallet.did;
+
+	const tester = getUser();
+	const account = (await tester.getAccounts())[0];
+	const myAddress = account.address;
+	const did = tester.did;
+
+	const bond = getUser(WalletUsers.bond);
+	const bondDid = bond.did;
 
 	const message = {
 		typeUrl: '/bonds.MsgWithdrawShare',
@@ -278,18 +310,22 @@ export const WithdrawShare = async () => {
 export const WithdrawReserve = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/bonds.MsgWithdrawReserve', MsgWithdrawReserve);
-
-	const ad = await offlineWallet.getAccounts();
-	const myAddress = ad[0].address;
 	const client = await createClient(myRegistry);
-	const did = offlineWallet.did;
+
+	const tester = getUser();
+	const account = (await tester.getAccounts())[0];
+	const myAddress = account.address;
+	const did = tester.did;
+
+	const bond = getUser(WalletUsers.bond);
+	const bondDid = bond.did;
 
 	const message = {
 		typeUrl: '/bonds.MsgWithdrawReserve',
 		value: MsgWithdrawReserve.fromPartial({
 			withdrawerDid: did,
 			withdrawerAddress: myAddress,
-			amount: [Coin.fromPartial({ denom: bondReserveToken, amount: '5000' })],
+			amount: [Coin.fromPartial({ denom: constants.bondReserveToken, amount: '1' })],
 			bondDid: bondDid,
 		}),
 	};

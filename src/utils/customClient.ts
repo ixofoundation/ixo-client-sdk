@@ -28,6 +28,7 @@ import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
 import { MsgTransfer } from 'cosmjs-types/ibc/applications/transfer/v1/tx';
 import { Height } from 'cosmjs-types/ibc/core/client/v1/client';
 import Long from 'long';
+import { KeyTypes } from '../tests/constants';
 
 import { encodePubkey } from './customPubkey';
 import { calculateFee, GasPrice } from './gasPrice';
@@ -82,10 +83,18 @@ export class SigningStargateClient extends StargateClient {
 	private readonly signer: OfflineSigner;
 	private readonly aminoTypes: AminoTypes;
 	private readonly gasPrice: GasPrice | undefined;
+	private readonly pubKeyType: string;
+	private readonly ignoreGetSequence: boolean;
 
-	public static async connectWithSigner(endpoint: string | HttpEndpoint, signer: OfflineSigner, options: SigningStargateClientOptions = {}): Promise<SigningStargateClient> {
+	public static async connectWithSigner(
+		endpoint: string | HttpEndpoint,
+		signer: OfflineSigner,
+		options: SigningStargateClientOptions = {},
+		pubKeyType?: KeyTypes,
+		ignoreGetSequence?: boolean,
+	): Promise<SigningStargateClient> {
 		const tmClient = await Tendermint34Client.connect(endpoint);
-		return new SigningStargateClient(tmClient, signer, options);
+		return new SigningStargateClient(tmClient, signer, options, pubKeyType, ignoreGetSequence);
 	}
 
 	/**
@@ -97,11 +106,11 @@ export class SigningStargateClient extends StargateClient {
 	 * When you try to use online functionality with such a signer, an
 	 * exception will be raised.
 	 */
-	public static async offline(signer: OfflineSigner, options: SigningStargateClientOptions = {}): Promise<SigningStargateClient> {
-		return new SigningStargateClient(undefined, signer, options);
+	public static async offline(signer: OfflineSigner, options: SigningStargateClientOptions = {}, pubKeyType?: KeyTypes, ignoreGetSequence?: boolean): Promise<SigningStargateClient> {
+		return new SigningStargateClient(undefined, signer, options, pubKeyType, ignoreGetSequence);
 	}
 
-	protected constructor(tmClient: Tendermint34Client | undefined, signer: OfflineSigner, options: SigningStargateClientOptions) {
+	protected constructor(tmClient: Tendermint34Client | undefined, signer: OfflineSigner, options: SigningStargateClientOptions, pubKeyType: KeyTypes = 'secp', ignoreGetSequence: boolean = false) {
 		super(tmClient, options);
 		// TODO: do we really want to set a default here? Ideally we could get it from the signer such that users only have to set it once.
 		const prefix = options.prefix ?? 'cosmos';
@@ -112,6 +121,8 @@ export class SigningStargateClient extends StargateClient {
 		this.broadcastTimeoutMs = options.broadcastTimeoutMs;
 		this.broadcastPollIntervalMs = options.broadcastPollIntervalMs;
 		this.gasPrice = options.gasPrice;
+		this.pubKeyType = pubKeyType === 'ed' ? pubkeyType.ed25519 : pubkeyType.secp256k1;
+		this.ignoreGetSequence = ignoreGetSequence;
 	}
 
 	public async simulate(signerAddress: string, messages: readonly EncodeObject[], memo: string | undefined): Promise<number> {
@@ -121,7 +132,7 @@ export class SigningStargateClient extends StargateClient {
 			throw new Error('Failed to retrieve account from signer');
 		}
 		const pubkey = encodeSecp256k1Pubkey(accountFromSigner.pubkey);
-		const { sequence } = await this.getSequence(signerAddress);
+		const { sequence } = this.ignoreGetSequence ? { sequence: 0 } : await this.getSequence(signerAddress);
 		const { gasInfo } = await this.forceGetQueryClient().tx.simulate(anyMsgs, memo, pubkey, sequence);
 		assertDefined(gasInfo);
 		return Uint53.fromString(gasInfo.gasUsed.toString()).toNumber();
@@ -232,7 +243,7 @@ export class SigningStargateClient extends StargateClient {
 		if (explicitSignerData) {
 			signerData = explicitSignerData;
 		} else {
-			const { accountNumber, sequence } = await this.getSequence(signerAddress);
+			const { accountNumber, sequence } = this.ignoreGetSequence ? { sequence: 0, accountNumber: 0 } : await this.getSequence(signerAddress);
 			const chainId = await this.getChainId();
 			signerData = {
 				accountNumber: accountNumber,
@@ -251,7 +262,7 @@ export class SigningStargateClient extends StargateClient {
 			throw new Error('Failed to retrieve account from signer');
 		}
 		const pubkey = encodePubkey({
-			type: pubkeyType.ed25519,
+			type: this.pubKeyType,
 			value: toBase64(accountFromSigner.pubkey),
 		});
 		const signMode = SignMode.SIGN_MODE_LEGACY_AMINO_JSON;
@@ -284,7 +295,7 @@ export class SigningStargateClient extends StargateClient {
 			throw new Error('Failed to retrieve account from signer');
 		}
 		const pubkey = encodePubkey({
-			type: pubkeyType.ed25519,
+			type: this.pubKeyType,
 			value: toBase64(accountFromSigner.pubkey),
 		});
 		const txBodyEncodeObject: TxBodyEncodeObject = {

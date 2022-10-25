@@ -12,7 +12,6 @@ export const getEdClient = (mnemonic: string) => {
 		didDoc,
 		didPrefix: 'did:ixo:',
 		did: 'did:ixo:' + didDoc.did,
-		didSov: 'did:sov:' + didDoc.did,
 
 		async getAccounts() {
 			return [
@@ -32,8 +31,8 @@ export const getEdClient = (mnemonic: string) => {
 			const signBytes = makeSignBytes(signDoc);
 			const signatureArray = await Ed25519.createSignature(signBytes, keypair);
 			const signatureBase64 = toBase64(signatureArray.slice(0, 64));
-			const verified = await Ed25519.verifySignature(signatureArray, signBytes, keypair.pubkey);
-			console.log({ verified });
+			// const verified = await Ed25519.verifySignature(signatureArray, signBytes, keypair.pubkey);
+			// console.log({ verified });
 
 			return {
 				signed: signDoc,

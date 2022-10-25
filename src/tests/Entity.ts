@@ -1,20 +1,20 @@
 import { Registry } from '@cosmjs/proto-signing';
-import base58 from 'bs58';
 import { MsgCreateEntity, MsgTransferEntity, MsgUpdateEntity, MsgUpdateEntityConfig } from '../codec/entity/tx';
-import { VerificationMethod } from '../codec/iid/iid';
 import { Verification } from '../codec/iid/tx';
 import { JsonToArray } from '../protoquery';
-import { createClient, fee, offlineWallet, alice } from './constants';
+import { createClient, getUser, getVerificationMethod } from './common';
+import { fee, WalletUsers } from './constants';
 
 export const CreateEntity = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/entity.MsgCreateEntity', MsgCreateEntity);
-
-	const ad = await offlineWallet.getAccounts();
-	const myAddress = ad[0].address;
-	const myPubKey = ad[0].pubkey;
 	const client = await createClient(myRegistry);
-	const did = offlineWallet.did;
+
+	const tester = getUser();
+	const account = (await tester.getAccounts())[0];
+	const myAddress = account.address;
+	const myPubKey = account.pubkey;
+	const did = tester.did;
 
 	const message = {
 		typeUrl: '/entity.MsgCreateEntity',
@@ -25,7 +25,7 @@ export const CreateEntity = async () => {
 			verification: [
 				Verification.fromPartial({
 					relationships: ['authentication'],
-					method: VerificationMethod.fromPartial({ id: did, type: 'EcdsaSecp256k1VerificationKey2019', publicKeyMultibase: base58.encode(myPubKey), controller: did }),
+					method: getVerificationMethod(did, myPubKey, did),
 				}),
 			],
 			accordedRight: [],
@@ -47,11 +47,14 @@ export const CreateEntity = async () => {
 export const TransferEntity = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/entity.MsgTransferEntity', MsgTransferEntity);
-
-	const ad = await offlineWallet.getAccounts();
-	const myAddress = ad[0].address;
 	const client = await createClient(myRegistry);
-	const did = offlineWallet.did;
+
+	const tester = getUser();
+	const account = (await tester.getAccounts())[0];
+	const myAddress = account.address;
+	const did = tester.did;
+
+	const alice = getUser(WalletUsers.alice);
 
 	const message = {
 		typeUrl: '/entity.MsgTransferEntity',
@@ -70,11 +73,12 @@ export const TransferEntity = async () => {
 export const UpdateEntity = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/entity.MsgUpdateEntity', MsgUpdateEntity);
-
-	const ad = await offlineWallet.getAccounts();
-	const myAddress = ad[0].address;
 	const client = await createClient(myRegistry);
-	const did = offlineWallet.did;
+
+	const tester = getUser();
+	const account = (await tester.getAccounts())[0];
+	const myAddress = account.address;
+	const did = tester.did;
 
 	const message = {
 		typeUrl: '/entity.MsgUpdateEntity',
@@ -92,10 +96,11 @@ export const UpdateEntity = async () => {
 export const UpdateConfigEntity = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/entity.MsgUpdateEntityConfig', MsgUpdateEntityConfig);
-
-	const ad = await offlineWallet.getAccounts();
-	const myAddress = ad[0].address;
 	const client = await createClient(myRegistry);
+
+	const tester = getUser();
+	const account = (await tester.getAccounts())[0];
+	const myAddress = account.address;
 
 	const message = {
 		typeUrl: '/entity.MsgUpdateEntityConfig',

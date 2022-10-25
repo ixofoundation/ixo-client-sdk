@@ -22,7 +22,8 @@ import {
 	MsgUpdateIidMeta,
 	Verification,
 } from '../codec/iid/tx';
-import { alice, bob, createClient, fee, offlineWallet } from './constants';
+import { createClient, getUser, getVerificationMethod } from './common';
+import { fee, WalletUsers } from './constants';
 
 const contextKey = 'context_key';
 const verificationMethodId = 'verification_method_id';
@@ -33,12 +34,13 @@ const serviceId = 'service_id';
 export const CreateIidDoc = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/iid.MsgCreateIidDocument', MsgCreateIidDocument);
-
-	const ad = await offlineWallet.getAccounts();
-	const myAddress = ad[0].address;
-	const myPubKey = ad[0].pubkey;
 	const client = await createClient(myRegistry);
-	const did = offlineWallet.did;
+
+	const tester = getUser();
+	const account = (await tester.getAccounts())[0];
+	const myAddress = account.address;
+	const myPubKey = account.pubkey;
+	const did = tester.did;
 
 	const message = {
 		typeUrl: '/iid.MsgCreateIidDocument',
@@ -47,7 +49,11 @@ export const CreateIidDoc = async () => {
 			verifications: [
 				Verification.fromPartial({
 					relationships: ['authentication'],
-					method: VerificationMethod.fromPartial({ id: did, type: 'EcdsaSecp256k1VerificationKey2019', publicKeyMultibase: base58.encode(myPubKey), controller: did }),
+					method: getVerificationMethod(did, myPubKey, did),
+				}),
+				Verification.fromPartial({
+					relationships: ['authentication'],
+					method: getVerificationMethod(did + `#${myAddress}`, myPubKey, did),
 				}),
 			],
 			signer: myAddress,
@@ -62,11 +68,14 @@ export const CreateIidDoc = async () => {
 export const UpdateIidDoc = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/iid.MsgUpdateIidDocument', MsgUpdateIidDocument);
-
-	const ad = await offlineWallet.getAccounts();
-	const myAddress = ad[0].address;
 	const client = await createClient(myRegistry);
-	const did = offlineWallet.did;
+
+	const tester = getUser();
+	const account = (await tester.getAccounts())[0];
+	const myAddress = account.address;
+	const did = tester.did;
+
+	const alice = getUser(WalletUsers.alice);
 
 	const message = {
 		typeUrl: '/iid.MsgUpdateIidDocument',
@@ -83,11 +92,12 @@ export const UpdateIidDoc = async () => {
 export const UpdateIidMeta = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/iid.MsgUpdateIidMeta', MsgUpdateIidMeta);
-
-	const ad = await offlineWallet.getAccounts();
-	const myAddress = ad[0].address;
 	const client = await createClient(myRegistry);
-	const did = offlineWallet.did;
+
+	const tester = getUser();
+	const account = (await tester.getAccounts())[0];
+	const myAddress = account.address;
+	const did = tester.did;
 
 	const message = {
 		typeUrl: '/iid.MsgUpdateIidMeta',
@@ -105,11 +115,12 @@ export const UpdateIidMeta = async () => {
 export const AddIidContext = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/iid.MsgAddIidContext', MsgAddIidContext);
-
-	const ad = await offlineWallet.getAccounts();
-	const myAddress = ad[0].address;
 	const client = await createClient(myRegistry);
-	const did = offlineWallet.did;
+
+	const tester = getUser();
+	const account = (await tester.getAccounts())[0];
+	const myAddress = account.address;
+	const did = tester.did;
 
 	const message = {
 		typeUrl: '/iid.MsgAddIidContext',
@@ -127,11 +138,12 @@ export const AddIidContext = async () => {
 export const DeleteIidContext = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/iid.MsgDeleteIidContext', MsgDeleteIidContext);
-
-	const ad = await offlineWallet.getAccounts();
-	const myAddress = ad[0].address;
 	const client = await createClient(myRegistry);
-	const did = offlineWallet.did;
+
+	const tester = getUser();
+	const account = (await tester.getAccounts())[0];
+	const myAddress = account.address;
+	const did = tester.did;
 
 	const message = {
 		typeUrl: '/iid.MsgDeleteIidContext',
@@ -149,11 +161,14 @@ export const DeleteIidContext = async () => {
 export const AddVerification = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/iid.MsgAddVerification', MsgAddVerification);
-
-	const ad = await offlineWallet.getAccounts();
-	const myAddress = ad[0].address;
 	const client = await createClient(myRegistry);
-	const did = offlineWallet.did;
+
+	const tester = getUser();
+	const account = (await tester.getAccounts())[0];
+	const myAddress = account.address;
+	const did = tester.did;
+
+	const alice = getUser(WalletUsers.alice);
 
 	const message = {
 		typeUrl: '/iid.MsgAddVerification',
@@ -174,11 +189,12 @@ export const AddVerification = async () => {
 export const SetVerificationRelationships = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/iid.MsgSetVerificationRelationships', MsgSetVerificationRelationships);
-
-	const ad = await offlineWallet.getAccounts();
-	const myAddress = ad[0].address;
 	const client = await createClient(myRegistry);
-	const did = offlineWallet.did;
+
+	const tester = getUser();
+	const account = (await tester.getAccounts())[0];
+	const myAddress = account.address;
+	const did = tester.did;
 
 	const message = {
 		typeUrl: '/iid.MsgSetVerificationRelationships',
@@ -197,11 +213,12 @@ export const SetVerificationRelationships = async () => {
 export const RevokeVerification = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/iid.MsgRevokeVerification', MsgRevokeVerification);
-
-	const ad = await offlineWallet.getAccounts();
-	const myAddress = ad[0].address;
 	const client = await createClient(myRegistry);
-	const did = offlineWallet.did;
+
+	const tester = getUser();
+	const account = (await tester.getAccounts())[0];
+	const myAddress = account.address;
+	const did = tester.did;
 
 	const message = {
 		typeUrl: '/iid.MsgRevokeVerification',
@@ -219,11 +236,12 @@ export const RevokeVerification = async () => {
 export const AddAccordedRight = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/iid.MsgAddAccordedRight', MsgAddAccordedRight);
-
-	const ad = await offlineWallet.getAccounts();
-	const myAddress = ad[0].address;
 	const client = await createClient(myRegistry);
-	const did = offlineWallet.did;
+
+	const tester = getUser();
+	const account = (await tester.getAccounts())[0];
+	const myAddress = account.address;
+	const did = tester.did;
 
 	const message = {
 		typeUrl: '/iid.MsgAddAccordedRight',
@@ -241,11 +259,12 @@ export const AddAccordedRight = async () => {
 export const DeleteAccordedRight = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/iid.MsgDeleteAccordedRight', MsgDeleteAccordedRight);
-
-	const ad = await offlineWallet.getAccounts();
-	const myAddress = ad[0].address;
 	const client = await createClient(myRegistry);
-	const did = offlineWallet.did;
+
+	const tester = getUser();
+	const account = (await tester.getAccounts())[0];
+	const myAddress = account.address;
+	const did = tester.did;
 
 	const message = {
 		typeUrl: '/iid.MsgDeleteAccordedRight',
@@ -263,11 +282,14 @@ export const DeleteAccordedRight = async () => {
 export const AddController = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/iid.MsgAddController', MsgAddController);
-
-	const ad = await offlineWallet.getAccounts();
-	const myAddress = ad[0].address;
 	const client = await createClient(myRegistry);
-	const did = offlineWallet.did;
+
+	const tester = getUser();
+	const account = (await tester.getAccounts())[0];
+	const myAddress = account.address;
+	const did = tester.did;
+
+	const bob = getUser(WalletUsers.bob);
 
 	const message = {
 		typeUrl: '/iid.MsgAddController',
@@ -285,11 +307,14 @@ export const AddController = async () => {
 export const DeleteController = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/iid.MsgDeleteController', MsgDeleteController);
-
-	const ad = await offlineWallet.getAccounts();
-	const myAddress = ad[0].address;
 	const client = await createClient(myRegistry);
-	const did = offlineWallet.did;
+
+	const tester = getUser();
+	const account = (await tester.getAccounts())[0];
+	const myAddress = account.address;
+	const did = tester.did;
+
+	const bob = getUser(WalletUsers.bob);
 
 	const message = {
 		typeUrl: '/iid.MsgDeleteController',
@@ -307,11 +332,12 @@ export const DeleteController = async () => {
 export const AddLinkedEntity = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/iid.MsgAddLinkedEntity', MsgAddLinkedEntity);
-
-	const ad = await offlineWallet.getAccounts();
-	const myAddress = ad[0].address;
 	const client = await createClient(myRegistry);
-	const did = offlineWallet.did;
+
+	const tester = getUser();
+	const account = (await tester.getAccounts())[0];
+	const myAddress = account.address;
+	const did = tester.did;
 
 	const message = {
 		typeUrl: '/iid.MsgAddLinkedEntity',
@@ -329,11 +355,12 @@ export const AddLinkedEntity = async () => {
 export const DeleteLinkedEntity = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/iid.MsgDeleteLinkedEntity', MsgDeleteLinkedEntity);
-
-	const ad = await offlineWallet.getAccounts();
-	const myAddress = ad[0].address;
 	const client = await createClient(myRegistry);
-	const did = offlineWallet.did;
+
+	const tester = getUser();
+	const account = (await tester.getAccounts())[0];
+	const myAddress = account.address;
+	const did = tester.did;
 
 	const message = {
 		typeUrl: '/iid.MsgDeleteLinkedEntity',
@@ -351,11 +378,12 @@ export const DeleteLinkedEntity = async () => {
 export const AddLinkedResource = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/iid.MsgAddLinkedResource', MsgAddLinkedResource);
-
-	const ad = await offlineWallet.getAccounts();
-	const myAddress = ad[0].address;
 	const client = await createClient(myRegistry);
-	const did = offlineWallet.did;
+
+	const tester = getUser();
+	const account = (await tester.getAccounts())[0];
+	const myAddress = account.address;
+	const did = tester.did;
 
 	const message = {
 		typeUrl: '/iid.MsgAddLinkedResource',
@@ -373,11 +401,12 @@ export const AddLinkedResource = async () => {
 export const DeleteLinkedResource = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/iid.MsgDeleteLinkedResource', MsgDeleteLinkedResource);
-
-	const ad = await offlineWallet.getAccounts();
-	const myAddress = ad[0].address;
 	const client = await createClient(myRegistry);
-	const did = offlineWallet.did;
+
+	const tester = getUser();
+	const account = (await tester.getAccounts())[0];
+	const myAddress = account.address;
+	const did = tester.did;
 
 	const message = {
 		typeUrl: '/iid.MsgDeleteLinkedResource',
@@ -395,11 +424,12 @@ export const DeleteLinkedResource = async () => {
 export const AddService = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/iid.MsgAddService', MsgAddService);
-
-	const ad = await offlineWallet.getAccounts();
-	const myAddress = ad[0].address;
 	const client = await createClient(myRegistry);
-	const did = offlineWallet.did;
+
+	const tester = getUser();
+	const account = (await tester.getAccounts())[0];
+	const myAddress = account.address;
+	const did = tester.did;
 
 	const message = {
 		typeUrl: '/iid.MsgAddService',
@@ -417,11 +447,12 @@ export const AddService = async () => {
 export const DeleteService = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/iid.MsgDeleteService', MsgDeleteService);
-
-	const ad = await offlineWallet.getAccounts();
-	const myAddress = ad[0].address;
 	const client = await createClient(myRegistry);
-	const did = offlineWallet.did;
+
+	const tester = getUser();
+	const account = (await tester.getAccounts())[0];
+	const myAddress = account.address;
+	const did = tester.did;
 
 	const message = {
 		typeUrl: '/iid.MsgDeleteService',

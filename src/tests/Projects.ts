@@ -1,41 +1,34 @@
-import { toBase64 } from '@cosmjs/encoding';
 import { Registry } from '@cosmjs/proto-signing';
 import base58 from 'bs58';
 import { CreateAgentDoc, CreateClaimDoc, CreateEvaluationDoc, UpdateAgentDoc, UpdateProjectStatusDoc, WithdrawFundsDoc } from '../codec/project/project';
 import { MsgCreateAgent, MsgCreateClaim, MsgCreateEvaluation, MsgCreateProject, MsgUpdateAgent, MsgUpdateProjectDoc, MsgUpdateProjectStatus, MsgWithdrawFunds } from '../codec/project/tx';
 import { JsonToArray } from '../protoquery/utils';
-import { createClient, offlineWallet, fee } from './constants';
-import { paymentTemplateId } from './Payments';
-import { getSecpClient } from './secpClient';
-
-// projectAddress: ixo1wfg2w8q7yegkdh3655szhf0pxtf9r3z9nnc30x for mnemonic below
-const project = getSecpClient('bike dose woman gospel discover mother door kite venue offer mention chuckle');
-const projectData = {
-	nodeDid: 'nodeDid',
-	requiredClaims: '500',
-	serviceEndpoint: 'serviceEndpoint',
-	createdOn: '2020-01-01T01:01:01.000Z',
-	createdBy: 'Creator',
-	status: '',
-	fees: {
-		'@context': '',
-		items: [{ '@type': 'OracleFee', id: paymentTemplateId }],
-	},
-};
-const claimId = 'claim_id';
-const templateId = 'template_id';
+import { createClient, getUser } from './common';
+import { constants, fee, WalletUsers } from './constants';
 
 /**
- * Requires CreatePaymentTemplate to be run first to create paymentTemplateId
+ * Requires CreatePaymentTemplate to be run first to create paymentTemplateId used
  */
 export const CreateProject = async () => {
+	const projectData = {
+		nodeDid: 'nodeDid',
+		requiredClaims: '500',
+		serviceEndpoint: 'serviceEndpoint',
+		createdOn: '2020-01-01T01:01:01.000Z',
+		createdBy: 'Creator',
+		status: '',
+		fees: {
+			'@context': '',
+			items: [{ '@type': 'OracleFee', id: constants.paymentTemplateId }],
+		},
+	};
 	const myRegistry = new Registry();
 	myRegistry.register('/project.MsgCreateProject', MsgCreateProject);
+	const client = await createClient(myRegistry, getUser(WalletUsers.project, constants.projectWalletType as any), constants.projectWalletType as any, true);
 
-	const ad = await offlineWallet.getAccounts();
-	const myAddress = ad[0].address;
-	const client = await createClient(myRegistry);
-	const did = offlineWallet.did;
+	const tester = getUser();
+	const did = tester.did;
+	const project = getUser(WalletUsers.project, constants.projectWalletType as any);
 
 	const projectDid = project.did;
 	const projectAccount = (await project.getAccounts())[0];
@@ -45,27 +38,30 @@ export const CreateProject = async () => {
 		value: MsgCreateProject.fromPartial({
 			senderDid: did,
 			projectDid: projectDid,
-			// pubKey: toBase64(projectAccount.pubkey),
 			pubKey: base58.encode(projectAccount.pubkey),
 			txHash: '',
 			projectAddress: projectAccount.address,
 			data: JsonToArray(JSON.stringify(projectData)),
 		}),
 	};
+	console.log({ CreateProject: message });
 
-	const response = await client.signAndBroadcast(myAddress, [message], fee);
+	const response = await client.signAndBroadcast(projectAccount.address, [message], fee);
 	return response;
 };
 
-export const UpdateProjectStatus = async () => {
+/**
+ * @param status one of 'CRETAED' | 'PENDING' | 'FUNDED' | 'STARTED'
+ */
+export const UpdateProjectStatus = async (status: string = 'CREATED') => {
 	const myRegistry = new Registry();
 	myRegistry.register('/project.MsgUpdateProjectStatus', MsgUpdateProjectStatus);
+	const client = await createClient(myRegistry, getUser(WalletUsers.project, constants.projectWalletType as any), constants.projectWalletType as any);
 
-	const ad = await offlineWallet.getAccounts();
-	const myAddress = ad[0].address;
-	const client = await createClient(myRegistry);
-	const did = offlineWallet.did;
+	const tester = getUser();
+	const did = tester.did;
 
+	const project = getUser(WalletUsers.project, constants.projectWalletType as any);
 	const projectDid = project.did;
 	const projectAccount = (await project.getAccounts())[0];
 
@@ -75,24 +71,27 @@ export const UpdateProjectStatus = async () => {
 			txHash: '',
 			senderDid: did,
 			projectDid: projectDid,
-			data: UpdateProjectStatusDoc.fromPartial({ status: 'CREATED' }),
+			data: UpdateProjectStatusDoc.fromPartial({ status }),
 			projectAddress: projectAccount.address,
 		}),
 	};
 
-	const response = await client.signAndBroadcast(myAddress, [message], fee);
+	const response = await client.signAndBroadcast(projectAccount.address, [message], fee);
 	return response;
 };
 
-export const CreateAgent = async () => {
+/**
+ * @param role one of 'SA' | ''.
+ */
+export const CreateAgent = async (role: string = 'SA') => {
 	const myRegistry = new Registry();
 	myRegistry.register('/project.MsgCreateAgent', MsgCreateAgent);
+	const client = await createClient(myRegistry, getUser(WalletUsers.project, constants.projectWalletType as any), constants.projectWalletType as any);
 
-	const ad = await offlineWallet.getAccounts();
-	const myAddress = ad[0].address;
-	const client = await createClient(myRegistry);
-	const did = offlineWallet.did;
+	const tester = getUser();
+	const did = tester.did;
 
+	const project = getUser(WalletUsers.project, constants.projectWalletType as any);
 	const projectDid = project.did;
 	const projectAccount = (await project.getAccounts())[0];
 
@@ -102,24 +101,27 @@ export const CreateAgent = async () => {
 			txHash: '',
 			senderDid: did,
 			projectDid: projectDid,
-			data: CreateAgentDoc.fromPartial({ agentDid: did, role: '' }),
+			data: CreateAgentDoc.fromPartial({ agentDid: did, role }),
 			projectAddress: projectAccount.address,
 		}),
 	};
 
-	const response = await client.signAndBroadcast(myAddress, [message], fee);
+	const response = await client.signAndBroadcast(projectAccount.address, [message], fee);
 	return response;
 };
 
+/**
+ * Not implemented on chain!!!
+ */
 export const UpdateAgent = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/project.MsgUpdateAgent', MsgUpdateAgent);
+	const client = await createClient(myRegistry, getUser(WalletUsers.project, constants.projectWalletType as any), constants.projectWalletType as any);
 
-	const ad = await offlineWallet.getAccounts();
-	const myAddress = ad[0].address;
-	const client = await createClient(myRegistry);
-	const did = offlineWallet.did;
+	const tester = getUser();
+	const did = tester.did;
 
+	const project = getUser(WalletUsers.project, constants.projectWalletType as any);
 	const projectDid = project.did;
 	const projectAccount = (await project.getAccounts())[0];
 
@@ -129,24 +131,24 @@ export const UpdateAgent = async () => {
 			txHash: '',
 			senderDid: did,
 			projectDid: projectDid,
-			data: UpdateAgentDoc.fromPartial({ did: did, status: '', role: '' }),
+			data: UpdateAgentDoc.fromPartial({ did: did, status: 'AWESOME' }),
 			projectAddress: projectAccount.address,
 		}),
 	};
 
-	const response = await client.signAndBroadcast(myAddress, [message], fee);
+	const response = await client.signAndBroadcast(projectAccount.address, [message], fee);
 	return response;
 };
 
 export const CreateClaim = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/project.MsgCreateClaim', MsgCreateClaim);
+	const client = await createClient(myRegistry, getUser(WalletUsers.project, constants.projectWalletType as any), constants.projectWalletType as any);
 
-	const ad = await offlineWallet.getAccounts();
-	const myAddress = ad[0].address;
-	const client = await createClient(myRegistry);
-	const did = offlineWallet.did;
+	const tester = getUser();
+	const did = tester.did;
 
+	const project = getUser(WalletUsers.project, constants.projectWalletType as any);
 	const projectDid = project.did;
 	const projectAccount = (await project.getAccounts())[0];
 
@@ -156,24 +158,24 @@ export const CreateClaim = async () => {
 			txHash: '',
 			senderDid: did,
 			projectDid: projectDid,
-			data: CreateClaimDoc.fromPartial({ claimId: claimId, claimTemplateId: templateId }),
+			data: CreateClaimDoc.fromPartial({ claimId: constants.projectClaimId, claimTemplateId: constants.projectTemplateId }),
 			projectAddress: projectAccount.address,
 		}),
 	};
 
-	const response = await client.signAndBroadcast(myAddress, [message], fee);
+	const response = await client.signAndBroadcast(projectAccount.address, [message], fee);
 	return response;
 };
 
 export const CreateEvaluation = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/project.MsgCreateEvaluation', MsgCreateEvaluation);
+	const client = await createClient(myRegistry, getUser(WalletUsers.project, constants.projectWalletType as any), constants.projectWalletType as any);
 
-	const ad = await offlineWallet.getAccounts();
-	const myAddress = ad[0].address;
-	const client = await createClient(myRegistry);
-	const did = offlineWallet.did;
+	const tester = getUser();
+	const did = tester.did;
 
+	const project = getUser(WalletUsers.project, constants.projectWalletType as any);
 	const projectDid = project.did;
 	const projectAccount = (await project.getAccounts())[0];
 
@@ -183,24 +185,26 @@ export const CreateEvaluation = async () => {
 			txHash: '',
 			senderDid: did,
 			projectDid: projectDid,
-			data: CreateEvaluationDoc.fromPartial({ claimId: claimId, status: '1' }),
+			data: CreateEvaluationDoc.fromPartial({ claimId: constants.projectClaimId, status: '1' }),
 			projectAddress: projectAccount.address,
 		}),
 	};
 
-	const response = await client.signAndBroadcast(myAddress, [message], fee);
+	const response = await client.signAndBroadcast(projectAccount.address, [message], fee);
 	return response;
 };
 
 export const WithdrawFunds = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/project.MsgWithdrawFunds', MsgWithdrawFunds);
-
-	const ad = await offlineWallet.getAccounts();
-	const myAddress = ad[0].address;
 	const client = await createClient(myRegistry);
-	const did = offlineWallet.did;
 
+	const tester = getUser();
+	const account = (await tester.getAccounts())[0];
+	const myAddress = account.address;
+	const did = tester.did;
+
+	const project = getUser(WalletUsers.project, constants.projectWalletType as any);
 	const projectDid = project.did;
 
 	const message = {
@@ -210,7 +214,7 @@ export const WithdrawFunds = async () => {
 			data: WithdrawFundsDoc.fromPartial({
 				projectDid: projectDid,
 				recipientDid: did,
-				amount: '1000000',
+				amount: '100000',
 				isRefund: true,
 			}),
 			senderAddress: myAddress,
@@ -224,12 +228,12 @@ export const WithdrawFunds = async () => {
 export const UpdateProjectDoc = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/project.MsgUpdateProjectDoc', MsgUpdateProjectDoc);
+	const client = await createClient(myRegistry, getUser(WalletUsers.project, constants.projectWalletType as any), constants.projectWalletType as any);
 
-	const ad = await offlineWallet.getAccounts();
-	const myAddress = ad[0].address;
-	const client = await createClient(myRegistry);
-	const did = offlineWallet.did;
+	const tester = getUser();
+	const did = tester.did;
 
+	const project = getUser(WalletUsers.project, constants.projectWalletType as any);
 	const projectDid = project.did;
 	const projectAccount = (await project.getAccounts())[0];
 
@@ -258,6 +262,6 @@ export const UpdateProjectDoc = async () => {
 		}),
 	};
 
-	const response = await client.signAndBroadcast(myAddress, [message], fee);
+	const response = await client.signAndBroadcast(projectAccount.address, [message], fee);
 	return response;
 };

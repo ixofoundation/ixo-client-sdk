@@ -1,25 +1,26 @@
 import { sha256 } from '@cosmjs/crypto';
 import { toUtf8 } from '@cosmjs/encoding';
-import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
+import { AccountData, DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
+import base58 from 'bs58';
 import sovrin from 'sovrin-did';
+import { generateSecpDid } from '../utils/did';
 
-export const getSecpClient = (mnemonic: string) => {
-	const didDoc = sovrin.fromSeed(sha256(toUtf8(mnemonic)).slice(0, 32));
+export const getSecpClient = async (mnemonic: string) => {
+	// const didDoc = sovrin.fromSeed(sha256(toUtf8(mnemonic)).slice(0, 32));
+	const wallet = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, { prefix: 'ixo' });
+	const account = (await wallet.getAccounts())[0];
 
 	const secpClient = {
 		mnemonic,
-		didDoc,
+		didDoc: '',
 		didPrefix: 'did:ixo:',
-		did: 'did:ixo:' + didDoc.did,
-		didSov: 'did:sov:' + didDoc.did,
+		did: generateSecpDid(base58.encode(account.pubkey), 'ixo'),
 
 		async getAccounts() {
-			const wallet = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, { prefix: 'ixo' });
-			return await wallet.getAccounts();
+			return (await wallet.getAccounts()) as AccountData[];
 		},
 
 		async signDirect(signerAddress: any, signDoc: any) {
-			const wallet = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, { prefix: 'ixo' });
 			return await wallet.signDirect(signerAddress, signDoc);
 		},
 	};

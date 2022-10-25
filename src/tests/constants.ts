@@ -1,60 +1,48 @@
-import { SigningStargateClient as CustomSigningStargateClient } from '../utils/customClient';
-import { assertIsDeliverTxSuccess, DeliverTxResponse, SigningStargateClient } from '@cosmjs/stargate';
-import { accountFromAny } from '../utils/EdAccountHandler';
-import { getEdClient } from './edClient';
-import { getSecpClient } from './secpClient';
+import { generateId } from './common';
 
-// const RPC_URL = process.env.RPC_URL || 'https://de56-102-182-65-22.sa.ngrok.io' || 'https://devnet.ixo.earth/rpc/';
-const RPC_URL = 'https://devnet.ixo.earth/rpc/';
-// const RPC_URL = 'https://testnet.ixo.earth/rpc/';
+export const RPC_URL = process.env.RPC_URL || 'https://devnet.ixo.earth/rpc/';
 
-// const keyType = 'ed';
-const keyType = 'secp';
+export type KeyTypes = 'ed' | 'secp';
+export const keyType: KeyTypes = 'secp';
 
-// const mnemonic = 'creek obvious bamboo ozone dwarf above hill muscle image fossil drastic toy';
-const mnemonic = 'basket mechanic myself capable shoe then home magic cream edge seminar artefact';
+export enum WalletUsers {
+	tester = 'tester',
+	alice = 'alice',
+	bob = 'bob',
+	project = 'project',
+	bond = 'bond',
+}
 
-// @ts-ignore
-export const offlineWallet = keyType === 'ed' ? getEdClient(mnemonic) : getSecpClient(mnemonic);
-export const alice = getSecpClient('century exile seat unknown hello maze genre table whale hockey rubber begin');
-export const bob = getSecpClient('pilot direct attitude scene fog second word until tube dizzy unfold glad');
+export let constants: ReturnType<typeof generateConstants>;
 
-export const createClient = async (myRegistry): Promise<SigningStargateClient> => {
-	// @ts-ignore
-	return await (keyType === 'ed' ? CustomSigningStargateClient : SigningStargateClient).connectWithSigner(
-		RPC_URL, // Replace with your own RPC endpoint
-		// @ts-ignore
-		offlineWallet,
-		{
-			registry: myRegistry,
-			accountParser: accountFromAny,
-		},
-	);
+export const generateConstants = () => {
+	const newConstants = {
+		// payments
+		paymentTemplateId: `payment:template:${generateId(10)}`,
+		paymentContractId: `payment:contract:${generateId(10)}`,
+		paymentSubscripionId: `payment:subscription:${generateId(10)}`,
+		paymentContractRecipient: { address: 'ixo107pmtx9wyndup8f9lgj6d7dnfq5kuf3sapg0vx', percentage: '100' },
+
+		// projects
+		projectClaimId: generateId(),
+		projectTemplateId: generateId(),
+		projectWalletType: 'ed',
+
+		// bonds
+		bondToken: generateId(3),
+		bondReserveToken: 'uixo',
+	};
+	constants = newConstants;
+	console.log({ constants });
+	return newConstants;
 };
 
 export const fee = {
 	amount: [
 		{
 			denom: 'uixo',
-			amount: '1000000',
+			amount: '100000',
 		},
 	],
 	gas: '3000000',
-};
-
-export const checkSuccess = (res: DeliverTxResponse) => {
-	let isSuccess = true;
-	try {
-		assertIsDeliverTxSuccess(res);
-	} catch (error) {
-		console.log({ error });
-		isSuccess = false;
-	}
-	expect(isSuccess).toBeTruthy();
-};
-
-export const testMsg = (message: string, action: () => Promise<DeliverTxResponse>) => {
-	return test(message, async () => {
-		checkSuccess(await action());
-	});
 };
