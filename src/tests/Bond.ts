@@ -102,7 +102,10 @@ export const EditBond = async () => {
 	return response;
 };
 
-export const SetNextAlpha = async () => {
+/**
+ * @param alpha alpha string number as e18
+ */
+export const SetNextAlpha = async (alpha: string = '520000000000000000') => {
 	const myRegistry = new Registry();
 	myRegistry.register('/bonds.MsgSetNextAlpha', MsgSetNextAlpha);
 	const client = await createClient(myRegistry);
@@ -119,7 +122,7 @@ export const SetNextAlpha = async () => {
 		typeUrl: '/bonds.MsgSetNextAlpha',
 		value: MsgSetNextAlpha.fromPartial({
 			bondDid: bondDid,
-			alpha: '520000000000000000',
+			alpha,
 			editorDid: did,
 			editorAddress: myAddress,
 		}),
@@ -129,7 +132,10 @@ export const SetNextAlpha = async () => {
 	return response;
 };
 
-export const UpdateBondState = async () => {
+/**
+ * @param state one of 'HATCH' | 'OPEN' | 'SETTLE' | 'FAILED'
+ */
+export const UpdateBondState = async (state: 'HATCH' | 'OPEN' | 'SETTLE' | 'FAILED') => {
 	const myRegistry = new Registry();
 	myRegistry.register('/bonds.MsgUpdateBondState', MsgUpdateBondState);
 	const client = await createClient(myRegistry);
@@ -146,7 +152,7 @@ export const UpdateBondState = async () => {
 		typeUrl: '/bonds.MsgUpdateBondState',
 		value: MsgUpdateBondState.fromPartial({
 			bondDid: bondDid,
-			state: 'SETTLE',
+			state: state,
 			editorDid: did,
 			editorAddress: myAddress,
 		}),
@@ -156,7 +162,7 @@ export const UpdateBondState = async () => {
 	return response;
 };
 
-export const Buy = async () => {
+export const Buy = async (amount: number) => {
 	const myRegistry = new Registry();
 	myRegistry.register('/bonds.MsgBuy', MsgBuy);
 	const client = await createClient(myRegistry);
@@ -176,7 +182,7 @@ export const Buy = async () => {
 			buyerAddress: myAddress,
 			amount: Coin.fromPartial({
 				denom: constants.bondToken,
-				amount: '20000',
+				amount: amount.toString(),
 			}),
 			maxPrices: [
 				Coin.fromPartial({
@@ -192,7 +198,7 @@ export const Buy = async () => {
 	return response;
 };
 
-export const Sell = async () => {
+export const Sell = async (amount: number) => {
 	const myRegistry = new Registry();
 	myRegistry.register('/bonds.MsgSell', MsgSell);
 	const client = await createClient(myRegistry);
@@ -212,7 +218,7 @@ export const Sell = async () => {
 			sellerAddress: myAddress,
 			amount: Coin.fromPartial({
 				denom: constants.bondToken,
-				amount: '200000',
+				amount: amount.toString(),
 			}),
 			bondDid: bondDid,
 		}),
@@ -254,7 +260,7 @@ export const Swap = async () => {
 	return response;
 };
 
-export const MakeOutcomePayment = async () => {
+export const MakeOutcomePayment = async (amount: number) => {
 	const myRegistry = new Registry();
 	myRegistry.register('/bonds.MsgMakeOutcomePayment', MsgMakeOutcomePayment);
 	const client = await createClient(myRegistry);
@@ -272,7 +278,7 @@ export const MakeOutcomePayment = async () => {
 		value: MsgMakeOutcomePayment.fromPartial({
 			senderDid: did,
 			senderAddress: myAddress,
-			amount: '1000',
+			amount: amount.toString(),
 			bondDid: bondDid,
 		}),
 	};
@@ -307,7 +313,7 @@ export const WithdrawShare = async () => {
 	return response;
 };
 
-export const WithdrawReserve = async () => {
+export const WithdrawReserve = async (amount: number) => {
 	const myRegistry = new Registry();
 	myRegistry.register('/bonds.MsgWithdrawReserve', MsgWithdrawReserve);
 	const client = await createClient(myRegistry);
@@ -325,7 +331,7 @@ export const WithdrawReserve = async () => {
 		value: MsgWithdrawReserve.fromPartial({
 			withdrawerDid: did,
 			withdrawerAddress: myAddress,
-			amount: [Coin.fromPartial({ denom: constants.bondReserveToken, amount: '1' })],
+			amount: [Coin.fromPartial({ denom: constants.bondReserveToken, amount: amount.toString() })],
 			bondDid: bondDid,
 		}),
 	};

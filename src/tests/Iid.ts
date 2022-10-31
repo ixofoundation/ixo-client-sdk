@@ -1,5 +1,4 @@
 import { Registry } from '@cosmjs/proto-signing';
-import base58 from 'bs58';
 import { AccordedRight, Context, IidDocument, IidMetadata, LinkedEntity, LinkedResource, Service, VerificationMethod } from '../codec/iid/iid';
 import {
 	MsgAddAccordedRight,
@@ -23,39 +22,40 @@ import {
 	Verification,
 } from '../codec/iid/tx';
 import { createClient, getUser, getVerificationMethod } from './common';
-import { fee, WalletUsers } from './constants';
+import { constants, fee, WalletUsers } from './constants';
 
-const contextKey = 'context_key';
-const verificationMethodId = 'verification_method_id';
-const linkedEntityId = 'linked_entity_id';
-const linkedResourceId = 'linked_resource_id';
-const serviceId = 'service_id';
-
-export const CreateIidDoc = async () => {
+export const CreateIidDoc = async (signer: WalletUsers = WalletUsers.tester, userToAddToVerifications?: WalletUsers) => {
 	const myRegistry = new Registry();
 	myRegistry.register('/iid.MsgCreateIidDocument', MsgCreateIidDocument);
-	const client = await createClient(myRegistry);
+	const client = await createClient(myRegistry, getUser(signer));
 
-	const tester = getUser();
-	const account = (await tester.getAccounts())[0];
+	const user = getUser(signer);
+	const account = (await user.getAccounts())[0];
 	const myAddress = account.address;
 	const myPubKey = account.pubkey;
-	const did = tester.did;
+	const did = user.did;
+
+	let verifications = [
+		Verification.fromPartial({ relationships: ['authentication'], method: getVerificationMethod(did, myPubKey, did) }),
+		Verification.fromPartial({ relationships: ['authentication'], method: getVerificationMethod(`${did}#${myAddress}`, myPubKey, did) }),
+	];
+
+	if (userToAddToVerifications) {
+		const eUser = getUser(userToAddToVerifications);
+		const eUserAccount = (await eUser.getAccounts())[0];
+		const eUserAddress = eUserAccount.address;
+		const eUserPubKey = eUserAccount.pubkey;
+		const eUserdid = eUser.did;
+
+		verifications.push(Verification.fromPartial({ relationships: ['authentication'], method: getVerificationMethod(eUserdid, eUserPubKey, eUserdid) }));
+		verifications.push(Verification.fromPartial({ relationships: ['authentication'], method: getVerificationMethod(`${eUserdid}#${eUserAddress}`, eUserPubKey, eUserdid) }));
+	}
 
 	const message = {
 		typeUrl: '/iid.MsgCreateIidDocument',
 		value: MsgCreateIidDocument.fromPartial({
 			id: did,
-			verifications: [
-				Verification.fromPartial({
-					relationships: ['authentication'],
-					method: getVerificationMethod(did, myPubKey, did),
-				}),
-				Verification.fromPartial({
-					relationships: ['authentication'],
-					method: getVerificationMethod(did + `#${myAddress}`, myPubKey, did),
-				}),
-			],
+			verifications,
 			signer: myAddress,
 			controllers: [did],
 		}),
@@ -80,7 +80,7 @@ export const UpdateIidDoc = async () => {
 	const message = {
 		typeUrl: '/iid.MsgUpdateIidDocument',
 		value: MsgUpdateIidDocument.fromPartial({
-			doc: IidDocument.fromPartial({ id: did, controller: [did, alice.did] }),
+			doc: IidDocument.fromPartial({ id: did, controller: [alice.did] }),
 			signer: myAddress,
 		}),
 	};
@@ -126,7 +126,7 @@ export const AddIidContext = async () => {
 		typeUrl: '/iid.MsgAddIidContext',
 		value: MsgAddIidContext.fromPartial({
 			id: did,
-			context: Context.fromPartial({ key: contextKey, val: 'val' }),
+			context: Context.fromPartial({ key: constants.contextKey, val: 'val' }),
 			signer: myAddress,
 		}),
 	};
@@ -149,7 +149,7 @@ export const DeleteIidContext = async () => {
 		typeUrl: '/iid.MsgDeleteIidContext',
 		value: MsgDeleteIidContext.fromPartial({
 			id: did,
-			contextKey: contextKey,
+			contextKey: constants.contextKey,
 			signer: myAddress,
 		}),
 	};
@@ -158,7 +158,10 @@ export const DeleteIidContext = async () => {
 	return response;
 };
 
-export const AddVerification = async () => {
+/**
+ * @param relationships list with values: 'authentication' | 'assertionMethod' | 'keyAgreement' | 'capabilityInvocation' | 'capabilityDelegation'
+ */
+export const AddVerification = async (relationships: string[] = ['authentication']) => {
 	const myRegistry = new Registry();
 	myRegistry.register('/iid.MsgAddVerification', MsgAddVerification);
 	const client = await createClient(myRegistry);
@@ -169,14 +172,15 @@ export const AddVerification = async () => {
 	const did = tester.did;
 
 	const alice = getUser(WalletUsers.alice);
+	const aliceAccount = (await alice.getAccounts())[0];
 
 	const message = {
 		typeUrl: '/iid.MsgAddVerification',
 		value: MsgAddVerification.fromPartial({
 			id: did,
 			verification: Verification.fromPartial({
-				relationships: [],
-				method: VerificationMethod.fromPartial({ id: verificationMethodId, type: 'EcdsaSecp256k1VerificationKey2019', publicKeyMultibase: base58.encode((await alice.getAccounts())[0].pubkey), controller: alice.did }),
+				relationships: relationships,
+				method: getVerificationMethod(alice.did, aliceAccount.pubkey, alice.did),
 			}),
 			signer: myAddress,
 		}),
@@ -186,7 +190,10 @@ export const AddVerification = async () => {
 	return response;
 };
 
-export const SetVerificationRelationships = async () => {
+/**
+ * @param relationships list with values: 'authentication' | 'assertionMethod' | 'keyAgreement' | 'capabilityInvocation' | 'capabilityDelegation'
+ */
+export const SetVerificationRelationships = async (relationships: string[] = ['authentication']) => {
 	const myRegistry = new Registry();
 	myRegistry.register('/iid.MsgSetVerificationRelationships', MsgSetVerificationRelationships);
 	const client = await createClient(myRegistry);
@@ -196,12 +203,14 @@ export const SetVerificationRelationships = async () => {
 	const myAddress = account.address;
 	const did = tester.did;
 
+	const alice = getUser(WalletUsers.alice);
+
 	const message = {
 		typeUrl: '/iid.MsgSetVerificationRelationships',
 		value: MsgSetVerificationRelationships.fromPartial({
 			id: did,
-			methodId: verificationMethodId,
-			relationships: ['authentication'],
+			methodId: alice.did,
+			relationships: relationships,
 			signer: myAddress,
 		}),
 	};
@@ -220,11 +229,13 @@ export const RevokeVerification = async () => {
 	const myAddress = account.address;
 	const did = tester.did;
 
+	const alice = getUser(WalletUsers.alice);
+
 	const message = {
 		typeUrl: '/iid.MsgRevokeVerification',
 		value: MsgRevokeVerification.fromPartial({
 			id: did,
-			methodId: verificationMethodId,
+			methodId: alice.did,
 			signer: myAddress,
 		}),
 	};
@@ -241,13 +252,20 @@ export const AddAccordedRight = async () => {
 	const tester = getUser();
 	const account = (await tester.getAccounts())[0];
 	const myAddress = account.address;
-	const did = tester.did;
+
+	const accordedRight = getUser(WalletUsers.accordedRight);
 
 	const message = {
 		typeUrl: '/iid.MsgAddAccordedRight',
 		value: MsgAddAccordedRight.fromPartial({
-			id: did,
-			accordedRight: AccordedRight.fromPartial({}),
+			id: accordedRight.did,
+			accordedRight: AccordedRight.fromPartial({
+				type: 'type',
+				id: constants.accordedRightId,
+				mechanism: 'mechanism',
+				message: 'message',
+				service: 'service',
+			}),
 			signer: myAddress,
 		}),
 	};
@@ -264,13 +282,14 @@ export const DeleteAccordedRight = async () => {
 	const tester = getUser();
 	const account = (await tester.getAccounts())[0];
 	const myAddress = account.address;
-	const did = tester.did;
+
+	const accordedRight = getUser(WalletUsers.accordedRight);
 
 	const message = {
 		typeUrl: '/iid.MsgDeleteAccordedRight',
 		value: MsgDeleteAccordedRight.fromPartial({
-			id: did,
-			rightId: '',
+			id: accordedRight.did,
+			rightId: constants.accordedRightId,
 			signer: myAddress,
 		}),
 	};
@@ -343,7 +362,7 @@ export const AddLinkedEntity = async () => {
 		typeUrl: '/iid.MsgAddLinkedEntity',
 		value: MsgAddLinkedEntity.fromPartial({
 			id: did,
-			linkedEntity: LinkedEntity.fromPartial({ id: linkedEntityId }),
+			linkedEntity: LinkedEntity.fromPartial({ id: constants.linkedEntityId }),
 			signer: myAddress,
 		}),
 	};
@@ -366,7 +385,7 @@ export const DeleteLinkedEntity = async () => {
 		typeUrl: '/iid.MsgDeleteLinkedEntity',
 		value: MsgDeleteLinkedEntity.fromPartial({
 			id: did,
-			entityId: linkedEntityId,
+			entityId: constants.linkedEntityId,
 			signer: myAddress,
 		}),
 	};
@@ -389,7 +408,7 @@ export const AddLinkedResource = async () => {
 		typeUrl: '/iid.MsgAddLinkedResource',
 		value: MsgAddLinkedResource.fromPartial({
 			id: did,
-			linkedResource: LinkedResource.fromPartial({ id: linkedResourceId, description: 'Description' }),
+			linkedResource: LinkedResource.fromPartial({ id: constants.linkedResourceId, description: 'Description' }),
 			signer: myAddress,
 		}),
 	};
@@ -412,7 +431,7 @@ export const DeleteLinkedResource = async () => {
 		typeUrl: '/iid.MsgDeleteLinkedResource',
 		value: MsgDeleteLinkedResource.fromPartial({
 			id: did,
-			resourceId: linkedResourceId,
+			resourceId: constants.linkedResourceId,
 			signer: myAddress,
 		}),
 	};
@@ -435,7 +454,7 @@ export const AddService = async () => {
 		typeUrl: '/iid.MsgAddService',
 		value: MsgAddService.fromPartial({
 			id: did,
-			serviceData: Service.fromPartial({ id: serviceId }),
+			serviceData: Service.fromPartial({ id: constants.serviceId, serviceEndpoint: 'https://ixo.world', type: 'awesome' }),
 			signer: myAddress,
 		}),
 	};
@@ -458,7 +477,7 @@ export const DeleteService = async () => {
 		typeUrl: '/iid.MsgDeleteService',
 		value: MsgDeleteService.fromPartial({
 			id: did,
-			serviceId: serviceId,
+			serviceId: constants.serviceId,
 			signer: myAddress,
 		}),
 	};

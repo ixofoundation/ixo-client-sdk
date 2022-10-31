@@ -44,16 +44,23 @@ export const CreateProject = async () => {
 			data: JsonToArray(JSON.stringify(projectData)),
 		}),
 	};
-	console.log({ CreateProject: message });
 
-	const response = await client.signAndBroadcast(projectAccount.address, [message], fee);
+	const response = await client.signAndBroadcast(projectAccount.address, [message], {
+		amount: [
+			{
+				denom: 'uixo',
+				amount: '1000000',
+			},
+		],
+		gas: '3000000',
+	});
 	return response;
 };
 
 /**
  * @param status one of 'CRETAED' | 'PENDING' | 'FUNDED' | 'STARTED'
  */
-export const UpdateProjectStatus = async (status: string = 'CREATED') => {
+export const UpdateProjectStatus = async (status: 'CRETAED' | 'PENDING' | 'FUNDED' | 'STARTED') => {
 	const myRegistry = new Registry();
 	myRegistry.register('/project.MsgUpdateProjectStatus', MsgUpdateProjectStatus);
 	const client = await createClient(myRegistry, getUser(WalletUsers.project, constants.projectWalletType as any), constants.projectWalletType as any);

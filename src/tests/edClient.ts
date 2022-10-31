@@ -1,5 +1,5 @@
 import { Ed25519, sha256 } from '@cosmjs/crypto';
-import { toUtf8, Bech32, toBase64, fromBase64 } from '@cosmjs/encoding';
+import { toUtf8, Bech32, toBase64 } from '@cosmjs/encoding';
 import { makeSignBytes } from '@cosmjs/proto-signing';
 import { decode } from 'bs58';
 import sovrin from 'sovrin-did';
@@ -31,8 +31,6 @@ export const getEdClient = (mnemonic: string) => {
 			const signBytes = makeSignBytes(signDoc);
 			const signatureArray = await Ed25519.createSignature(signBytes, keypair);
 			const signatureBase64 = toBase64(signatureArray.slice(0, 64));
-			// const verified = await Ed25519.verifySignature(signatureArray, signBytes, keypair.pubkey);
-			// console.log({ verified });
 
 			return {
 				signed: signDoc,

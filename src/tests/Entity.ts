@@ -13,7 +13,6 @@ export const CreateEntity = async () => {
 	const tester = getUser();
 	const account = (await tester.getAccounts())[0];
 	const myAddress = account.address;
-	const myPubKey = account.pubkey;
 	const did = tester.did;
 
 	const message = {
@@ -21,26 +20,32 @@ export const CreateEntity = async () => {
 		value: MsgCreateEntity.fromPartial({
 			entityType: 'asset',
 			entityStatus: 0,
-			controller: [did],
-			verification: [
-				Verification.fromPartial({
-					relationships: ['authentication'],
-					method: getVerificationMethod(did, myPubKey, did),
-				}),
-			],
-			accordedRight: [],
-			service: [],
-			linkedResource: [],
-			linkedEntity: [],
-			deactivated: false,
-			stage: 'stage',
+			// controller: [did],
+			// verification: [
+			// 	Verification.fromPartial({
+			// 		relationships: ['authentication'],
+			// 		method: getVerificationMethod(did, myPubKey, did),
+			// 	}),
+			// ],
+			// accordedRight: [],
+			// service: [],
+			// linkedResource: [],
+			// linkedEntity: [],
+			// deactivated: false,
+			// stage: 'stage',
 			ownerDid: did,
 			ownerAddress: myAddress,
-			data: JsonToArray(JSON.stringify({})),
+			// data: JsonToArray(JSON.stringify({})),
 		}),
 	};
 
 	const response = await client.signAndBroadcast(myAddress, [message], fee);
+	console.log(
+		JSON.parse(response.rawLog)[0]
+			['events'].find((e: any) => e.type === 'iid.IidDocumentCreatedEvent')
+			['attributes'].find((e: any) => e.key === 'did')
+			['value'].replaceAll('"', ''),
+	);
 	return response;
 };
 

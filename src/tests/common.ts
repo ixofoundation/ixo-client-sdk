@@ -14,7 +14,7 @@ import { accountFromAny } from '../utils/EdAccountHandler';
 
 export const generateId = (length: number = 12) => {
 	var result = '';
-	var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+	var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 	var charactersLength = characters.length;
 	for (var i = 0; i < length; i++) {
 		result += characters.charAt(Math.floor(Math.random() * charactersLength));
@@ -33,7 +33,7 @@ export const sendFaucet = async (address: string) => {
 	return await axios.post('https://devnet-faucet.ixo.earth/credit', { denom: 'uixo', address: address });
 };
 
-export const getVerificationMethod = (did: string, pubkey: Uint8Array, controller: string, type?: KeyTypes) => {
+export const getVerificationMethod = (did: string, pubkey: Uint8Array, controller: string, type: KeyTypes = keyType) => {
 	return VerificationMethod.fromPartial({ id: did, type: type === 'ed' ? 'Ed25519VerificationKey2018' : 'EcdsaSecp256k1VerificationKey2019', publicKeyMultibase: 'F' + toHex(pubkey), controller: controller });
 };
 
@@ -44,7 +44,8 @@ export let wallets: { [key in WalletUsers]: wallet };
 export const generateWallets = async () => {
 	let generatedWallets = {};
 	for (const user of Object.values(WalletUsers)) {
-		generatedWallets[user] = { ed: getEdClient(generateMnemonic()), secp: await getSecpClient(generateMnemonic()) };
+		const mnemonics = generateMnemonic();
+		generatedWallets[user] = { ed: getEdClient(mnemonics), secp: await getSecpClient(mnemonics) };
 	}
 	wallets = generatedWallets as any;
 
@@ -97,5 +98,15 @@ export const testMsg = (message: string, action: () => Promise<DeliverTxResponse
 	return test(message, async () => {
 		console.log('Testing ' + message);
 		checkSuccess(await action());
+	});
+};
+
+export const sendFromFaucet = (user: WalletUsers) => {
+	return test('send tokens from faucet', async () => {
+		const tester = getUser(user);
+		const account = (await tester.getAccounts())[0];
+		console.log(`Sending tokens from faucet to: ${user}(${account.address})`);
+		const res = await sendFaucet(account.address);
+		expect(res.data).toBe('ok');
 	});
 };

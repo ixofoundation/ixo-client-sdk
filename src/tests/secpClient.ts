@@ -1,12 +1,8 @@
-import { sha256 } from '@cosmjs/crypto';
-import { toUtf8 } from '@cosmjs/encoding';
 import { AccountData, DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
 import base58 from 'bs58';
-import sovrin from 'sovrin-did';
 import { generateSecpDid } from '../utils/did';
 
 export const getSecpClient = async (mnemonic: string) => {
-	// const didDoc = sovrin.fromSeed(sha256(toUtf8(mnemonic)).slice(0, 32));
 	const wallet = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, { prefix: 'ixo' });
 	const account = (await wallet.getAccounts())[0];
 

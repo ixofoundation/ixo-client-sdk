@@ -1,9 +1,10 @@
 import { Registry } from '@cosmjs/proto-signing';
 import { Coin } from '../codec/cosmos/coin';
-import { BlockPeriod, DistributionShare, PaymentTemplate } from '../codec/payments/payments';
+import { BlockPeriod, Discount, DistributionShare, PaymentTemplate } from '../codec/payments/payments';
 import { MsgCreatePaymentContract, MsgCreatePaymentTemplate, MsgCreateSubscription, MsgEffectPayment, MsgGrantDiscount, MsgRevokeDiscount, MsgSetPaymentContractAuthorisation } from '../codec/payments/tx';
+import { JsonToArray } from '../protoquery';
 import { createClient, getUser } from './common';
-import { constants, fee } from './constants';
+import { constants, fee, WalletUsers } from './constants';
 
 export const CreatePaymentTemplate = async () => {
 	const myRegistry = new Registry();
@@ -25,13 +26,13 @@ export const CreatePaymentTemplate = async () => {
 				paymentAmount: [
 					Coin.fromPartial({
 						denom: 'uixo',
-						amount: '1000000',
+						amount: '500000',
 					}),
 				],
 				paymentMinimum: [
 					Coin.fromPartial({
 						denom: 'uixo',
-						amount: '500000',
+						amount: '100000',
 					}),
 				],
 				paymentMaximum: [
@@ -40,7 +41,7 @@ export const CreatePaymentTemplate = async () => {
 						amount: '500000000',
 					}),
 				],
-				discounts: [],
+				discounts: [Discount.fromPartial({ id: constants.paymentDiscountId, percent: '5000000000000000000' })],
 			}),
 		}),
 	};
@@ -49,6 +50,9 @@ export const CreatePaymentTemplate = async () => {
 	return response;
 };
 
+/**
+ * Distribution shares must add up to 100, and inputs is to power 18
+ */
 export const CreatePaymentContract = async () => {
 	const myRegistry = new Registry();
 	myRegistry.register('/payments.MsgCreatePaymentContract', MsgCreatePaymentContract);
@@ -59,6 +63,9 @@ export const CreatePaymentContract = async () => {
 	const myAddress = account.address;
 	const did = tester.did;
 
+	const alice = getUser(WalletUsers.alice);
+	const aliceAccount = (await alice.getAccounts())[0];
+
 	const message = {
 		typeUrl: '/payments.MsgCreatePaymentContract',
 		value: MsgCreatePaymentContract.fromPartial({
@@ -66,8 +73,8 @@ export const CreatePaymentContract = async () => {
 			paymentTemplateId: constants.paymentTemplateId,
 			paymentContractId: constants.paymentContractId,
 			payer: myAddress,
-			recipients: [DistributionShare.fromPartial(constants.paymentContractRecipient)],
-			discountId: '0',
+			recipients: [DistributionShare.fromPartial({ address: aliceAccount.address, percentage: '100000000000000000000' })],
+			discountId: constants.paymentDiscountId,
 			canDeauthorise: true,
 			creatorAddress: myAddress,
 		}),
@@ -118,12 +125,13 @@ export const CreateSubscription = async () => {
 			subscriptionId: constants.paymentSubscripionId,
 			paymentContractId: constants.paymentContractId,
 			maxPeriods: '3',
-			// @ts-ignore
-			period: BlockPeriod.fromPartial({ periodLength: '3', periodStartBlock: '5' }),
+			period: { typeUrl: '/payments.BlockPeriod', value: BlockPeriod.encode(BlockPeriod.fromPartial({ periodLength: 3, periodStartBlock: 5 })).finish() },
 			creatorAddress: myAddress,
 		}),
 	};
 
+	console.log({ message });
+	console.log(message.value.period);
 	const response = await client.signAndBroadcast(myAddress, [message], fee);
 	return response;
 };
@@ -143,7 +151,7 @@ export const GrantDiscount = async () => {
 		value: MsgGrantDiscount.fromPartial({
 			senderDid: did,
 			paymentContractId: constants.paymentContractId,
-			discountId: '0',
+			discountId: constants.paymentDiscountId,
 			recipient: constants.paymentContractRecipient.address,
 			senderAddress: myAddress,
 		}),
