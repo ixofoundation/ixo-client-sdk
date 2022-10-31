@@ -97,7 +97,7 @@ export interface MsgTransferEntity {
   controllerDid: string;
   /** The ownersdid used to sign this transaction. */
   controllerAddress: string;
-  recipiantDid: string;
+  recipientDid: string;
 }
 
 /** MsgUpdateProjectStatusResponse defines the Msg/UpdateEntityStatus response type. */
@@ -713,7 +713,7 @@ export const MsgUpdateEntityConfigResponse = {
 };
 
 function createBaseMsgTransferEntity(): MsgTransferEntity {
-  return { entityDid: "", controllerDid: "", controllerAddress: "", recipiantDid: "" };
+  return { entityDid: "", controllerDid: "", controllerAddress: "", recipientDid: "" };
 }
 
 export const MsgTransferEntity = {
@@ -727,8 +727,8 @@ export const MsgTransferEntity = {
     if (message.controllerAddress !== "") {
       writer.uint32(26).string(message.controllerAddress);
     }
-    if (message.recipiantDid !== "") {
-      writer.uint32(34).string(message.recipiantDid);
+    if (message.recipientDid !== "") {
+      writer.uint32(34).string(message.recipientDid);
     }
     return writer;
   },
@@ -750,7 +750,7 @@ export const MsgTransferEntity = {
           message.controllerAddress = reader.string();
           break;
         case 4:
-          message.recipiantDid = reader.string();
+          message.recipientDid = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -765,7 +765,7 @@ export const MsgTransferEntity = {
       entityDid: isSet(object.entityDid) ? String(object.entityDid) : "",
       controllerDid: isSet(object.controllerDid) ? String(object.controllerDid) : "",
       controllerAddress: isSet(object.controllerAddress) ? String(object.controllerAddress) : "",
-      recipiantDid: isSet(object.recipiantDid) ? String(object.recipiantDid) : "",
+      recipientDid: isSet(object.recipientDid) ? String(object.recipientDid) : "",
     };
   },
 
@@ -774,7 +774,7 @@ export const MsgTransferEntity = {
     message.entityDid !== undefined && (obj.entityDid = message.entityDid);
     message.controllerDid !== undefined && (obj.controllerDid = message.controllerDid);
     message.controllerAddress !== undefined && (obj.controllerAddress = message.controllerAddress);
-    message.recipiantDid !== undefined && (obj.recipiantDid = message.recipiantDid);
+    message.recipientDid !== undefined && (obj.recipientDid = message.recipientDid);
     return obj;
   },
 
@@ -783,7 +783,7 @@ export const MsgTransferEntity = {
     message.entityDid = object.entityDid ?? "";
     message.controllerDid = object.controllerDid ?? "";
     message.controllerAddress = object.controllerAddress ?? "";
-    message.recipiantDid = object.recipiantDid ?? "";
+    message.recipientDid = object.recipientDid ?? "";
     return message;
   },
 };
