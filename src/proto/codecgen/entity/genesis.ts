@@ -1,27 +1,28 @@
 /* eslint-disable */
 import Long from "long";
 import _m0 from "protobufjs/minimal";
-import { EntityDoc } from "./entity";
+import { EntityDoc, Params } from "./entity";
 
 export const protobufPackage = "entity";
 
 /** GenesisState defines the project module's genesis state. */
 export interface GenesisState {
-  /**
-   * repeated GenesisAccountMap account_maps       = 2 [(gogoproto.nullable) = false, (gogoproto.moretags) = "yaml:\"account_maps\""];
-   * Params params                                 = 2 [(gogoproto.nullable) = false, (gogoproto.moretags) = "yaml:\"params\""];
-   */
   entityDocs: EntityDoc[];
+  /** repeated GenesisAccountMap account_maps       = 2 [(gogoproto.nullable) = false, (gogoproto.moretags) = "yaml:\"account_maps\""]; */
+  params?: Params;
 }
 
 function createBaseGenesisState(): GenesisState {
-  return { entityDocs: [] };
+  return { entityDocs: [], params: undefined };
 }
 
 export const GenesisState = {
   encode(message: GenesisState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.entityDocs) {
       EntityDoc.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.params !== undefined) {
+      Params.encode(message.params, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -36,6 +37,9 @@ export const GenesisState = {
         case 1:
           message.entityDocs.push(EntityDoc.decode(reader, reader.uint32()));
           break;
+        case 2:
+          message.params = Params.decode(reader, reader.uint32());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -47,6 +51,7 @@ export const GenesisState = {
   fromJSON(object: any): GenesisState {
     return {
       entityDocs: Array.isArray(object?.entityDocs) ? object.entityDocs.map((e: any) => EntityDoc.fromJSON(e)) : [],
+      params: isSet(object.params) ? Params.fromJSON(object.params) : undefined,
     };
   },
 
@@ -57,12 +62,16 @@ export const GenesisState = {
     } else {
       obj.entityDocs = [];
     }
+    message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<GenesisState>, I>>(object: I): GenesisState {
     const message = createBaseGenesisState();
     message.entityDocs = object.entityDocs?.map((e) => EntityDoc.fromPartial(e)) || [];
+    message.params = (object.params !== undefined && object.params !== null)
+      ? Params.fromPartial(object.params)
+      : undefined;
     return message;
   },
 };
@@ -82,4 +91,8 @@ export type Exact<P, I extends P> = P extends Builtin ? P
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;
   _m0.configure();
+}
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
 }
