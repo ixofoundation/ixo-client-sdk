@@ -1,6 +1,7 @@
 /* eslint-disable */
 import Long from "long";
 import _m0 from "protobufjs/minimal";
+import { Coin } from "../cosmos/coin";
 import { Any } from "../google/protobuf/any";
 import { DistributionShare, PaymentTemplate } from "./payments";
 
@@ -88,6 +89,7 @@ export interface MsgRevokeDiscountResponse {
 export interface MsgEffectPayment {
   senderDid: string;
   paymentContractId: string;
+  partialPaymentAmount: Coin[];
   senderAddress: string;
 }
 
@@ -875,7 +877,7 @@ export const MsgRevokeDiscountResponse = {
 };
 
 function createBaseMsgEffectPayment(): MsgEffectPayment {
-  return { senderDid: "", paymentContractId: "", senderAddress: "" };
+  return { senderDid: "", paymentContractId: "", partialPaymentAmount: [], senderAddress: "" };
 }
 
 export const MsgEffectPayment = {
@@ -886,8 +888,11 @@ export const MsgEffectPayment = {
     if (message.paymentContractId !== "") {
       writer.uint32(18).string(message.paymentContractId);
     }
+    for (const v of message.partialPaymentAmount) {
+      Coin.encode(v!, writer.uint32(50).fork()).ldelim();
+    }
     if (message.senderAddress !== "") {
-      writer.uint32(26).string(message.senderAddress);
+      writer.uint32(34).string(message.senderAddress);
     }
     return writer;
   },
@@ -905,7 +910,10 @@ export const MsgEffectPayment = {
         case 2:
           message.paymentContractId = reader.string();
           break;
-        case 3:
+        case 6:
+          message.partialPaymentAmount.push(Coin.decode(reader, reader.uint32()));
+          break;
+        case 4:
           message.senderAddress = reader.string();
           break;
         default:
@@ -920,6 +928,9 @@ export const MsgEffectPayment = {
     return {
       senderDid: isSet(object.senderDid) ? String(object.senderDid) : "",
       paymentContractId: isSet(object.paymentContractId) ? String(object.paymentContractId) : "",
+      partialPaymentAmount: Array.isArray(object?.partialPaymentAmount)
+        ? object.partialPaymentAmount.map((e: any) => Coin.fromJSON(e))
+        : [],
       senderAddress: isSet(object.senderAddress) ? String(object.senderAddress) : "",
     };
   },
@@ -928,6 +939,11 @@ export const MsgEffectPayment = {
     const obj: any = {};
     message.senderDid !== undefined && (obj.senderDid = message.senderDid);
     message.paymentContractId !== undefined && (obj.paymentContractId = message.paymentContractId);
+    if (message.partialPaymentAmount) {
+      obj.partialPaymentAmount = message.partialPaymentAmount.map((e) => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.partialPaymentAmount = [];
+    }
     message.senderAddress !== undefined && (obj.senderAddress = message.senderAddress);
     return obj;
   },
@@ -936,6 +952,7 @@ export const MsgEffectPayment = {
     const message = createBaseMsgEffectPayment();
     message.senderDid = object.senderDid ?? "";
     message.paymentContractId = object.paymentContractId ?? "";
+    message.partialPaymentAmount = object.partialPaymentAmount?.map((e) => Coin.fromPartial(e)) || [];
     message.senderAddress = object.senderAddress ?? "";
     return message;
   },
