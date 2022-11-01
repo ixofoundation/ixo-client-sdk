@@ -58,9 +58,9 @@ export const CreateProject = async () => {
 };
 
 /**
- * @param status one of 'CRETAED' | 'PENDING' | 'FUNDED' | 'STARTED'
+ * @param status one of 'CREATED' | 'PENDING' | 'FUNDED' | 'STARTED'
  */
-export const UpdateProjectStatus = async (status: 'CRETAED' | 'PENDING' | 'FUNDED' | 'STARTED') => {
+export const UpdateProjectStatus = async (status: 'CREATED' | 'PENDING' | 'FUNDED' | 'STARTED') => {
 	const myRegistry = new Registry();
 	myRegistry.register('/project.MsgUpdateProjectStatus', MsgUpdateProjectStatus);
 	const client = await createClient(myRegistry, getUser(WalletUsers.project, constants.projectWalletType as any), constants.projectWalletType as any);

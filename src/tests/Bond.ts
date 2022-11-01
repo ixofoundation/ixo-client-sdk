@@ -5,7 +5,7 @@ import { Coin } from '../codec/external/cosmos/base/v1beta1/coin';
 import { createClient, getUser } from './common';
 import { constants, fee, WalletUsers } from './constants';
 
-export const CreateBond = async () => {
+export const CreateBond = async (allowSells: boolean) => {
 	const myRegistry = new Registry();
 	myRegistry.register('/bonds.MsgCreateBond', MsgCreateBond);
 	const client = await createClient(myRegistry);
@@ -32,7 +32,7 @@ export const CreateBond = async () => {
 			functionParameters: [
 				FunctionParam.fromPartial({
 					param: 'p0',
-					value: '1000000000000000000',
+					value: '1000000000000000000', //1
 				}),
 				FunctionParam.fromPartial({
 					param: 'theta',
@@ -40,11 +40,11 @@ export const CreateBond = async () => {
 				}),
 				FunctionParam.fromPartial({
 					param: 'kappa',
-					value: '1010000000000000000',
+					value: '3000000000000000000', //3
 				}),
 				FunctionParam.fromPartial({
 					param: 'd0',
-					value: '1000000000000000000',
+					value: '1000000000000000000000000', // 1mil
 				}),
 			],
 			reserveTokens: [constants.bondReserveToken],
@@ -59,11 +59,11 @@ export const CreateBond = async () => {
 			orderQuantityLimits: [],
 			sanityRate: '0',
 			sanityMarginPercentage: '0',
-			allowSells: false,
-			allowReserveWithdrawals: true,
+			allowSells: allowSells,
+			allowReserveWithdrawals: !allowSells,
 			alphaBond: true,
 			batchBlocks: '1',
-			outcomePayment: '68100',
+			outcomePayment: '300000000',
 			creatorAddress: myAddress,
 		}),
 	};
@@ -162,15 +162,15 @@ export const UpdateBondState = async (state: 'HATCH' | 'OPEN' | 'SETTLE' | 'FAIL
 	return response;
 };
 
-export const Buy = async (amount: number) => {
+export const Buy = async (signer: WalletUsers = WalletUsers.tester, amount: number) => {
 	const myRegistry = new Registry();
 	myRegistry.register('/bonds.MsgBuy', MsgBuy);
-	const client = await createClient(myRegistry);
+	const client = await createClient(myRegistry, getUser(signer));
 
-	const tester = getUser();
-	const account = (await tester.getAccounts())[0];
+	const user = getUser(signer);
+	const account = (await user.getAccounts())[0];
 	const myAddress = account.address;
-	const did = tester.did;
+	const did = user.did;
 
 	const bond = getUser(WalletUsers.bond);
 	const bondDid = bond.did;
@@ -198,15 +198,15 @@ export const Buy = async (amount: number) => {
 	return response;
 };
 
-export const Sell = async (amount: number) => {
+export const Sell = async (signer: WalletUsers = WalletUsers.tester, amount: number) => {
 	const myRegistry = new Registry();
 	myRegistry.register('/bonds.MsgSell', MsgSell);
-	const client = await createClient(myRegistry);
+	const client = await createClient(myRegistry, getUser(signer));
 
-	const tester = getUser();
-	const account = (await tester.getAccounts())[0];
+	const user = getUser(signer);
+	const account = (await user.getAccounts())[0];
 	const myAddress = account.address;
-	const did = tester.did;
+	const did = user.did;
 
 	const bond = getUser(WalletUsers.bond);
 	const bondDid = bond.did;
@@ -287,15 +287,15 @@ export const MakeOutcomePayment = async (amount: number) => {
 	return response;
 };
 
-export const WithdrawShare = async () => {
+export const WithdrawShare = async (signer: WalletUsers = WalletUsers.tester) => {
 	const myRegistry = new Registry();
 	myRegistry.register('/bonds.MsgWithdrawShare', MsgWithdrawShare);
-	const client = await createClient(myRegistry);
+	const client = await createClient(myRegistry, getUser(signer));
 
-	const tester = getUser();
-	const account = (await tester.getAccounts())[0];
+	const user = getUser(signer);
+	const account = (await user.getAccounts())[0];
 	const myAddress = account.address;
-	const did = tester.did;
+	const did = user.did;
 
 	const bond = getUser(WalletUsers.bond);
 	const bondDid = bond.did;
@@ -313,15 +313,15 @@ export const WithdrawShare = async () => {
 	return response;
 };
 
-export const WithdrawReserve = async (amount: number) => {
+export const WithdrawReserve = async (signer: WalletUsers = WalletUsers.tester, amount: number) => {
 	const myRegistry = new Registry();
 	myRegistry.register('/bonds.MsgWithdrawReserve', MsgWithdrawReserve);
-	const client = await createClient(myRegistry);
+	const client = await createClient(myRegistry, getUser(signer));
 
-	const tester = getUser();
-	const account = (await tester.getAccounts())[0];
+	const user = getUser(signer);
+	const account = (await user.getAccounts())[0];
 	const myAddress = account.address;
-	const did = tester.did;
+	const did = user.did;
 
 	const bond = getUser(WalletUsers.bond);
 	const bondDid = bond.did;

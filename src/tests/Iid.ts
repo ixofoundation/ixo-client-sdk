@@ -65,7 +65,7 @@ export const CreateIidDoc = async (signer: WalletUsers = WalletUsers.tester, use
 	return response;
 };
 
-export const UpdateIidDoc = async () => {
+export const UpdateIidDoc = async (IidDocumentJSON: string) => {
 	const myRegistry = new Registry();
 	myRegistry.register('/iid.MsgUpdateIidDocument', MsgUpdateIidDocument);
 	const client = await createClient(myRegistry);

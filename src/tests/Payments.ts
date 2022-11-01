@@ -130,8 +130,6 @@ export const CreateSubscription = async () => {
 		}),
 	};
 
-	console.log({ message });
-	console.log(message.value.period);
 	const response = await client.signAndBroadcast(myAddress, [message], fee);
 	return response;
 };

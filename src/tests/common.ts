@@ -44,7 +44,7 @@ export let wallets: { [key in WalletUsers]: wallet };
 export const generateWallets = async () => {
 	let generatedWallets = {};
 	for (const user of Object.values(WalletUsers)) {
-		const mnemonics = generateMnemonic();
+		const mnemonics = generateMnemonic(24);
 		generatedWallets[user] = { ed: getEdClient(mnemonics), secp: await getSecpClient(mnemonics) };
 	}
 	wallets = generatedWallets as any;
@@ -60,6 +60,21 @@ export const generateWallets = async () => {
 		};
 	}
 	console.log(walletLog);
+};
+
+export const generateNewWallet = async (user: WalletUsers) => {
+	const mnemonics = generateMnemonic();
+	const wallet = { ed: getEdClient(mnemonics), secp: await getSecpClient(mnemonics) };
+	wallets[user] = wallet;
+
+	const edAccount = (await wallet.ed.getAccounts())[0];
+	const secpAccount = (await wallet.secp.getAccounts())[0];
+	console.log({
+		[user]: {
+			ed: { did: wallet.ed.did, address: edAccount.address, publicKey: base58.encode(edAccount.pubkey) },
+			secp: { did: wallet.secp.did, address: secpAccount.address, publicKey: base58.encode(secpAccount.pubkey) },
+		},
+	});
 };
 
 export const getUser = (user: WalletUsers = WalletUsers.tester, walletKeyType: KeyTypes = keyType) => wallets[user][walletKeyType];
@@ -83,21 +98,22 @@ export const createClient = async (
 	);
 };
 
-export const checkSuccess = (res: DeliverTxResponse) => {
+export const checkSuccess = (res: DeliverTxResponse, succeed: boolean) => {
 	let isSuccess = true;
 	try {
 		assertIsDeliverTxSuccess(res);
 	} catch (error) {
-		console.log({ error });
+		// Only print error if expects to succeed
+		if (succeed) console.log({ error });
 		isSuccess = false;
 	}
-	expect(isSuccess).toBeTruthy();
+	succeed ? expect(isSuccess).toBeTruthy() : expect(isSuccess).toBeFalsy();
 };
 
-export const testMsg = (message: string, action: () => Promise<DeliverTxResponse>) => {
+export const testMsg = (message: string, action: () => Promise<DeliverTxResponse>, succeed: boolean = true) => {
 	return test(message, async () => {
 		console.log('Testing ' + message);
-		checkSuccess(await action());
+		checkSuccess(await action(), succeed);
 	});
 };
 
@@ -109,4 +125,12 @@ export const sendFromFaucet = (user: WalletUsers) => {
 		const res = await sendFaucet(account.address);
 		expect(res.data).toBe('ok');
 	});
+};
+
+export const getDidFromEvents = (res: DeliverTxResponse) => {
+	// console.log(res);
+	return JSON.parse(res.rawLog)[0]
+		['events'].find((e: any) => e.type === 'iid.IidDocumentCreatedEvent')
+		['attributes'].find((e: any) => e.key === 'did')
+		['value'].replaceAll('"', '');
 };
