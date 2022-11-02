@@ -12,10 +12,6 @@ beforeAll(() => {
 	return generateWallets();
 });
 
-describe('Testing the cosmos bank module', () => {
-	// testMsg('/cosmos.bank.v1beta1.MsgSend', () => Cosmos.BankSendTrx());
-});
-
 describe('Testing the iid module', () => {
 	sendFromFaucet(WalletUsers.tester);
 	testMsg('/iid.MsgCreateIidDocument', () => Iid.CreateIidDoc());
@@ -164,3 +160,7 @@ describe('Testing the Bonds module sells enabled', () => {
 	testMsg('/bonds.MsgWithdrawShare', () => Bond.WithdrawShare(WalletUsers.bob));
 });
 */
+
+describe('Testing the cosmos bank module', () => {
+	// testMsg('/cosmos.bank.v1beta1.MsgSend', () => Cosmos.BankSendTrx());
+});

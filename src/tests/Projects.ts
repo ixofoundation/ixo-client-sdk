@@ -1,10 +1,8 @@
-import { Registry } from '@cosmjs/proto-signing';
 import base58 from 'bs58';
-import { CreateAgentDoc, CreateClaimDoc, CreateEvaluationDoc, UpdateAgentDoc, UpdateProjectStatusDoc, WithdrawFundsDoc } from '../codec/project/project';
-import { MsgCreateAgent, MsgCreateClaim, MsgCreateEvaluation, MsgCreateProject, MsgUpdateAgent, MsgUpdateProjectDoc, MsgUpdateProjectStatus, MsgWithdrawFunds } from '../codec/project/tx';
-import { JsonToArray } from '../protoquery/utils';
 import { createClient, getUser } from './common';
 import { constants, fee, WalletUsers } from './constants';
+import { impact } from '../index';
+import { JsonToArray } from '../utils/conversions';
 
 /**
  * Requires CreatePaymentTemplate to be run first to create paymentTemplateId used
@@ -22,9 +20,8 @@ export const CreateProject = async () => {
 			items: [{ '@type': 'OracleFee', id: constants.paymentTemplateId }],
 		},
 	};
-	const myRegistry = new Registry();
-	myRegistry.register('/project.MsgCreateProject', MsgCreateProject);
-	const client = await createClient(myRegistry, getUser(WalletUsers.project, constants.projectWalletType as any), constants.projectWalletType as any, true);
+
+	const client = await createClient(getUser(WalletUsers.project, constants.projectWalletType as any), true);
 
 	const tester = getUser();
 	const did = tester.did;
@@ -35,7 +32,7 @@ export const CreateProject = async () => {
 
 	const message = {
 		typeUrl: '/project.MsgCreateProject',
-		value: MsgCreateProject.fromPartial({
+		value: impact.project.MsgCreateProject.fromPartial({
 			senderDid: did,
 			projectDid: projectDid,
 			pubKey: base58.encode(projectAccount.pubkey),
@@ -61,9 +58,7 @@ export const CreateProject = async () => {
  * @param status one of 'CREATED' | 'PENDING' | 'FUNDED' | 'STARTED'
  */
 export const UpdateProjectStatus = async (status: 'CREATED' | 'PENDING' | 'FUNDED' | 'STARTED') => {
-	const myRegistry = new Registry();
-	myRegistry.register('/project.MsgUpdateProjectStatus', MsgUpdateProjectStatus);
-	const client = await createClient(myRegistry, getUser(WalletUsers.project, constants.projectWalletType as any), constants.projectWalletType as any);
+	const client = await createClient(getUser(WalletUsers.project, constants.projectWalletType as any));
 
 	const tester = getUser();
 	const did = tester.did;
@@ -74,11 +69,11 @@ export const UpdateProjectStatus = async (status: 'CREATED' | 'PENDING' | 'FUNDE
 
 	const message = {
 		typeUrl: '/project.MsgUpdateProjectStatus',
-		value: MsgUpdateProjectStatus.fromPartial({
+		value: impact.project.MsgUpdateProjectStatus.fromPartial({
 			txHash: '',
 			senderDid: did,
 			projectDid: projectDid,
-			data: UpdateProjectStatusDoc.fromPartial({ status }),
+			data: impact.project.UpdateProjectStatusDoc.fromPartial({ status }),
 			projectAddress: projectAccount.address,
 		}),
 	};
@@ -91,9 +86,7 @@ export const UpdateProjectStatus = async (status: 'CREATED' | 'PENDING' | 'FUNDE
  * @param role one of 'SA' | ''.
  */
 export const CreateAgent = async (role: string = 'SA') => {
-	const myRegistry = new Registry();
-	myRegistry.register('/project.MsgCreateAgent', MsgCreateAgent);
-	const client = await createClient(myRegistry, getUser(WalletUsers.project, constants.projectWalletType as any), constants.projectWalletType as any);
+	const client = await createClient(getUser(WalletUsers.project, constants.projectWalletType as any));
 
 	const tester = getUser();
 	const did = tester.did;
@@ -104,11 +97,11 @@ export const CreateAgent = async (role: string = 'SA') => {
 
 	const message = {
 		typeUrl: '/project.MsgCreateAgent',
-		value: MsgCreateAgent.fromPartial({
+		value: impact.project.MsgCreateAgent.fromPartial({
 			txHash: '',
 			senderDid: did,
 			projectDid: projectDid,
-			data: CreateAgentDoc.fromPartial({ agentDid: did, role }),
+			data: impact.project.CreateAgentDoc.fromPartial({ agentDid: did, role }),
 			projectAddress: projectAccount.address,
 		}),
 	};
@@ -121,9 +114,7 @@ export const CreateAgent = async (role: string = 'SA') => {
  * Not implemented on chain!!!
  */
 export const UpdateAgent = async () => {
-	const myRegistry = new Registry();
-	myRegistry.register('/project.MsgUpdateAgent', MsgUpdateAgent);
-	const client = await createClient(myRegistry, getUser(WalletUsers.project, constants.projectWalletType as any), constants.projectWalletType as any);
+	const client = await createClient(getUser(WalletUsers.project, constants.projectWalletType as any));
 
 	const tester = getUser();
 	const did = tester.did;
@@ -134,11 +125,11 @@ export const UpdateAgent = async () => {
 
 	const message = {
 		typeUrl: '/project.MsgUpdateAgent',
-		value: MsgUpdateAgent.fromPartial({
+		value: impact.project.MsgUpdateAgent.fromPartial({
 			txHash: '',
 			senderDid: did,
 			projectDid: projectDid,
-			data: UpdateAgentDoc.fromPartial({ did: did, status: 'AWESOME' }),
+			data: impact.project.UpdateAgentDoc.fromPartial({ did: did, status: 'AWESOME' }),
 			projectAddress: projectAccount.address,
 		}),
 	};
@@ -148,9 +139,7 @@ export const UpdateAgent = async () => {
 };
 
 export const CreateClaim = async () => {
-	const myRegistry = new Registry();
-	myRegistry.register('/project.MsgCreateClaim', MsgCreateClaim);
-	const client = await createClient(myRegistry, getUser(WalletUsers.project, constants.projectWalletType as any), constants.projectWalletType as any);
+	const client = await createClient(getUser(WalletUsers.project, constants.projectWalletType as any));
 
 	const tester = getUser();
 	const did = tester.did;
@@ -161,11 +150,11 @@ export const CreateClaim = async () => {
 
 	const message = {
 		typeUrl: '/project.MsgCreateClaim',
-		value: MsgCreateClaim.fromPartial({
+		value: impact.project.MsgCreateClaim.fromPartial({
 			txHash: '',
 			senderDid: did,
 			projectDid: projectDid,
-			data: CreateClaimDoc.fromPartial({ claimId: constants.projectClaimId, claimTemplateId: constants.projectTemplateId }),
+			data: impact.project.CreateClaimDoc.fromPartial({ claimId: constants.projectClaimId, claimTemplateId: constants.projectTemplateId }),
 			projectAddress: projectAccount.address,
 		}),
 	};
@@ -175,9 +164,7 @@ export const CreateClaim = async () => {
 };
 
 export const CreateEvaluation = async () => {
-	const myRegistry = new Registry();
-	myRegistry.register('/project.MsgCreateEvaluation', MsgCreateEvaluation);
-	const client = await createClient(myRegistry, getUser(WalletUsers.project, constants.projectWalletType as any), constants.projectWalletType as any);
+	const client = await createClient(getUser(WalletUsers.project, constants.projectWalletType as any));
 
 	const tester = getUser();
 	const did = tester.did;
@@ -188,11 +175,11 @@ export const CreateEvaluation = async () => {
 
 	const message = {
 		typeUrl: '/project.MsgCreateEvaluation',
-		value: MsgCreateEvaluation.fromPartial({
+		value: impact.project.MsgCreateEvaluation.fromPartial({
 			txHash: '',
 			senderDid: did,
 			projectDid: projectDid,
-			data: CreateEvaluationDoc.fromPartial({ claimId: constants.projectClaimId, status: '1' }),
+			data: impact.project.CreateEvaluationDoc.fromPartial({ claimId: constants.projectClaimId, status: '1' }),
 			projectAddress: projectAccount.address,
 		}),
 	};
@@ -202,9 +189,7 @@ export const CreateEvaluation = async () => {
 };
 
 export const WithdrawFunds = async () => {
-	const myRegistry = new Registry();
-	myRegistry.register('/project.MsgWithdrawFunds', MsgWithdrawFunds);
-	const client = await createClient(myRegistry);
+	const client = await createClient();
 
 	const tester = getUser();
 	const account = (await tester.getAccounts())[0];
@@ -216,9 +201,9 @@ export const WithdrawFunds = async () => {
 
 	const message = {
 		typeUrl: '/project.MsgWithdrawFunds',
-		value: MsgWithdrawFunds.fromPartial({
+		value: impact.project.MsgWithdrawFunds.fromPartial({
 			senderDid: did,
-			data: WithdrawFundsDoc.fromPartial({
+			data: impact.project.WithdrawFundsDoc.fromPartial({
 				projectDid: projectDid,
 				recipientDid: did,
 				amount: '100000',
@@ -233,9 +218,7 @@ export const WithdrawFunds = async () => {
 };
 
 export const UpdateProjectDoc = async () => {
-	const myRegistry = new Registry();
-	myRegistry.register('/project.MsgUpdateProjectDoc', MsgUpdateProjectDoc);
-	const client = await createClient(myRegistry, getUser(WalletUsers.project, constants.projectWalletType as any), constants.projectWalletType as any);
+	const client = await createClient(getUser(WalletUsers.project, constants.projectWalletType as any));
 
 	const tester = getUser();
 	const did = tester.did;
@@ -260,7 +243,7 @@ export const UpdateProjectDoc = async () => {
 
 	const message = {
 		typeUrl: '/project.MsgUpdateProjectDoc',
-		value: MsgUpdateProjectDoc.fromPartial({
+		value: impact.project.MsgUpdateProjectDoc.fromPartial({
 			txHash: '',
 			senderDid: did,
 			projectDid: projectDid,

@@ -1,16 +1,15 @@
-import { SigningStargateClient as CustomSigningStargateClient } from '../utils/customClient';
 import { Random } from '@cosmjs/crypto';
 import { toHex } from '@cosmjs/encoding';
-import { Registry } from '@cosmjs/proto-signing';
+import { OfflineSigner } from '@cosmjs/proto-signing';
 import { assertIsDeliverTxSuccess, DeliverTxResponse } from '@cosmjs/stargate';
 import axios from 'axios';
 import base58 from 'bs58';
-import { VerificationMethod } from '../codec/iid/iid';
+
 import { Bip39 } from '../utils/fromMm';
 import { keyType, KeyTypes, RPC_URL, WalletUsers } from './constants';
 import { getEdClient } from './edClient';
 import { getSecpClient } from './secpClient';
-import { accountFromAny } from '../utils/EdAccountHandler';
+import { createClient as createClientMain, impact } from '../index';
 
 export const generateId = (length: number = 12) => {
 	var result = '';
@@ -34,7 +33,7 @@ export const sendFaucet = async (address: string) => {
 };
 
 export const getVerificationMethod = (did: string, pubkey: Uint8Array, controller: string, type: KeyTypes = keyType) => {
-	return VerificationMethod.fromPartial({ id: did, type: type === 'ed' ? 'Ed25519VerificationKey2018' : 'EcdsaSecp256k1VerificationKey2019', publicKeyMultibase: 'F' + toHex(pubkey), controller: controller });
+	return impact.iid.VerificationMethod.fromPartial({ id: did, type: type === 'ed' ? 'Ed25519VerificationKey2018' : 'EcdsaSecp256k1VerificationKey2019', publicKeyMultibase: 'F' + toHex(pubkey), controller: controller });
 };
 
 export type wallet = { ed: ReturnType<typeof getEdClient>; secp: ReturnType<typeof getEdClient> };
@@ -79,23 +78,8 @@ export const generateNewWallet = async (user: WalletUsers) => {
 
 export const getUser = (user: WalletUsers = WalletUsers.tester, walletKeyType: KeyTypes = keyType) => wallets[user][walletKeyType];
 
-export const createClient = async (
-	myRegistry: Registry,
-	offlineWallet: ReturnType<typeof getEdClient> = getUser(),
-	walletKeyType: KeyTypes = keyType,
-	ignoreGetSequence?: boolean,
-): Promise<CustomSigningStargateClient> => {
-	return await CustomSigningStargateClient.connectWithSigner(
-		RPC_URL,
-		// @ts-ignore
-		offlineWallet,
-		{
-			registry: myRegistry,
-			accountParser: accountFromAny,
-		},
-		walletKeyType,
-		ignoreGetSequence,
-	);
+export const createClient = async (offlineWallet: ReturnType<typeof getEdClient> = getUser(), ignoreGetSequence?: boolean) => {
+	return createClientMain(RPC_URL, offlineWallet as OfflineSigner, ignoreGetSequence);
 };
 
 export const checkSuccess = (res: DeliverTxResponse, succeed: boolean) => {

@@ -1,13 +1,9 @@
-import { Registry } from '@cosmjs/proto-signing';
-import { MsgCreateEntity, MsgTransferEntity, MsgUpdateEntity, MsgUpdateEntityConfig } from '../codec/entity/tx';
-import { AccordedRight, Context, LinkedResource, Service } from '../codec/iid/iid';
 import { createClient, getUser } from './common';
 import { fee, WalletUsers } from './constants';
+import { impact } from '../index';
 
 export const CreateEntityAsset = async () => {
-	const myRegistry = new Registry();
-	myRegistry.register('/entity.MsgCreateEntity', MsgCreateEntity);
-	const client = await createClient(myRegistry);
+	const client = await createClient();
 
 	const tester = getUser();
 	const account = (await tester.getAccounts())[0];
@@ -16,11 +12,11 @@ export const CreateEntityAsset = async () => {
 
 	const message = {
 		typeUrl: '/entity.MsgCreateEntity',
-		value: MsgCreateEntity.fromPartial({
+		value: impact.entity.MsgCreateEntity.fromPartial({
 			entityType: 'asset',
 			entityStatus: 0,
 			// @ts-ignore
-			context: [Context.fromPartial({ key: 'ixo', value: 'https://w3id.org/ixo/v1' })],
+			context: [impact.iid.Context.fromPartial({ key: 'ixo', value: 'https://w3id.org/ixo/v1' })],
 			ownerDid: did,
 			ownerAddress: myAddress,
 		}),
@@ -31,9 +27,7 @@ export const CreateEntityAsset = async () => {
 };
 
 export const CreateEntityAssetSupamoto = async (inheritEntityDid: string) => {
-	const myRegistry = new Registry();
-	myRegistry.register('/entity.MsgCreateEntity', MsgCreateEntity);
-	const client = await createClient(myRegistry);
+	const client = await createClient();
 
 	const tester = getUser();
 	const account = (await tester.getAccounts())[0];
@@ -42,19 +36,19 @@ export const CreateEntityAssetSupamoto = async (inheritEntityDid: string) => {
 
 	const message = {
 		typeUrl: '/entity.MsgCreateEntity',
-		value: MsgCreateEntity.fromPartial({
+		value: impact.entity.MsgCreateEntity.fromPartial({
 			entityType: 'protocol',
 			entityStatus: 0,
 			// @ts-ignore
-			context: [Context.fromPartial({ key: 'ixo', value: inheritEntityDid })],
+			context: [impact.iid.Context.fromPartial({ key: 'ixo', value: inheritEntityDid })],
 			service: [
-				Service.fromPartial({ id: 'did:ixo:entity:abc123#cellnode-pandora', type: 'cellnode', serviceEndpoint: 'https://cellnode-pandora.ixo.earth' }),
-				Service.fromPartial({ id: 'did:ixo:entity:abc123#ixo', type: 'chainService', serviceEndpoint: 'https://proxies.sifchain.finance/api/impacthub-3/rpc' }),
-				Service.fromPartial({ id: 'did:ixo:entity:abc123#supamoto', type: 'linkedDomains', serviceEndpoint: 'https://legal.supamoto.se/' }),
-				Service.fromPartial({ id: 'did:ixo:entity:abc123#dashboard', type: 'linkedDomains', serviceEndpoint: 'https://supamoto.jambo.earth/?id={stoveId}' }),
+				impact.iid.Service.fromPartial({ id: 'did:ixo:entity:abc123#cellnode-pandora', type: 'cellnode', serviceEndpoint: 'https://cellnode-pandora.ixo.earth' }),
+				impact.iid.Service.fromPartial({ id: 'did:ixo:entity:abc123#ixo', type: 'chainService', serviceEndpoint: 'https://proxies.sifchain.finance/api/impacthub-3/rpc' }),
+				impact.iid.Service.fromPartial({ id: 'did:ixo:entity:abc123#supamoto', type: 'linkedDomains', serviceEndpoint: 'https://legal.supamoto.se/' }),
+				impact.iid.Service.fromPartial({ id: 'did:ixo:entity:abc123#dashboard', type: 'linkedDomains', serviceEndpoint: 'https://supamoto.jambo.earth/?id={stoveId}' }),
 			],
 			linkedResource: [
-				LinkedResource.fromPartial({
+				impact.iid.LinkedResource.fromPartial({
 					id: 'did:ixo:entity:abc123#m5tf6df728jl2hsi8fwa',
 					type: 'tokenMetadata',
 					description: 'SumaMoto Token Collection Template',
@@ -64,7 +58,7 @@ export const CreateEntityAssetSupamoto = async (inheritEntityDid: string) => {
 					encrypted: 'false',
 					right: '#mintNft',
 				}),
-				LinkedResource.fromPartial({
+				impact.iid.LinkedResource.fromPartial({
 					id: 'did:ixo:entity:abc123#{tokenid.json}',
 					type: 'tokenMetadata',
 					description: 'SumaMoto Token Template',
@@ -74,7 +68,7 @@ export const CreateEntityAssetSupamoto = async (inheritEntityDid: string) => {
 					encrypted: 'false',
 					right: '#mintCarbonToken',
 				}),
-				LinkedResource.fromPartial({
+				impact.iid.LinkedResource.fromPartial({
 					id: 'did:ixo:entity:abc123#m5tf6df728jl2hsi8fwb',
 					type: 'page',
 					description: '',
@@ -84,7 +78,7 @@ export const CreateEntityAssetSupamoto = async (inheritEntityDid: string) => {
 					encrypted: 'false',
 					right: '',
 				}),
-				LinkedResource.fromPartial({
+				impact.iid.LinkedResource.fromPartial({
 					id: 'did:ixo:entity:abc123#m5tf6df728jl2hsi8fwc',
 					type: 'settings',
 					description: '',
@@ -94,7 +88,7 @@ export const CreateEntityAssetSupamoto = async (inheritEntityDid: string) => {
 					encrypted: 'false',
 					right: '',
 				}),
-				LinkedResource.fromPartial({
+				impact.iid.LinkedResource.fromPartial({
 					id: 'did:ixo:entity:abc123#m5tf6df728jl2hsi8fwd',
 					type: 'claims',
 					description: '',
@@ -104,7 +98,7 @@ export const CreateEntityAssetSupamoto = async (inheritEntityDid: string) => {
 					encrypted: 'false',
 					right: '',
 				}),
-				LinkedResource.fromPartial({
+				impact.iid.LinkedResource.fromPartial({
 					id: 'did:ixo:entity:abc123#m5tf6df728jl2hsi8fwe',
 					type: 'filters',
 					description: '',
@@ -114,7 +108,7 @@ export const CreateEntityAssetSupamoto = async (inheritEntityDid: string) => {
 					encrypted: 'false',
 					right: '',
 				}),
-				LinkedResource.fromPartial({
+				impact.iid.LinkedResource.fromPartial({
 					id: 'did:ixo:entity:abc123#certification*',
 					type: 'verifiableCredential',
 					description: 'Project Certification',
@@ -124,7 +118,7 @@ export const CreateEntityAssetSupamoto = async (inheritEntityDid: string) => {
 					encrypted: 'false',
 					right: '',
 				}),
-				LinkedResource.fromPartial({
+				impact.iid.LinkedResource.fromPartial({
 					id: 'did:ixo:entity:abc123#dashboard*',
 					type: 'service',
 					description: 'Dashboard',
@@ -136,28 +130,28 @@ export const CreateEntityAssetSupamoto = async (inheritEntityDid: string) => {
 				}),
 			],
 			accordedRight: [
-				AccordedRight.fromPartial({
+				impact.iid.AccordedRight.fromPartial({
 					id: 'did:ixo:entity:abc123#mintNFT',
 					type: 'mint',
 					mechanism: 'cw721',
 					message: 'msgMintNFT',
 					service: '#ixo',
 				}),
-				AccordedRight.fromPartial({
+				impact.iid.AccordedRight.fromPartial({
 					id: 'did:ixo:entity:abc123#mintCarbonToken',
 					type: 'mint',
 					mechanism: 'cw1155',
 					message: 'msgMint/carbon',
 					service: '#ixo',
 				}),
-				AccordedRight.fromPartial({
+				impact.iid.AccordedRight.fromPartial({
 					id: 'did:ixo:entity:abc123#carbonCreditClaim',
 					type: 'claim/carbonCredit',
 					mechanism: 'claimApproval',
 					message: 'msgSubmitClaim',
 					service: '#ixo',
 				}),
-				AccordedRight.fromPartial({
+				impact.iid.AccordedRight.fromPartial({
 					id: 'https://legal.supamoto.se/supamoto/termsAndConditions.pdf',
 					type: 'legal',
 					mechanism: 'enforceable',
@@ -176,9 +170,7 @@ export const CreateEntityAssetSupamoto = async (inheritEntityDid: string) => {
 };
 
 export const CreateEntityAssetSupamotoInstance = async (inheritEntityDid: string) => {
-	const myRegistry = new Registry();
-	myRegistry.register('/entity.MsgCreateEntity', MsgCreateEntity);
-	const client = await createClient(myRegistry);
+	const client = await createClient();
 
 	const tester = getUser();
 	const account = (await tester.getAccounts())[0];
@@ -187,14 +179,14 @@ export const CreateEntityAssetSupamotoInstance = async (inheritEntityDid: string
 
 	const message = {
 		typeUrl: '/entity.MsgCreateEntity',
-		value: MsgCreateEntity.fromPartial({
+		value: impact.entity.MsgCreateEntity.fromPartial({
 			entityType: 'asset',
 			entityStatus: 0,
 			// @ts-ignore
-			context: [Context.fromPartial({ key: 'ixo', value: inheritEntityDid })],
+			context: [impact.iid.Context.fromPartial({ key: 'ixo', value: inheritEntityDid })],
 			service: [],
 			linkedResource: [
-				LinkedResource.fromPartial({
+				impact.iid.LinkedResource.fromPartial({
 					id: 'did:ixo:entity:abc123#m5tf6df728jl2hsi8fwa',
 					type: 'page',
 					description: '',
@@ -204,7 +196,7 @@ export const CreateEntityAssetSupamotoInstance = async (inheritEntityDid: string
 					encrypted: 'false',
 					right: '',
 				}),
-				LinkedResource.fromPartial({
+				impact.iid.LinkedResource.fromPartial({
 					id: 'did:ixo:entity:abc123#m5tf6df728jl2hsi8fwb',
 					type: 'settings',
 					description: '',
@@ -214,7 +206,7 @@ export const CreateEntityAssetSupamotoInstance = async (inheritEntityDid: string
 					encrypted: 'false',
 					right: '',
 				}),
-				LinkedResource.fromPartial({
+				impact.iid.LinkedResource.fromPartial({
 					id: 'did:ixo:entity:abc123#m5tf6df728jl2hsi8fwc',
 					type: 'class:claims',
 					description: '',
@@ -224,7 +216,7 @@ export const CreateEntityAssetSupamotoInstance = async (inheritEntityDid: string
 					encrypted: 'false',
 					right: '',
 				}),
-				LinkedResource.fromPartial({
+				impact.iid.LinkedResource.fromPartial({
 					id: 'did:ixo:entity:abc123#m5tf6df728jl2hsi8fwd',
 					type: 'class:filters',
 					description: '',
@@ -234,7 +226,7 @@ export const CreateEntityAssetSupamotoInstance = async (inheritEntityDid: string
 					encrypted: 'false',
 					right: '',
 				}),
-				LinkedResource.fromPartial({
+				impact.iid.LinkedResource.fromPartial({
 					id: 'did:ixo:entity:abc123#dashboard*',
 					type: 'service',
 					description: 'Dashboard',
@@ -257,9 +249,7 @@ export const CreateEntityAssetSupamotoInstance = async (inheritEntityDid: string
 };
 
 export const TransferEntity = async (entityDid: string) => {
-	const myRegistry = new Registry();
-	myRegistry.register('/entity.MsgTransferEntity', MsgTransferEntity);
-	const client = await createClient(myRegistry);
+	const client = await createClient();
 
 	const tester = getUser();
 	const account = (await tester.getAccounts())[0];
@@ -270,7 +260,7 @@ export const TransferEntity = async (entityDid: string) => {
 
 	const message = {
 		typeUrl: '/entity.MsgTransferEntity',
-		value: MsgTransferEntity.fromPartial({
+		value: impact.entity.MsgTransferEntity.fromPartial({
 			entityDid: entityDid,
 			controllerDid: did,
 			controllerAddress: myAddress,
@@ -283,9 +273,7 @@ export const TransferEntity = async (entityDid: string) => {
 };
 
 export const UpdateEntity = async () => {
-	const myRegistry = new Registry();
-	myRegistry.register('/entity.MsgUpdateEntity', MsgUpdateEntity);
-	const client = await createClient(myRegistry);
+	const client = await createClient();
 
 	const tester = getUser();
 	const account = (await tester.getAccounts())[0];
@@ -294,7 +282,7 @@ export const UpdateEntity = async () => {
 
 	const message = {
 		typeUrl: '/entity.MsgUpdateEntity',
-		value: MsgUpdateEntity.fromPartial({
+		value: impact.entity.MsgUpdateEntity.fromPartial({
 			status: 1,
 			controllerDid: did,
 			controllerAddress: myAddress,
@@ -306,9 +294,7 @@ export const UpdateEntity = async () => {
 };
 
 export const UpdateConfigEntity = async () => {
-	const myRegistry = new Registry();
-	myRegistry.register('/entity.MsgUpdateEntityConfig', MsgUpdateEntityConfig);
-	const client = await createClient(myRegistry);
+	const client = await createClient();
 
 	const tester = getUser();
 	const account = (await tester.getAccounts())[0];
@@ -316,7 +302,7 @@ export const UpdateConfigEntity = async () => {
 
 	const message = {
 		typeUrl: '/entity.MsgUpdateEntityConfig',
-		value: MsgUpdateEntityConfig.fromPartial({
+		value: impact.entity.MsgUpdateEntityConfig.fromPartial({
 			nftContractAddress: '',
 			signer: myAddress,
 		}),

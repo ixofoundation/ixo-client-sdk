@@ -1,13 +1,9 @@
-import { Registry } from '@cosmjs/proto-signing';
 import { fee, WalletUsers } from './constants';
-import { defaultRegistryTypes as defaultStargateTypes } from '@cosmjs/stargate';
-import { MsgSend } from '../codec/external/cosmos/bank/v1beta1/tx';
-import { Coin } from '../codec/cosmos/coin';
 import { createClient, getUser } from './common';
+import { cosmos } from '../index';
 
 export const BankSendTrx = async () => {
-	const myRegistry = new Registry(defaultStargateTypes);
-	const client = await createClient(myRegistry);
+	const client = await createClient();
 
 	const tester = getUser();
 	const account = (await tester.getAccounts())[0];
@@ -18,10 +14,10 @@ export const BankSendTrx = async () => {
 
 	const message = {
 		typeUrl: '/cosmos.bank.v1beta1.MsgSend',
-		value: MsgSend.fromPartial({
+		value: cosmos.bank.v1beta1.MsgSend.fromPartial({
 			fromAddress: myAddress,
 			toAddress: aliceAccount.address,
-			amount: [Coin.fromPartial({ amount: '100000', denom: 'uixo' })],
+			amount: [cosmos.base.v1beta1.Coin.fromPartial({ amount: '100000', denom: 'uixo' })],
 		}),
 	};
 

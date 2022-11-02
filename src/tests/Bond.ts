@@ -1,14 +1,9 @@
-import { Registry } from '@cosmjs/proto-signing';
-import { FunctionParam } from '../codec/bonds/bonds';
-import { MsgBuy, MsgCreateBond, MsgEditBond, MsgMakeOutcomePayment, MsgSell, MsgSetNextAlpha, MsgSwap, MsgUpdateBondState, MsgWithdrawReserve, MsgWithdrawShare } from '../codec/bonds/tx';
-import { Coin } from '../codec/external/cosmos/base/v1beta1/coin';
 import { createClient, getUser } from './common';
 import { constants, fee, WalletUsers } from './constants';
+import { impact } from '../index';
 
 export const CreateBond = async (allowSells: boolean) => {
-	const myRegistry = new Registry();
-	myRegistry.register('/bonds.MsgCreateBond', MsgCreateBond);
-	const client = await createClient(myRegistry);
+	const client = await createClient();
 
 	const tester = getUser();
 	const account = (await tester.getAccounts())[0];
@@ -21,7 +16,7 @@ export const CreateBond = async (allowSells: boolean) => {
 
 	const message = {
 		typeUrl: '/bonds.MsgCreateBond',
-		value: MsgCreateBond.fromPartial({
+		value: impact.bonds.MsgCreateBond.fromPartial({
 			bondDid: bondDid,
 			token: constants.bondToken,
 			name: 'A B C',
@@ -30,19 +25,19 @@ export const CreateBond = async (allowSells: boolean) => {
 			controllerDid: did,
 			functionType: 'augmented_function',
 			functionParameters: [
-				FunctionParam.fromPartial({
+				impact.bonds.FunctionParam.fromPartial({
 					param: 'p0',
 					value: '1000000000000000000', //1
 				}),
-				FunctionParam.fromPartial({
+				impact.bonds.FunctionParam.fromPartial({
 					param: 'theta',
 					value: '0',
 				}),
-				FunctionParam.fromPartial({
+				impact.bonds.FunctionParam.fromPartial({
 					param: 'kappa',
 					value: '3000000000000000000', //3
 				}),
-				FunctionParam.fromPartial({
+				impact.bonds.FunctionParam.fromPartial({
 					param: 'd0',
 					value: '1000000000000000000000000', // 1mil
 				}),
@@ -52,7 +47,7 @@ export const CreateBond = async (allowSells: boolean) => {
 			exitFeePercentage: '0',
 			feeAddress: feeReserveAddress,
 			reserveWithdrawalAddress: feeReserveAddress,
-			maxSupply: Coin.fromPartial({
+			maxSupply: impact.cosmos.Coin.fromPartial({
 				denom: constants.bondToken,
 				amount: '1000000000000',
 			}),
@@ -73,9 +68,7 @@ export const CreateBond = async (allowSells: boolean) => {
 };
 
 export const EditBond = async () => {
-	const myRegistry = new Registry();
-	myRegistry.register('/bonds.MsgEditBond', MsgEditBond);
-	const client = await createClient(myRegistry);
+	const client = await createClient();
 
 	const tester = getUser();
 	const account = (await tester.getAccounts())[0];
@@ -87,7 +80,7 @@ export const EditBond = async () => {
 
 	const message = {
 		typeUrl: '/bonds.MsgEditBond',
-		value: MsgEditBond.fromPartial({
+		value: impact.bonds.MsgEditBond.fromPartial({
 			bondDid: bondDid,
 			name: 'New A B C',
 			description: 'Description about A B C',
@@ -106,9 +99,7 @@ export const EditBond = async () => {
  * @param alpha alpha string number as e18
  */
 export const SetNextAlpha = async (alpha: string = '520000000000000000') => {
-	const myRegistry = new Registry();
-	myRegistry.register('/bonds.MsgSetNextAlpha', MsgSetNextAlpha);
-	const client = await createClient(myRegistry);
+	const client = await createClient();
 
 	const tester = getUser();
 	const account = (await tester.getAccounts())[0];
@@ -120,7 +111,7 @@ export const SetNextAlpha = async (alpha: string = '520000000000000000') => {
 
 	const message = {
 		typeUrl: '/bonds.MsgSetNextAlpha',
-		value: MsgSetNextAlpha.fromPartial({
+		value: impact.bonds.MsgSetNextAlpha.fromPartial({
 			bondDid: bondDid,
 			alpha,
 			editorDid: did,
@@ -136,9 +127,7 @@ export const SetNextAlpha = async (alpha: string = '520000000000000000') => {
  * @param state one of 'HATCH' | 'OPEN' | 'SETTLE' | 'FAILED'
  */
 export const UpdateBondState = async (state: 'HATCH' | 'OPEN' | 'SETTLE' | 'FAILED') => {
-	const myRegistry = new Registry();
-	myRegistry.register('/bonds.MsgUpdateBondState', MsgUpdateBondState);
-	const client = await createClient(myRegistry);
+	const client = await createClient();
 
 	const tester = getUser();
 	const account = (await tester.getAccounts())[0];
@@ -150,7 +139,7 @@ export const UpdateBondState = async (state: 'HATCH' | 'OPEN' | 'SETTLE' | 'FAIL
 
 	const message = {
 		typeUrl: '/bonds.MsgUpdateBondState',
-		value: MsgUpdateBondState.fromPartial({
+		value: impact.bonds.MsgUpdateBondState.fromPartial({
 			bondDid: bondDid,
 			state: state,
 			editorDid: did,
@@ -163,9 +152,7 @@ export const UpdateBondState = async (state: 'HATCH' | 'OPEN' | 'SETTLE' | 'FAIL
 };
 
 export const Buy = async (signer: WalletUsers = WalletUsers.tester, amount: number) => {
-	const myRegistry = new Registry();
-	myRegistry.register('/bonds.MsgBuy', MsgBuy);
-	const client = await createClient(myRegistry, getUser(signer));
+	const client = await createClient(getUser(signer));
 
 	const user = getUser(signer);
 	const account = (await user.getAccounts())[0];
@@ -177,15 +164,15 @@ export const Buy = async (signer: WalletUsers = WalletUsers.tester, amount: numb
 
 	const message = {
 		typeUrl: '/bonds.MsgBuy',
-		value: MsgBuy.fromPartial({
+		value: impact.bonds.MsgBuy.fromPartial({
 			buyerDid: did,
 			buyerAddress: myAddress,
-			amount: Coin.fromPartial({
+			amount: impact.cosmos.Coin.fromPartial({
 				denom: constants.bondToken,
 				amount: amount.toString(),
 			}),
 			maxPrices: [
-				Coin.fromPartial({
+				impact.cosmos.Coin.fromPartial({
 					denom: constants.bondReserveToken,
 					amount: '1000000',
 				}),
@@ -199,9 +186,7 @@ export const Buy = async (signer: WalletUsers = WalletUsers.tester, amount: numb
 };
 
 export const Sell = async (signer: WalletUsers = WalletUsers.tester, amount: number) => {
-	const myRegistry = new Registry();
-	myRegistry.register('/bonds.MsgSell', MsgSell);
-	const client = await createClient(myRegistry, getUser(signer));
+	const client = await createClient(getUser(signer));
 
 	const user = getUser(signer);
 	const account = (await user.getAccounts())[0];
@@ -213,10 +198,10 @@ export const Sell = async (signer: WalletUsers = WalletUsers.tester, amount: num
 
 	const message = {
 		typeUrl: '/bonds.MsgSell',
-		value: MsgSell.fromPartial({
+		value: impact.bonds.MsgSell.fromPartial({
 			sellerDid: did,
 			sellerAddress: myAddress,
-			amount: Coin.fromPartial({
+			amount: impact.cosmos.Coin.fromPartial({
 				denom: constants.bondToken,
 				amount: amount.toString(),
 			}),
@@ -230,9 +215,7 @@ export const Sell = async (signer: WalletUsers = WalletUsers.tester, amount: num
 
 // Needs swapper function
 export const Swap = async () => {
-	const myRegistry = new Registry();
-	myRegistry.register('/bonds.MsgSwap', MsgSwap);
-	const client = await createClient(myRegistry);
+	const client = await createClient();
 
 	const tester = getUser();
 	const account = (await tester.getAccounts())[0];
@@ -244,11 +227,11 @@ export const Swap = async () => {
 
 	const message = {
 		typeUrl: '/bonds.MsgSwap',
-		value: MsgSwap.fromPartial({
+		value: impact.bonds.MsgSwap.fromPartial({
 			swapperDid: did,
 			swapperAddress: myAddress,
 			bondDid: bondDid,
-			from: Coin.fromPartial({
+			from: impact.cosmos.Coin.fromPartial({
 				denom: '',
 				amount: '',
 			}),
@@ -261,9 +244,7 @@ export const Swap = async () => {
 };
 
 export const MakeOutcomePayment = async (amount: number) => {
-	const myRegistry = new Registry();
-	myRegistry.register('/bonds.MsgMakeOutcomePayment', MsgMakeOutcomePayment);
-	const client = await createClient(myRegistry);
+	const client = await createClient();
 
 	const tester = getUser();
 	const account = (await tester.getAccounts())[0];
@@ -275,7 +256,7 @@ export const MakeOutcomePayment = async (amount: number) => {
 
 	const message = {
 		typeUrl: '/bonds.MsgMakeOutcomePayment',
-		value: MsgMakeOutcomePayment.fromPartial({
+		value: impact.bonds.MsgMakeOutcomePayment.fromPartial({
 			senderDid: did,
 			senderAddress: myAddress,
 			amount: amount.toString(),
@@ -288,9 +269,7 @@ export const MakeOutcomePayment = async (amount: number) => {
 };
 
 export const WithdrawShare = async (signer: WalletUsers = WalletUsers.tester) => {
-	const myRegistry = new Registry();
-	myRegistry.register('/bonds.MsgWithdrawShare', MsgWithdrawShare);
-	const client = await createClient(myRegistry, getUser(signer));
+	const client = await createClient(getUser(signer));
 
 	const user = getUser(signer);
 	const account = (await user.getAccounts())[0];
@@ -302,7 +281,7 @@ export const WithdrawShare = async (signer: WalletUsers = WalletUsers.tester) =>
 
 	const message = {
 		typeUrl: '/bonds.MsgWithdrawShare',
-		value: MsgWithdrawShare.fromPartial({
+		value: impact.bonds.MsgWithdrawShare.fromPartial({
 			recipientDid: did,
 			bondDid: bondDid,
 			recipientAddress: myAddress,
@@ -314,9 +293,7 @@ export const WithdrawShare = async (signer: WalletUsers = WalletUsers.tester) =>
 };
 
 export const WithdrawReserve = async (signer: WalletUsers = WalletUsers.tester, amount: number) => {
-	const myRegistry = new Registry();
-	myRegistry.register('/bonds.MsgWithdrawReserve', MsgWithdrawReserve);
-	const client = await createClient(myRegistry, getUser(signer));
+	const client = await createClient(getUser(signer));
 
 	const user = getUser(signer);
 	const account = (await user.getAccounts())[0];
@@ -328,10 +305,10 @@ export const WithdrawReserve = async (signer: WalletUsers = WalletUsers.tester, 
 
 	const message = {
 		typeUrl: '/bonds.MsgWithdrawReserve',
-		value: MsgWithdrawReserve.fromPartial({
+		value: impact.bonds.MsgWithdrawReserve.fromPartial({
 			withdrawerDid: did,
 			withdrawerAddress: myAddress,
-			amount: [Coin.fromPartial({ denom: constants.bondReserveToken, amount: amount.toString() })],
+			amount: [impact.cosmos.Coin.fromPartial({ denom: constants.bondReserveToken, amount: amount.toString() })],
 			bondDid: bondDid,
 		}),
 	};

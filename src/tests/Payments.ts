@@ -1,15 +1,9 @@
-import { Registry } from '@cosmjs/proto-signing';
-import { Coin } from '../codec/cosmos/coin';
-import { BlockPeriod, Discount, DistributionShare, PaymentTemplate } from '../codec/payments/payments';
-import { MsgCreatePaymentContract, MsgCreatePaymentTemplate, MsgCreateSubscription, MsgEffectPayment, MsgGrantDiscount, MsgRevokeDiscount, MsgSetPaymentContractAuthorisation } from '../codec/payments/tx';
-import { JsonToArray } from '../protoquery';
 import { createClient, getUser } from './common';
 import { constants, fee, WalletUsers } from './constants';
+import { impact, helpers } from '../index';
 
 export const CreatePaymentTemplate = async () => {
-	const myRegistry = new Registry();
-	myRegistry.register('/payments.MsgCreatePaymentTemplate', MsgCreatePaymentTemplate);
-	const client = await createClient(myRegistry);
+	const client = await createClient();
 
 	const tester = getUser();
 	const account = (await tester.getAccounts())[0];
@@ -18,30 +12,30 @@ export const CreatePaymentTemplate = async () => {
 
 	const message = {
 		typeUrl: '/payments.MsgCreatePaymentTemplate',
-		value: MsgCreatePaymentTemplate.fromPartial({
+		value: impact.payments.MsgCreatePaymentTemplate.fromPartial({
 			creatorDid: did,
 			creatorAddress: myAddress,
-			paymentTemplate: PaymentTemplate.fromPartial({
+			paymentTemplate: impact.payments.PaymentTemplate.fromPartial({
 				id: constants.paymentTemplateId,
 				paymentAmount: [
-					Coin.fromPartial({
+					impact.cosmos.Coin.fromPartial({
 						denom: 'uixo',
 						amount: '500000',
 					}),
 				],
 				paymentMinimum: [
-					Coin.fromPartial({
+					impact.cosmos.Coin.fromPartial({
 						denom: 'uixo',
 						amount: '100000',
 					}),
 				],
 				paymentMaximum: [
-					Coin.fromPartial({
+					impact.cosmos.Coin.fromPartial({
 						denom: 'uixo',
 						amount: '500000000',
 					}),
 				],
-				discounts: [Discount.fromPartial({ id: constants.paymentDiscountId, percent: '5000000000000000000' })],
+				discounts: [impact.payments.Discount.fromPartial({ id: constants.paymentDiscountId, percent: '5000000000000000000' })],
 			}),
 		}),
 	};
@@ -54,9 +48,7 @@ export const CreatePaymentTemplate = async () => {
  * Distribution shares must add up to 100, and inputs is to power 18
  */
 export const CreatePaymentContract = async () => {
-	const myRegistry = new Registry();
-	myRegistry.register('/payments.MsgCreatePaymentContract', MsgCreatePaymentContract);
-	const client = await createClient(myRegistry);
+	const client = await createClient();
 
 	const tester = getUser();
 	const account = (await tester.getAccounts())[0];
@@ -68,12 +60,12 @@ export const CreatePaymentContract = async () => {
 
 	const message = {
 		typeUrl: '/payments.MsgCreatePaymentContract',
-		value: MsgCreatePaymentContract.fromPartial({
+		value: impact.payments.MsgCreatePaymentContract.fromPartial({
 			creatorDid: did,
 			paymentTemplateId: constants.paymentTemplateId,
 			paymentContractId: constants.paymentContractId,
 			payer: myAddress,
-			recipients: [DistributionShare.fromPartial({ address: aliceAccount.address, percentage: '100000000000000000000' })],
+			recipients: [impact.payments.DistributionShare.fromPartial({ address: aliceAccount.address, percentage: '100000000000000000000' })],
 			discountId: constants.paymentDiscountId,
 			canDeauthorise: true,
 			creatorAddress: myAddress,
@@ -85,9 +77,7 @@ export const CreatePaymentContract = async () => {
 };
 
 export const SetPaymentContractAuthorization = async () => {
-	const myRegistry = new Registry();
-	myRegistry.register('/payments.MsgSetPaymentContractAuthorisation', MsgSetPaymentContractAuthorisation);
-	const client = await createClient(myRegistry);
+	const client = await createClient();
 
 	const tester = getUser();
 	const account = (await tester.getAccounts())[0];
@@ -96,7 +86,7 @@ export const SetPaymentContractAuthorization = async () => {
 
 	const message = {
 		typeUrl: '/payments.MsgSetPaymentContractAuthorisation',
-		value: MsgSetPaymentContractAuthorisation.fromPartial({
+		value: impact.payments.MsgSetPaymentContractAuthorisation.fromPartial({
 			paymentContractId: constants.paymentContractId,
 			payerDid: did,
 			authorised: true,
@@ -109,9 +99,7 @@ export const SetPaymentContractAuthorization = async () => {
 };
 
 export const CreateSubscription = async () => {
-	const myRegistry = new Registry();
-	myRegistry.register('/payments.MsgCreateSubscription', MsgCreateSubscription);
-	const client = await createClient(myRegistry);
+	const client = await createClient();
 
 	const tester = getUser();
 	const account = (await tester.getAccounts())[0];
@@ -120,12 +108,15 @@ export const CreateSubscription = async () => {
 
 	const message = {
 		typeUrl: '/payments.MsgCreateSubscription',
-		value: MsgCreateSubscription.fromPartial({
+		value: impact.payments.MsgCreateSubscription.fromPartial({
 			creatorDid: did,
 			subscriptionId: constants.paymentSubscripionId,
 			paymentContractId: constants.paymentContractId,
 			maxPeriods: '3',
-			period: { typeUrl: '/payments.BlockPeriod', value: BlockPeriod.encode(BlockPeriod.fromPartial({ periodLength: 3, periodStartBlock: 5 })).finish() },
+			period: {
+				typeUrl: '/payments.BlockPeriod',
+				value: impact.payments.BlockPeriod.encode(impact.payments.BlockPeriod.fromPartial({ periodLength: helpers.Long.fromNumber(3), periodStartBlock: helpers.Long.fromNumber(5) })).finish(),
+			},
 			creatorAddress: myAddress,
 		}),
 	};
@@ -135,9 +126,7 @@ export const CreateSubscription = async () => {
 };
 
 export const GrantDiscount = async () => {
-	const myRegistry = new Registry();
-	myRegistry.register('/payments.MsgGrantDiscount', MsgGrantDiscount);
-	const client = await createClient(myRegistry);
+	const client = await createClient();
 
 	const tester = getUser();
 	const account = (await tester.getAccounts())[0];
@@ -146,7 +135,7 @@ export const GrantDiscount = async () => {
 
 	const message = {
 		typeUrl: '/payments.MsgGrantDiscount',
-		value: MsgGrantDiscount.fromPartial({
+		value: impact.payments.MsgGrantDiscount.fromPartial({
 			senderDid: did,
 			paymentContractId: constants.paymentContractId,
 			discountId: constants.paymentDiscountId,
@@ -160,9 +149,7 @@ export const GrantDiscount = async () => {
 };
 
 export const RevokeDiscount = async () => {
-	const myRegistry = new Registry();
-	myRegistry.register('/payments.MsgRevokeDiscount', MsgRevokeDiscount);
-	const client = await createClient(myRegistry);
+	const client = await createClient();
 
 	const tester = getUser();
 	const account = (await tester.getAccounts())[0];
@@ -171,7 +158,7 @@ export const RevokeDiscount = async () => {
 
 	const message = {
 		typeUrl: '/payments.MsgRevokeDiscount',
-		value: MsgRevokeDiscount.fromPartial({
+		value: impact.payments.MsgRevokeDiscount.fromPartial({
 			senderDid: did,
 			paymentContractId: constants.paymentContractId,
 			holder: myAddress,
@@ -184,9 +171,7 @@ export const RevokeDiscount = async () => {
 };
 
 export const EffectPayment = async () => {
-	const myRegistry = new Registry();
-	myRegistry.register('/payments.MsgEffectPayment', MsgEffectPayment);
-	const client = await createClient(myRegistry);
+	const client = await createClient();
 
 	const tester = getUser();
 	const account = (await tester.getAccounts())[0];
@@ -195,7 +180,7 @@ export const EffectPayment = async () => {
 
 	const message = {
 		typeUrl: '/payments.MsgEffectPayment',
-		value: MsgEffectPayment.fromPartial({
+		value: impact.payments.MsgEffectPayment.fromPartial({
 			senderDid: did,
 			paymentContractId: constants.paymentContractId,
 			senderAddress: myAddress,

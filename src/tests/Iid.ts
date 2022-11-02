@@ -1,34 +1,9 @@
-import { Registry } from '@cosmjs/proto-signing';
-import { AccordedRight, Context, IidDocument, IidMetadata, LinkedEntity, LinkedResource, Service, VerificationMethod } from '../codec/iid/iid';
-import {
-	MsgAddAccordedRight,
-	MsgAddController,
-	MsgAddIidContext,
-	MsgAddLinkedEntity,
-	MsgAddLinkedResource,
-	MsgAddService,
-	MsgAddVerification,
-	// MsgCreateIidDocument,
-	MsgDeleteAccordedRight,
-	MsgDeleteController,
-	MsgDeleteIidContext,
-	MsgDeleteLinkedEntity,
-	MsgDeleteLinkedResource,
-	MsgDeleteService,
-	MsgRevokeVerification,
-	MsgSetVerificationRelationships,
-	MsgUpdateIidDocument,
-	MsgUpdateIidMeta,
-	Verification,
-} from '../codec/iid/tx';
-import { createClient, getUser, getVerificationMethod } from './common';
+import { getUser, getVerificationMethod, createClient } from './common';
 import { constants, fee, WalletUsers } from './constants';
-import { ixo } from '../telescope/src';
+import { impact } from '../index';
 
 export const CreateIidDoc = async (signer: WalletUsers = WalletUsers.tester, userToAddToVerifications?: WalletUsers) => {
-	const myRegistry = new Registry();
-	myRegistry.register('/iid.MsgCreateIidDocument', ixo.iid.MsgCreateIidDocument);
-	const client = await createClient(myRegistry, getUser(signer));
+	const client = await createClient(getUser(signer));
 
 	const user = getUser(signer);
 	const account = (await user.getAccounts())[0];
@@ -37,8 +12,8 @@ export const CreateIidDoc = async (signer: WalletUsers = WalletUsers.tester, use
 	const did = user.did;
 
 	let verifications = [
-		Verification.fromPartial({ relationships: ['authentication'], method: getVerificationMethod(did, myPubKey, did) }),
-		Verification.fromPartial({ relationships: ['authentication'], method: getVerificationMethod(`${did}#${myAddress}`, myPubKey, did) }),
+		impact.iid.Verification.fromPartial({ relationships: ['authentication'], method: getVerificationMethod(did, myPubKey, did) }),
+		impact.iid.Verification.fromPartial({ relationships: ['authentication'], method: getVerificationMethod(`${did}#${myAddress}`, myPubKey, did) }),
 	];
 
 	if (userToAddToVerifications) {
@@ -48,13 +23,13 @@ export const CreateIidDoc = async (signer: WalletUsers = WalletUsers.tester, use
 		const eUserPubKey = eUserAccount.pubkey;
 		const eUserdid = eUser.did;
 
-		verifications.push(Verification.fromPartial({ relationships: ['authentication'], method: getVerificationMethod(eUserdid, eUserPubKey, eUserdid) }));
-		verifications.push(Verification.fromPartial({ relationships: ['authentication'], method: getVerificationMethod(`${eUserdid}#${eUserAddress}`, eUserPubKey, eUserdid) }));
+		verifications.push(impact.iid.Verification.fromPartial({ relationships: ['authentication'], method: getVerificationMethod(eUserdid, eUserPubKey, eUserdid) }));
+		verifications.push(impact.iid.Verification.fromPartial({ relationships: ['authentication'], method: getVerificationMethod(`${eUserdid}#${eUserAddress}`, eUserPubKey, eUserdid) }));
 	}
 
 	const message = {
 		typeUrl: '/iid.MsgCreateIidDocument',
-		value: ixo.iid.MsgCreateIidDocument.fromPartial({
+		value: impact.iid.MsgCreateIidDocument.fromPartial({
 			id: did,
 			verifications,
 			signer: myAddress,
@@ -66,10 +41,8 @@ export const CreateIidDoc = async (signer: WalletUsers = WalletUsers.tester, use
 	return response;
 };
 
-export const UpdateIidDoc = async (IidDocumentJSON: string) => {
-	const myRegistry = new Registry();
-	myRegistry.register('/iid.MsgUpdateIidDocument', MsgUpdateIidDocument);
-	const client = await createClient(myRegistry);
+export const UpdateIidDoc = async () => {
+	const client = await createClient();
 
 	const tester = getUser();
 	const account = (await tester.getAccounts())[0];
@@ -80,8 +53,8 @@ export const UpdateIidDoc = async (IidDocumentJSON: string) => {
 
 	const message = {
 		typeUrl: '/iid.MsgUpdateIidDocument',
-		value: MsgUpdateIidDocument.fromPartial({
-			doc: IidDocument.fromPartial({ id: did, controller: [alice.did] }),
+		value: impact.iid.MsgUpdateIidDocument.fromPartial({
+			doc: impact.iid.IidDocument.fromPartial({ id: did, controller: [alice.did] }),
 			signer: myAddress,
 		}),
 	};
@@ -91,9 +64,7 @@ export const UpdateIidDoc = async (IidDocumentJSON: string) => {
 };
 
 export const UpdateIidMeta = async () => {
-	const myRegistry = new Registry();
-	myRegistry.register('/iid.MsgUpdateIidMeta', MsgUpdateIidMeta);
-	const client = await createClient(myRegistry);
+	const client = await createClient();
 
 	const tester = getUser();
 	const account = (await tester.getAccounts())[0];
@@ -102,9 +73,9 @@ export const UpdateIidMeta = async () => {
 
 	const message = {
 		typeUrl: '/iid.MsgUpdateIidMeta',
-		value: MsgUpdateIidMeta.fromPartial({
+		value: impact.iid.MsgUpdateIidMeta.fromPartial({
 			id: did,
-			meta: IidMetadata.fromPartial({ versionId: '2' }),
+			meta: impact.iid.IidMetadata.fromPartial({ versionId: '2' }),
 			signer: myAddress,
 		}),
 	};
@@ -114,9 +85,7 @@ export const UpdateIidMeta = async () => {
 };
 
 export const AddIidContext = async () => {
-	const myRegistry = new Registry();
-	myRegistry.register('/iid.MsgAddIidContext', MsgAddIidContext);
-	const client = await createClient(myRegistry);
+	const client = await createClient();
 
 	const tester = getUser();
 	const account = (await tester.getAccounts())[0];
@@ -125,9 +94,9 @@ export const AddIidContext = async () => {
 
 	const message = {
 		typeUrl: '/iid.MsgAddIidContext',
-		value: MsgAddIidContext.fromPartial({
+		value: impact.iid.MsgAddIidContext.fromPartial({
 			id: did,
-			context: Context.fromPartial({ key: constants.contextKey, val: 'val' }),
+			context: impact.iid.Context.fromPartial({ key: constants.contextKey, val: 'val' }),
 			signer: myAddress,
 		}),
 	};
@@ -137,9 +106,7 @@ export const AddIidContext = async () => {
 };
 
 export const DeleteIidContext = async () => {
-	const myRegistry = new Registry();
-	myRegistry.register('/iid.MsgDeleteIidContext', MsgDeleteIidContext);
-	const client = await createClient(myRegistry);
+	const client = await createClient();
 
 	const tester = getUser();
 	const account = (await tester.getAccounts())[0];
@@ -148,7 +115,7 @@ export const DeleteIidContext = async () => {
 
 	const message = {
 		typeUrl: '/iid.MsgDeleteIidContext',
-		value: MsgDeleteIidContext.fromPartial({
+		value: impact.iid.MsgDeleteIidContext.fromPartial({
 			id: did,
 			contextKey: constants.contextKey,
 			signer: myAddress,
@@ -163,9 +130,7 @@ export const DeleteIidContext = async () => {
  * @param relationships list with values: 'authentication' | 'assertionMethod' | 'keyAgreement' | 'capabilityInvocation' | 'capabilityDelegation'
  */
 export const AddVerification = async (relationships: string[] = ['authentication']) => {
-	const myRegistry = new Registry();
-	myRegistry.register('/iid.MsgAddVerification', MsgAddVerification);
-	const client = await createClient(myRegistry);
+	const client = await createClient();
 
 	const tester = getUser();
 	const account = (await tester.getAccounts())[0];
@@ -177,9 +142,9 @@ export const AddVerification = async (relationships: string[] = ['authentication
 
 	const message = {
 		typeUrl: '/iid.MsgAddVerification',
-		value: MsgAddVerification.fromPartial({
+		value: impact.iid.MsgAddVerification.fromPartial({
 			id: did,
-			verification: Verification.fromPartial({
+			verification: impact.iid.Verification.fromPartial({
 				relationships: relationships,
 				method: getVerificationMethod(alice.did, aliceAccount.pubkey, alice.did),
 			}),
@@ -195,9 +160,7 @@ export const AddVerification = async (relationships: string[] = ['authentication
  * @param relationships list with values: 'authentication' | 'assertionMethod' | 'keyAgreement' | 'capabilityInvocation' | 'capabilityDelegation'
  */
 export const SetVerificationRelationships = async (relationships: string[] = ['authentication']) => {
-	const myRegistry = new Registry();
-	myRegistry.register('/iid.MsgSetVerificationRelationships', MsgSetVerificationRelationships);
-	const client = await createClient(myRegistry);
+	const client = await createClient();
 
 	const tester = getUser();
 	const account = (await tester.getAccounts())[0];
@@ -208,7 +171,7 @@ export const SetVerificationRelationships = async (relationships: string[] = ['a
 
 	const message = {
 		typeUrl: '/iid.MsgSetVerificationRelationships',
-		value: MsgSetVerificationRelationships.fromPartial({
+		value: impact.iid.MsgSetVerificationRelationships.fromPartial({
 			id: did,
 			methodId: alice.did,
 			relationships: relationships,
@@ -221,9 +184,7 @@ export const SetVerificationRelationships = async (relationships: string[] = ['a
 };
 
 export const RevokeVerification = async () => {
-	const myRegistry = new Registry();
-	myRegistry.register('/iid.MsgRevokeVerification', MsgRevokeVerification);
-	const client = await createClient(myRegistry);
+	const client = await createClient();
 
 	const tester = getUser();
 	const account = (await tester.getAccounts())[0];
@@ -234,7 +195,7 @@ export const RevokeVerification = async () => {
 
 	const message = {
 		typeUrl: '/iid.MsgRevokeVerification',
-		value: MsgRevokeVerification.fromPartial({
+		value: impact.iid.MsgRevokeVerification.fromPartial({
 			id: did,
 			methodId: alice.did,
 			signer: myAddress,
@@ -246,9 +207,7 @@ export const RevokeVerification = async () => {
 };
 
 export const AddAccordedRight = async () => {
-	const myRegistry = new Registry();
-	myRegistry.register('/iid.MsgAddAccordedRight', MsgAddAccordedRight);
-	const client = await createClient(myRegistry);
+	const client = await createClient();
 
 	const tester = getUser();
 	const account = (await tester.getAccounts())[0];
@@ -258,9 +217,9 @@ export const AddAccordedRight = async () => {
 
 	const message = {
 		typeUrl: '/iid.MsgAddAccordedRight',
-		value: MsgAddAccordedRight.fromPartial({
+		value: impact.iid.MsgAddAccordedRight.fromPartial({
 			id: accordedRight.did,
-			accordedRight: AccordedRight.fromPartial({
+			accordedRight: impact.iid.AccordedRight.fromPartial({
 				type: 'type',
 				id: constants.accordedRightId,
 				mechanism: 'mechanism',
@@ -276,9 +235,7 @@ export const AddAccordedRight = async () => {
 };
 
 export const DeleteAccordedRight = async () => {
-	const myRegistry = new Registry();
-	myRegistry.register('/iid.MsgDeleteAccordedRight', MsgDeleteAccordedRight);
-	const client = await createClient(myRegistry);
+	const client = await createClient();
 
 	const tester = getUser();
 	const account = (await tester.getAccounts())[0];
@@ -288,7 +245,7 @@ export const DeleteAccordedRight = async () => {
 
 	const message = {
 		typeUrl: '/iid.MsgDeleteAccordedRight',
-		value: MsgDeleteAccordedRight.fromPartial({
+		value: impact.iid.MsgDeleteAccordedRight.fromPartial({
 			id: accordedRight.did,
 			rightId: constants.accordedRightId,
 			signer: myAddress,
@@ -300,9 +257,7 @@ export const DeleteAccordedRight = async () => {
 };
 
 export const AddController = async () => {
-	const myRegistry = new Registry();
-	myRegistry.register('/iid.MsgAddController', MsgAddController);
-	const client = await createClient(myRegistry);
+	const client = await createClient();
 
 	const tester = getUser();
 	const account = (await tester.getAccounts())[0];
@@ -313,7 +268,7 @@ export const AddController = async () => {
 
 	const message = {
 		typeUrl: '/iid.MsgAddController',
-		value: MsgAddController.fromPartial({
+		value: impact.iid.MsgAddController.fromPartial({
 			id: did,
 			controllerDid: bob.did,
 			signer: myAddress,
@@ -325,9 +280,7 @@ export const AddController = async () => {
 };
 
 export const DeleteController = async () => {
-	const myRegistry = new Registry();
-	myRegistry.register('/iid.MsgDeleteController', MsgDeleteController);
-	const client = await createClient(myRegistry);
+	const client = await createClient();
 
 	const tester = getUser();
 	const account = (await tester.getAccounts())[0];
@@ -338,7 +291,7 @@ export const DeleteController = async () => {
 
 	const message = {
 		typeUrl: '/iid.MsgDeleteController',
-		value: MsgDeleteController.fromPartial({
+		value: impact.iid.MsgDeleteController.fromPartial({
 			id: did,
 			controllerDid: bob.did,
 			signer: myAddress,
@@ -350,9 +303,7 @@ export const DeleteController = async () => {
 };
 
 export const AddLinkedEntity = async () => {
-	const myRegistry = new Registry();
-	myRegistry.register('/iid.MsgAddLinkedEntity', MsgAddLinkedEntity);
-	const client = await createClient(myRegistry);
+	const client = await createClient();
 
 	const tester = getUser();
 	const account = (await tester.getAccounts())[0];
@@ -361,9 +312,9 @@ export const AddLinkedEntity = async () => {
 
 	const message = {
 		typeUrl: '/iid.MsgAddLinkedEntity',
-		value: MsgAddLinkedEntity.fromPartial({
+		value: impact.iid.MsgAddLinkedEntity.fromPartial({
 			id: did,
-			linkedEntity: LinkedEntity.fromPartial({ id: constants.linkedEntityId }),
+			linkedEntity: impact.iid.LinkedEntity.fromPartial({ id: constants.linkedEntityId }),
 			signer: myAddress,
 		}),
 	};
@@ -373,9 +324,7 @@ export const AddLinkedEntity = async () => {
 };
 
 export const DeleteLinkedEntity = async () => {
-	const myRegistry = new Registry();
-	myRegistry.register('/iid.MsgDeleteLinkedEntity', MsgDeleteLinkedEntity);
-	const client = await createClient(myRegistry);
+	const client = await createClient();
 
 	const tester = getUser();
 	const account = (await tester.getAccounts())[0];
@@ -384,7 +333,7 @@ export const DeleteLinkedEntity = async () => {
 
 	const message = {
 		typeUrl: '/iid.MsgDeleteLinkedEntity',
-		value: MsgDeleteLinkedEntity.fromPartial({
+		value: impact.iid.MsgDeleteLinkedEntity.fromPartial({
 			id: did,
 			entityId: constants.linkedEntityId,
 			signer: myAddress,
@@ -396,9 +345,7 @@ export const DeleteLinkedEntity = async () => {
 };
 
 export const AddLinkedResource = async () => {
-	const myRegistry = new Registry();
-	myRegistry.register('/iid.MsgAddLinkedResource', MsgAddLinkedResource);
-	const client = await createClient(myRegistry);
+	const client = await createClient();
 
 	const tester = getUser();
 	const account = (await tester.getAccounts())[0];
@@ -407,9 +354,9 @@ export const AddLinkedResource = async () => {
 
 	const message = {
 		typeUrl: '/iid.MsgAddLinkedResource',
-		value: MsgAddLinkedResource.fromPartial({
+		value: impact.iid.MsgAddLinkedResource.fromPartial({
 			id: did,
-			linkedResource: LinkedResource.fromPartial({ id: constants.linkedResourceId, description: 'Description' }),
+			linkedResource: impact.iid.LinkedResource.fromPartial({ id: constants.linkedResourceId, description: 'Description' }),
 			signer: myAddress,
 		}),
 	};
@@ -419,9 +366,7 @@ export const AddLinkedResource = async () => {
 };
 
 export const DeleteLinkedResource = async () => {
-	const myRegistry = new Registry();
-	myRegistry.register('/iid.MsgDeleteLinkedResource', MsgDeleteLinkedResource);
-	const client = await createClient(myRegistry);
+	const client = await createClient();
 
 	const tester = getUser();
 	const account = (await tester.getAccounts())[0];
@@ -430,7 +375,7 @@ export const DeleteLinkedResource = async () => {
 
 	const message = {
 		typeUrl: '/iid.MsgDeleteLinkedResource',
-		value: MsgDeleteLinkedResource.fromPartial({
+		value: impact.iid.MsgDeleteLinkedResource.fromPartial({
 			id: did,
 			resourceId: constants.linkedResourceId,
 			signer: myAddress,
@@ -442,9 +387,7 @@ export const DeleteLinkedResource = async () => {
 };
 
 export const AddService = async () => {
-	const myRegistry = new Registry();
-	myRegistry.register('/iid.MsgAddService', MsgAddService);
-	const client = await createClient(myRegistry);
+	const client = await createClient();
 
 	const tester = getUser();
 	const account = (await tester.getAccounts())[0];
@@ -453,9 +396,9 @@ export const AddService = async () => {
 
 	const message = {
 		typeUrl: '/iid.MsgAddService',
-		value: MsgAddService.fromPartial({
+		value: impact.iid.MsgAddService.fromPartial({
 			id: did,
-			serviceData: Service.fromPartial({ id: constants.serviceId, serviceEndpoint: 'https://ixo.world', type: 'awesome' }),
+			serviceData: impact.iid.Service.fromPartial({ id: constants.serviceId, serviceEndpoint: 'https://ixo.world', type: 'awesome' }),
 			signer: myAddress,
 		}),
 	};
@@ -465,9 +408,7 @@ export const AddService = async () => {
 };
 
 export const DeleteService = async () => {
-	const myRegistry = new Registry();
-	myRegistry.register('/iid.MsgDeleteService', MsgDeleteService);
-	const client = await createClient(myRegistry);
+	const client = await createClient();
 
 	const tester = getUser();
 	const account = (await tester.getAccounts())[0];
@@ -476,7 +417,7 @@ export const DeleteService = async () => {
 
 	const message = {
 		typeUrl: '/iid.MsgDeleteService',
-		value: MsgDeleteService.fromPartial({
+		value: impact.iid.MsgDeleteService.fromPartial({
 			id: did,
 			serviceId: constants.serviceId,
 			signer: myAddress,
