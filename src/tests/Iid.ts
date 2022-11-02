@@ -8,7 +8,7 @@ import {
 	MsgAddLinkedResource,
 	MsgAddService,
 	MsgAddVerification,
-	MsgCreateIidDocument,
+	// MsgCreateIidDocument,
 	MsgDeleteAccordedRight,
 	MsgDeleteController,
 	MsgDeleteIidContext,
@@ -23,10 +23,11 @@ import {
 } from '../codec/iid/tx';
 import { createClient, getUser, getVerificationMethod } from './common';
 import { constants, fee, WalletUsers } from './constants';
+import { ixo } from '../telescope/src';
 
 export const CreateIidDoc = async (signer: WalletUsers = WalletUsers.tester, userToAddToVerifications?: WalletUsers) => {
 	const myRegistry = new Registry();
-	myRegistry.register('/iid.MsgCreateIidDocument', MsgCreateIidDocument);
+	myRegistry.register('/iid.MsgCreateIidDocument', ixo.iid.MsgCreateIidDocument);
 	const client = await createClient(myRegistry, getUser(signer));
 
 	const user = getUser(signer);
@@ -53,7 +54,7 @@ export const CreateIidDoc = async (signer: WalletUsers = WalletUsers.tester, use
 
 	const message = {
 		typeUrl: '/iid.MsgCreateIidDocument',
-		value: MsgCreateIidDocument.fromPartial({
+		value: ixo.iid.MsgCreateIidDocument.fromPartial({
 			id: did,
 			verifications,
 			signer: myAddress,

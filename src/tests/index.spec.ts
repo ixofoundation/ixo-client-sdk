@@ -19,10 +19,10 @@ describe('Testing the cosmos bank module', () => {
 describe('Testing the iid module', () => {
 	sendFromFaucet(WalletUsers.tester);
 	testMsg('/iid.MsgCreateIidDocument', () => Iid.CreateIidDoc());
-	sendFromFaucet(WalletUsers.alice);
-	testMsg('/iid.MsgCreateIidDocument', () => Iid.CreateIidDoc(WalletUsers.alice));
-	sendFromFaucet(WalletUsers.bob);
-	testMsg('/iid.MsgCreateIidDocument', () => Iid.CreateIidDoc(WalletUsers.bob));
+	// sendFromFaucet(WalletUsers.alice);
+	// testMsg('/iid.MsgCreateIidDocument', () => Iid.CreateIidDoc(WalletUsers.alice));
+	// sendFromFaucet(WalletUsers.bob);
+	// testMsg('/iid.MsgCreateIidDocument', () => Iid.CreateIidDoc(WalletUsers.bob));
 
 	// testMsg('/iid.MsgUpdateIidDocument', () => Iid.UpdateIidDoc());
 	// testMsg('/iid.MsgUpdateIidMeta', () => Iid.UpdateIidMeta());
