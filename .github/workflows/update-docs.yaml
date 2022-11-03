@@ -1,8 +1,8 @@
 name: update docs
-on: 
-  push: 
-    branches: [develop]
-  workflow_dispatch: 
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
 permissions:
   contents: write
 
@@ -27,7 +27,7 @@ jobs:
 
       - name: generate docs
         run: npx typedoc src/index.ts
-      
+
       #   run: echo ${GITHUB_REF##*/}
 
       - name: Deploy 🚀
