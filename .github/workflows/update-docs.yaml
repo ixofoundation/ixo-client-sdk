@@ -34,5 +34,5 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: docs
-          branch: develop
+          branch: master
           target-folder: docs
