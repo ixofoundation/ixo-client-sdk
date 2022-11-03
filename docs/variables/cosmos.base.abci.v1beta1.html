@@ -1,0 +1,821 @@
+<!DOCTYPE html><html class="default" lang="en"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>v1beta1 | @ixo/client-sdk</title><meta name="description" content="Documentation for @ixo/client-sdk"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script async src="../assets/search.js" id="search-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os"</script><header class="tsd-page-toolbar">
+<div class="tsd-toolbar-contents container">
+<div class="table-cell" id="tsd-search" data-base="..">
+<div class="field"><label for="tsd-search-field" class="tsd-widget tsd-toolbar-icon search no-caption"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M15.7824 13.833L12.6666 10.7177C12.5259 10.5771 12.3353 10.499 12.1353 10.499H11.6259C12.4884 9.39596 13.001 8.00859 13.001 6.49937C13.001 2.90909 10.0914 0 6.50048 0C2.90959 0 0 2.90909 0 6.49937C0 10.0896 2.90959 12.9987 6.50048 12.9987C8.00996 12.9987 9.39756 12.4863 10.5008 11.6239V12.1332C10.5008 12.3332 10.5789 12.5238 10.7195 12.6644L13.8354 15.7797C14.1292 16.0734 14.6042 16.0734 14.8948 15.7797L15.7793 14.8954C16.0731 14.6017 16.0731 14.1267 15.7824 13.833ZM6.50048 10.499C4.29094 10.499 2.50018 8.71165 2.50018 6.49937C2.50018 4.29021 4.28781 2.49976 6.50048 2.49976C8.71001 2.49976 10.5008 4.28708 10.5008 6.49937C10.5008 8.70852 8.71314 10.499 6.50048 10.499Z" fill="var(--color-text)"></path></svg></label><input type="text" id="tsd-search-field" aria-label="Search"/></div>
+<div class="field">
+<div id="tsd-toolbar-links"></div></div>
+<ul class="results">
+<li class="state loading">Preparing search index...</li>
+<li class="state failure">The search index is not available</li></ul><a href="../index.html" class="title">@ixo/client-sdk</a></div>
+<div class="table-cell" id="tsd-widgets"><a href="#" class="tsd-widget tsd-toolbar-icon menu no-caption" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="3" width="14" height="2" fill="var(--color-text)"></rect><rect x="1" y="7" width="14" height="2" fill="var(--color-text)"></rect><rect x="1" y="11" width="14" height="2" fill="var(--color-text)"></rect></svg></a></div></div></header>
+<div class="container container-main">
+<div class="col-8 col-content">
+<div class="tsd-page-title">
+<ul class="tsd-breadcrumb">
+<li><a href="../modules.html">@ixo/client-sdk</a></li>
+<li><a href="../modules/cosmos.html">cosmos</a></li>
+<li><a href="../modules/cosmos.base.html">base</a></li>
+<li><a href="../modules/cosmos.base.abci.html">abci</a></li>
+<li><a href="cosmos.base.abci.v1beta1.html">v1beta1</a></li></ul>
+<h1>Variable v1beta1<code class="tsd-tag ts-flagConst">Const</code> </h1></div>
+<div class="tsd-signature">v1beta1<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span><br/><span>    </span>ABCIMessageLog<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span><br/><span>        </span>decode<span class="tsd-signature-symbol">(</span>input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Reader</span>, length<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ABCIMessageLog</span><span class="tsd-signature-symbol">; </span><br/><span>        </span>encode<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ABCIMessageLog</span>, writer<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">; </span><br/><span>        </span>fromJSON<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ABCIMessageLog</span><span class="tsd-signature-symbol">; </span><br/><span>        </span>fromPartial<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ABCIMessageLog</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ABCIMessageLog</span><span class="tsd-signature-symbol">; </span><br/><span>        </span>toJSON<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ABCIMessageLog</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">; </span><br/><span>    </span><span class="tsd-signature-symbol">}</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>Attribute<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span><br/><span>        </span>decode<span class="tsd-signature-symbol">(</span>input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Reader</span>, length<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Attribute</span><span class="tsd-signature-symbol">; </span><br/><span>        </span>encode<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Attribute</span>, writer<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">; </span><br/><span>        </span>fromJSON<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Attribute</span><span class="tsd-signature-symbol">; </span><br/><span>        </span>fromPartial<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Attribute</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Attribute</span><span class="tsd-signature-symbol">; </span><br/><span>        </span>toJSON<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Attribute</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">; </span><br/><span>    </span><span class="tsd-signature-symbol">}</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>GasInfo<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span><br/><span>        </span>decode<span class="tsd-signature-symbol">(</span>input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Reader</span>, length<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GasInfo</span><span class="tsd-signature-symbol">; </span><br/><span>        </span>encode<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GasInfo</span>, writer<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">; </span><br/><span>        </span>fromJSON<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GasInfo</span><span class="tsd-signature-symbol">; </span><br/><span>        </span>fromPartial<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">GasInfo</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GasInfo</span><span class="tsd-signature-symbol">; </span><br/><span>        </span>toJSON<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GasInfo</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">; </span><br/><span>    </span><span class="tsd-signature-symbol">}</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>MsgData<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span><br/><span>        </span>decode<span class="tsd-signature-symbol">(</span>input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Reader</span>, length<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MsgData</span><span class="tsd-signature-symbol">; </span><br/><span>        </span>encode<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MsgData</span>, writer<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">; </span><br/><span>        </span>fromJSON<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MsgData</span><span class="tsd-signature-symbol">; </span><br/><span>        </span>fromPartial<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">MsgData</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MsgData</span><span class="tsd-signature-symbol">; </span><br/><span>        </span>toJSON<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MsgData</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">; </span><br/><span>    </span><span class="tsd-signature-symbol">}</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>Result<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span><br/><span>        </span>decode<span class="tsd-signature-symbol">(</span>input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Reader</span>, length<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Result</span><span class="tsd-signature-symbol">; </span><br/><span>        </span>encode<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Result</span>, writer<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">; </span><br/><span>        </span>fromJSON<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Result</span><span class="tsd-signature-symbol">; </span><br/><span>        </span>fromPartial<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Result</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Result</span><span class="tsd-signature-symbol">; </span><br/><span>        </span>toJSON<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Result</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">; </span><br/><span>    </span><span class="tsd-signature-symbol">}</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>SearchTxsResult<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span><br/><span>        </span>decode<span class="tsd-signature-symbol">(</span>input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Reader</span>, length<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SearchTxsResult</span><span class="tsd-signature-symbol">; </span><br/><span>        </span>encode<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SearchTxsResult</span>, writer<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">; </span><br/><span>        </span>fromJSON<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SearchTxsResult</span><span class="tsd-signature-symbol">; </span><br/><span>        </span>fromPartial<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">SearchTxsResult</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SearchTxsResult</span><span class="tsd-signature-symbol">; </span><br/><span>        </span>toJSON<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SearchTxsResult</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">; </span><br/><span>    </span><span class="tsd-signature-symbol">}</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>SimulationResponse<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span><br/><span>        </span>decode<span class="tsd-signature-symbol">(</span>input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Reader</span>, length<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SimulationResponse</span><span class="tsd-signature-symbol">; </span><br/><span>        </span>encode<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SimulationResponse</span>, writer<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">; </span><br/><span>        </span>fromJSON<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SimulationResponse</span><span class="tsd-signature-symbol">; </span><br/><span>        </span>fromPartial<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">SimulationResponse</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SimulationResponse</span><span class="tsd-signature-symbol">; </span><br/><span>        </span>toJSON<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SimulationResponse</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">; </span><br/><span>    </span><span class="tsd-signature-symbol">}</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>StringEvent<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span><br/><span>        </span>decode<span class="tsd-signature-symbol">(</span>input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Reader</span>, length<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">StringEvent</span><span class="tsd-signature-symbol">; </span><br/><span>        </span>encode<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">StringEvent</span>, writer<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">; </span><br/><span>        </span>fromJSON<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">StringEvent</span><span class="tsd-signature-symbol">; </span><br/><span>        </span>fromPartial<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">StringEvent</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">StringEvent</span><span class="tsd-signature-symbol">; </span><br/><span>        </span>toJSON<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">StringEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">; </span><br/><span>    </span><span class="tsd-signature-symbol">}</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>TxMsgData<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span><br/><span>        </span>decode<span class="tsd-signature-symbol">(</span>input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Reader</span>, length<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TxMsgData</span><span class="tsd-signature-symbol">; </span><br/><span>        </span>encode<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TxMsgData</span>, writer<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">; </span><br/><span>        </span>fromJSON<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TxMsgData</span><span class="tsd-signature-symbol">; </span><br/><span>        </span>fromPartial<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TxMsgData</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TxMsgData</span><span class="tsd-signature-symbol">; </span><br/><span>        </span>toJSON<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TxMsgData</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">; </span><br/><span>    </span><span class="tsd-signature-symbol">}</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>TxResponse<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span><br/><span>        </span>decode<span class="tsd-signature-symbol">(</span>input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Reader</span>, length<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TxResponse</span><span class="tsd-signature-symbol">; </span><br/><span>        </span>encode<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TxResponse</span>, writer<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">; </span><br/><span>        </span>fromJSON<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TxResponse</span><span class="tsd-signature-symbol">; </span><br/><span>        </span>fromPartial<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TxResponse</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TxResponse</span><span class="tsd-signature-symbol">; </span><br/><span>        </span>toJSON<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TxResponse</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">; </span><br/><span>    </span><span class="tsd-signature-symbol">}</span><span class="tsd-signature-symbol">; </span><br/><span class="tsd-signature-symbol">}</span><span class="tsd-signature-symbol"> = ...</span></div>
+<div class="tsd-type-declaration">
+<h4>Type declaration</h4>
+<ul class="tsd-parameters">
+<li class="tsd-parameter">
+<h5>ABCIMessage<wbr/>Log<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span><br/><span>    </span>decode<span class="tsd-signature-symbol">(</span>input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Reader</span>, length<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ABCIMessageLog</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>encode<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ABCIMessageLog</span>, writer<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>fromJSON<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ABCIMessageLog</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>fromPartial<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ABCIMessageLog</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ABCIMessageLog</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>toJSON<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ABCIMessageLog</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">; </span><br/><span class="tsd-signature-symbol">}</span></h5>
+<ul class="tsd-parameters">
+<li class="tsd-parameter">
+<h5>decode<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-1.decode.decode-1">decode<span class="tsd-signature-symbol">(</span>input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Reader</span>, length<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ABCIMessageLog</span><a href="#__type.__type-1.decode.decode-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" id="icon-anchor-a"></path><path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" id="icon-anchor-b"></path><path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" id="icon-anchor-c"></path></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>input: <span class="tsd-signature-type">Uint8Array</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Reader</span></h5></li>
+<li>
+<h5><code class="tsd-tag ts-flagOptional">Optional</code> length: <span class="tsd-signature-type">number</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">ABCIMessageLog</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L616">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:616</a></li></ul></aside></li></ul></li>
+<li class="tsd-parameter">
+<h5>encode<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-1.encode.encode-1">encode<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ABCIMessageLog</span>, writer<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Writer</span><a href="#__type.__type-1.encode.encode-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>message: <span class="tsd-signature-type">ABCIMessageLog</span></h5></li>
+<li>
+<h5>writer: <span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol"> = ...</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Writer</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L600">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:600</a></li></ul></aside></li></ul></li>
+<li class="tsd-parameter">
+<h5>fromJSON<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-1.fromJSON.fromJSON-1">fromJSON<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ABCIMessageLog</span><a href="#__type.__type-1.fromJSON.fromJSON-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>object: <span class="tsd-signature-type">any</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">ABCIMessageLog</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L646">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:646</a></li></ul></aside></li></ul></li>
+<li class="tsd-parameter">
+<h5>from<wbr/>Partial<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-1.fromPartial.fromPartial-1">from<wbr/>Partial<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ABCIMessageLog</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ABCIMessageLog</span><a href="#__type.__type-1.fromPartial.fromPartial-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>object: <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ABCIMessageLog</span><span class="tsd-signature-symbol">&gt;</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">ABCIMessageLog</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L668">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:668</a></li></ul></aside></li></ul></li>
+<li class="tsd-parameter">
+<h5>toJSON<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-1.toJSON.toJSON-1">toJSON<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ABCIMessageLog</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><a href="#__type.__type-1.toJSON.toJSON-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>message: <span class="tsd-signature-type">ABCIMessageLog</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">unknown</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L654">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:654</a></li></ul></aside></li></ul></li></ul></li>
+<li class="tsd-parameter">
+<h5>Attribute<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span><br/><span>    </span>decode<span class="tsd-signature-symbol">(</span>input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Reader</span>, length<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Attribute</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>encode<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Attribute</span>, writer<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>fromJSON<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Attribute</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>fromPartial<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Attribute</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Attribute</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>toJSON<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Attribute</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">; </span><br/><span class="tsd-signature-symbol">}</span></h5>
+<ul class="tsd-parameters">
+<li class="tsd-parameter">
+<h5>decode<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-2.decode-2.decode-3">decode<span class="tsd-signature-symbol">(</span>input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Reader</span>, length<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Attribute</span><a href="#__type.__type-2.decode-2.decode-3" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>input: <span class="tsd-signature-type">Uint8Array</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Reader</span></h5></li>
+<li>
+<h5><code class="tsd-tag ts-flagOptional">Optional</code> length: <span class="tsd-signature-type">number</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Attribute</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L773">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:773</a></li></ul></aside></li></ul></li>
+<li class="tsd-parameter">
+<h5>encode<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-2.encode-2.encode-3">encode<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Attribute</span>, writer<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Writer</span><a href="#__type.__type-2.encode-2.encode-3" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>message: <span class="tsd-signature-type">Attribute</span></h5></li>
+<li>
+<h5>writer: <span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol"> = ...</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Writer</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L761">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:761</a></li></ul></aside></li></ul></li>
+<li class="tsd-parameter">
+<h5>fromJSON<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-2.fromJSON-2.fromJSON-3">fromJSON<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Attribute</span><a href="#__type.__type-2.fromJSON-2.fromJSON-3" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>object: <span class="tsd-signature-type">any</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Attribute</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L799">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:799</a></li></ul></aside></li></ul></li>
+<li class="tsd-parameter">
+<h5>from<wbr/>Partial<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-2.fromPartial-2.fromPartial-3">from<wbr/>Partial<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Attribute</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Attribute</span><a href="#__type.__type-2.fromPartial-2.fromPartial-3" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>object: <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Attribute</span><span class="tsd-signature-symbol">&gt;</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Attribute</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L813">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:813</a></li></ul></aside></li></ul></li>
+<li class="tsd-parameter">
+<h5>toJSON<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-2.toJSON-2.toJSON-3">toJSON<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Attribute</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><a href="#__type.__type-2.toJSON-2.toJSON-3" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>message: <span class="tsd-signature-type">Attribute</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">unknown</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L806">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:806</a></li></ul></aside></li></ul></li></ul></li>
+<li class="tsd-parameter">
+<h5>Gas<wbr/>Info<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span><br/><span>    </span>decode<span class="tsd-signature-symbol">(</span>input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Reader</span>, length<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GasInfo</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>encode<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GasInfo</span>, writer<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>fromJSON<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GasInfo</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>fromPartial<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">GasInfo</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GasInfo</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>toJSON<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GasInfo</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">; </span><br/><span class="tsd-signature-symbol">}</span></h5>
+<ul class="tsd-parameters">
+<li class="tsd-parameter">
+<h5>decode<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-3.decode-4.decode-5">decode<span class="tsd-signature-symbol">(</span>input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Reader</span>, length<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GasInfo</span><a href="#__type.__type-3.decode-4.decode-5" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>input: <span class="tsd-signature-type">Uint8Array</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Reader</span></h5></li>
+<li>
+<h5><code class="tsd-tag ts-flagOptional">Optional</code> length: <span class="tsd-signature-type">number</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">GasInfo</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L842">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:842</a></li></ul></aside></li></ul></li>
+<li class="tsd-parameter">
+<h5>encode<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-3.encode-4.encode-5">encode<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GasInfo</span>, writer<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Writer</span><a href="#__type.__type-3.encode-4.encode-5" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>message: <span class="tsd-signature-type">GasInfo</span></h5></li>
+<li>
+<h5>writer: <span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol"> = ...</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Writer</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L830">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:830</a></li></ul></aside></li></ul></li>
+<li class="tsd-parameter">
+<h5>fromJSON<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-3.fromJSON-4.fromJSON-5">fromJSON<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GasInfo</span><a href="#__type.__type-3.fromJSON-4.fromJSON-5" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>object: <span class="tsd-signature-type">any</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">GasInfo</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L868">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:868</a></li></ul></aside></li></ul></li>
+<li class="tsd-parameter">
+<h5>from<wbr/>Partial<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-3.fromPartial-4.fromPartial-5">from<wbr/>Partial<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">GasInfo</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GasInfo</span><a href="#__type.__type-3.fromPartial-4.fromPartial-5" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>object: <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">GasInfo</span><span class="tsd-signature-symbol">&gt;</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">GasInfo</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L882">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:882</a></li></ul></aside></li></ul></li>
+<li class="tsd-parameter">
+<h5>toJSON<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-3.toJSON-4.toJSON-5">toJSON<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GasInfo</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><a href="#__type.__type-3.toJSON-4.toJSON-5" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>message: <span class="tsd-signature-type">GasInfo</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">unknown</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L875">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:875</a></li></ul></aside></li></ul></li></ul></li>
+<li class="tsd-parameter">
+<h5>Msg<wbr/>Data<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span><br/><span>    </span>decode<span class="tsd-signature-symbol">(</span>input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Reader</span>, length<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MsgData</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>encode<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MsgData</span>, writer<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>fromJSON<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MsgData</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>fromPartial<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">MsgData</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MsgData</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>toJSON<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MsgData</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">; </span><br/><span class="tsd-signature-symbol">}</span></h5>
+<ul class="tsd-parameters">
+<li class="tsd-parameter">
+<h5>decode<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-4.decode-6.decode-7">decode<span class="tsd-signature-symbol">(</span>input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Reader</span>, length<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MsgData</span><a href="#__type.__type-4.decode-6.decode-7" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>input: <span class="tsd-signature-type">Uint8Array</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Reader</span></h5></li>
+<li>
+<h5><code class="tsd-tag ts-flagOptional">Optional</code> length: <span class="tsd-signature-type">number</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">MsgData</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L1084">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:1084</a></li></ul></aside></li></ul></li>
+<li class="tsd-parameter">
+<h5>encode<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-4.encode-6.encode-7">encode<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MsgData</span>, writer<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Writer</span><a href="#__type.__type-4.encode-6.encode-7" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>message: <span class="tsd-signature-type">MsgData</span></h5></li>
+<li>
+<h5>writer: <span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol"> = ...</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Writer</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L1072">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:1072</a></li></ul></aside></li></ul></li>
+<li class="tsd-parameter">
+<h5>fromJSON<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-4.fromJSON-6.fromJSON-7">fromJSON<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MsgData</span><a href="#__type.__type-4.fromJSON-6.fromJSON-7" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>object: <span class="tsd-signature-type">any</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">MsgData</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L1110">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:1110</a></li></ul></aside></li></ul></li>
+<li class="tsd-parameter">
+<h5>from<wbr/>Partial<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-4.fromPartial-6.fromPartial-7">from<wbr/>Partial<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">MsgData</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MsgData</span><a href="#__type.__type-4.fromPartial-6.fromPartial-7" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>object: <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">MsgData</span><span class="tsd-signature-symbol">&gt;</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">MsgData</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L1124">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:1124</a></li></ul></aside></li></ul></li>
+<li class="tsd-parameter">
+<h5>toJSON<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-4.toJSON-6.toJSON-7">toJSON<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MsgData</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><a href="#__type.__type-4.toJSON-6.toJSON-7" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>message: <span class="tsd-signature-type">MsgData</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">unknown</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L1117">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:1117</a></li></ul></aside></li></ul></li></ul></li>
+<li class="tsd-parameter">
+<h5>Result<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span><br/><span>    </span>decode<span class="tsd-signature-symbol">(</span>input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Reader</span>, length<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Result</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>encode<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Result</span>, writer<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>fromJSON<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Result</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>fromPartial<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Result</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Result</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>toJSON<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Result</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">; </span><br/><span class="tsd-signature-symbol">}</span></h5>
+<ul class="tsd-parameters">
+<li class="tsd-parameter">
+<h5>decode<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-5.decode-8.decode-9">decode<span class="tsd-signature-symbol">(</span>input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Reader</span>, length<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Result</span><a href="#__type.__type-5.decode-8.decode-9" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>input: <span class="tsd-signature-type">Uint8Array</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Reader</span></h5></li>
+<li>
+<h5><code class="tsd-tag ts-flagOptional">Optional</code> length: <span class="tsd-signature-type">number</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Result</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L921">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:921</a></li></ul></aside></li></ul></li>
+<li class="tsd-parameter">
+<h5>encode<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-5.encode-8.encode-9">encode<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Result</span>, writer<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Writer</span><a href="#__type.__type-5.encode-8.encode-9" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>message: <span class="tsd-signature-type">Result</span></h5></li>
+<li>
+<h5>writer: <span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol"> = ...</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Writer</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L901">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:901</a></li></ul></aside></li></ul></li>
+<li class="tsd-parameter">
+<h5>fromJSON<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-5.fromJSON-8.fromJSON-9">fromJSON<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Result</span><a href="#__type.__type-5.fromJSON-8.fromJSON-9" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>object: <span class="tsd-signature-type">any</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Result</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L955">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:955</a></li></ul></aside></li></ul></li>
+<li class="tsd-parameter">
+<h5>from<wbr/>Partial<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-5.fromPartial-8.fromPartial-9">from<wbr/>Partial<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Result</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Result</span><a href="#__type.__type-5.fromPartial-8.fromPartial-9" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>object: <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Result</span><span class="tsd-signature-symbol">&gt;</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Result</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L984">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:984</a></li></ul></aside></li></ul></li>
+<li class="tsd-parameter">
+<h5>toJSON<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-5.toJSON-8.toJSON-9">toJSON<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Result</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><a href="#__type.__type-5.toJSON-8.toJSON-9" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>message: <span class="tsd-signature-type">Result</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">unknown</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L964">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:964</a></li></ul></aside></li></ul></li></ul></li>
+<li class="tsd-parameter">
+<h5>Search<wbr/>Txs<wbr/>Result<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span><br/><span>    </span>decode<span class="tsd-signature-symbol">(</span>input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Reader</span>, length<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SearchTxsResult</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>encode<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SearchTxsResult</span>, writer<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>fromJSON<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SearchTxsResult</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>fromPartial<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">SearchTxsResult</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SearchTxsResult</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>toJSON<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SearchTxsResult</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">; </span><br/><span class="tsd-signature-symbol">}</span></h5>
+<ul class="tsd-parameters">
+<li class="tsd-parameter">
+<h5>decode<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-6.decode-10.decode-11">decode<span class="tsd-signature-symbol">(</span>input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Reader</span>, length<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SearchTxsResult</span><a href="#__type.__type-6.decode-10.decode-11" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>input: <span class="tsd-signature-type">Uint8Array</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Reader</span></h5></li>
+<li>
+<h5><code class="tsd-tag ts-flagOptional">Optional</code> length: <span class="tsd-signature-type">number</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">SearchTxsResult</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L1253">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:1253</a></li></ul></aside></li></ul></li>
+<li class="tsd-parameter">
+<h5>encode<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-6.encode-10.encode-11">encode<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SearchTxsResult</span>, writer<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Writer</span><a href="#__type.__type-6.encode-10.encode-11" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>message: <span class="tsd-signature-type">SearchTxsResult</span></h5></li>
+<li>
+<h5>writer: <span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol"> = ...</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Writer</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L1225">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:1225</a></li></ul></aside></li></ul></li>
+<li class="tsd-parameter">
+<h5>fromJSON<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-6.fromJSON-10.fromJSON-11">fromJSON<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SearchTxsResult</span><a href="#__type.__type-6.fromJSON-10.fromJSON-11" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>object: <span class="tsd-signature-type">any</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">SearchTxsResult</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L1295">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:1295</a></li></ul></aside></li></ul></li>
+<li class="tsd-parameter">
+<h5>from<wbr/>Partial<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-6.fromPartial-10.fromPartial-11">from<wbr/>Partial<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">SearchTxsResult</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SearchTxsResult</span><a href="#__type.__type-6.fromPartial-10.fromPartial-11" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>object: <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">SearchTxsResult</span><span class="tsd-signature-symbol">&gt;</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">SearchTxsResult</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L1323">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:1323</a></li></ul></aside></li></ul></li>
+<li class="tsd-parameter">
+<h5>toJSON<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-6.toJSON-10.toJSON-11">toJSON<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SearchTxsResult</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><a href="#__type.__type-6.toJSON-10.toJSON-11" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>message: <span class="tsd-signature-type">SearchTxsResult</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">unknown</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L1306">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:1306</a></li></ul></aside></li></ul></li></ul></li>
+<li class="tsd-parameter">
+<h5>Simulation<wbr/>Response<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span><br/><span>    </span>decode<span class="tsd-signature-symbol">(</span>input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Reader</span>, length<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SimulationResponse</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>encode<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SimulationResponse</span>, writer<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>fromJSON<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SimulationResponse</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>fromPartial<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">SimulationResponse</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SimulationResponse</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>toJSON<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SimulationResponse</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">; </span><br/><span class="tsd-signature-symbol">}</span></h5>
+<ul class="tsd-parameters">
+<li class="tsd-parameter">
+<h5>decode<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-7.decode-12.decode-13">decode<span class="tsd-signature-symbol">(</span>input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Reader</span>, length<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SimulationResponse</span><a href="#__type.__type-7.decode-12.decode-13" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>input: <span class="tsd-signature-type">Uint8Array</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Reader</span></h5></li>
+<li>
+<h5><code class="tsd-tag ts-flagOptional">Optional</code> length: <span class="tsd-signature-type">number</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">SimulationResponse</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L1015">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:1015</a></li></ul></aside></li></ul></li>
+<li class="tsd-parameter">
+<h5>encode<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-7.encode-12.encode-13">encode<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SimulationResponse</span>, writer<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Writer</span><a href="#__type.__type-7.encode-12.encode-13" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>message: <span class="tsd-signature-type">SimulationResponse</span></h5></li>
+<li>
+<h5>writer: <span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol"> = ...</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Writer</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L1003">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:1003</a></li></ul></aside></li></ul></li>
+<li class="tsd-parameter">
+<h5>fromJSON<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-7.fromJSON-12.fromJSON-13">fromJSON<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SimulationResponse</span><a href="#__type.__type-7.fromJSON-12.fromJSON-13" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>object: <span class="tsd-signature-type">any</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">SimulationResponse</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L1041">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:1041</a></li></ul></aside></li></ul></li>
+<li class="tsd-parameter">
+<h5>from<wbr/>Partial<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-7.fromPartial-12.fromPartial-13">from<wbr/>Partial<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">SimulationResponse</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SimulationResponse</span><a href="#__type.__type-7.fromPartial-12.fromPartial-13" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>object: <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">SimulationResponse</span><span class="tsd-signature-symbol">&gt;</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">SimulationResponse</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L1055">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:1055</a></li></ul></aside></li></ul></li>
+<li class="tsd-parameter">
+<h5>toJSON<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-7.toJSON-12.toJSON-13">toJSON<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SimulationResponse</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><a href="#__type.__type-7.toJSON-12.toJSON-13" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>message: <span class="tsd-signature-type">SimulationResponse</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">unknown</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L1048">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:1048</a></li></ul></aside></li></ul></li></ul></li>
+<li class="tsd-parameter">
+<h5>String<wbr/>Event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span><br/><span>    </span>decode<span class="tsd-signature-symbol">(</span>input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Reader</span>, length<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">StringEvent</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>encode<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">StringEvent</span>, writer<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>fromJSON<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">StringEvent</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>fromPartial<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">StringEvent</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">StringEvent</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>toJSON<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">StringEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">; </span><br/><span class="tsd-signature-symbol">}</span></h5>
+<ul class="tsd-parameters">
+<li class="tsd-parameter">
+<h5>decode<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-8.decode-14.decode-15">decode<span class="tsd-signature-symbol">(</span>input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Reader</span>, length<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">StringEvent</span><a href="#__type.__type-8.decode-14.decode-15" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>input: <span class="tsd-signature-type">Uint8Array</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Reader</span></h5></li>
+<li>
+<h5><code class="tsd-tag ts-flagOptional">Optional</code> length: <span class="tsd-signature-type">number</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">StringEvent</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L698">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:698</a></li></ul></aside></li></ul></li>
+<li class="tsd-parameter">
+<h5>encode<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-8.encode-14.encode-15">encode<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">StringEvent</span>, writer<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Writer</span><a href="#__type.__type-8.encode-14.encode-15" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>message: <span class="tsd-signature-type">StringEvent</span></h5></li>
+<li>
+<h5>writer: <span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol"> = ...</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Writer</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L686">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:686</a></li></ul></aside></li></ul></li>
+<li class="tsd-parameter">
+<h5>fromJSON<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-8.fromJSON-14.fromJSON-15">fromJSON<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">StringEvent</span><a href="#__type.__type-8.fromJSON-14.fromJSON-15" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>object: <span class="tsd-signature-type">any</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">StringEvent</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L724">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:724</a></li></ul></aside></li></ul></li>
+<li class="tsd-parameter">
+<h5>from<wbr/>Partial<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-8.fromPartial-14.fromPartial-15">from<wbr/>Partial<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">StringEvent</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">StringEvent</span><a href="#__type.__type-8.fromPartial-14.fromPartial-15" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>object: <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">StringEvent</span><span class="tsd-signature-symbol">&gt;</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">StringEvent</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L744">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:744</a></li></ul></aside></li></ul></li>
+<li class="tsd-parameter">
+<h5>toJSON<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-8.toJSON-14.toJSON-15">toJSON<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">StringEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><a href="#__type.__type-8.toJSON-14.toJSON-15" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>message: <span class="tsd-signature-type">StringEvent</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">unknown</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L731">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:731</a></li></ul></aside></li></ul></li></ul></li>
+<li class="tsd-parameter">
+<h5>Tx<wbr/>Msg<wbr/>Data<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span><br/><span>    </span>decode<span class="tsd-signature-symbol">(</span>input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Reader</span>, length<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TxMsgData</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>encode<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TxMsgData</span>, writer<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>fromJSON<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TxMsgData</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>fromPartial<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TxMsgData</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TxMsgData</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>toJSON<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TxMsgData</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">; </span><br/><span class="tsd-signature-symbol">}</span></h5>
+<ul class="tsd-parameters">
+<li class="tsd-parameter">
+<h5>decode<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-9.decode-16.decode-17">decode<span class="tsd-signature-symbol">(</span>input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Reader</span>, length<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TxMsgData</span><a href="#__type.__type-9.decode-16.decode-17" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>input: <span class="tsd-signature-type">Uint8Array</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Reader</span></h5></li>
+<li>
+<h5><code class="tsd-tag ts-flagOptional">Optional</code> length: <span class="tsd-signature-type">number</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">TxMsgData</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L1153">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:1153</a></li></ul></aside></li></ul></li>
+<li class="tsd-parameter">
+<h5>encode<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-9.encode-16.encode-17">encode<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TxMsgData</span>, writer<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Writer</span><a href="#__type.__type-9.encode-16.encode-17" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>message: <span class="tsd-signature-type">TxMsgData</span></h5></li>
+<li>
+<h5>writer: <span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol"> = ...</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Writer</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L1141">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:1141</a></li></ul></aside></li></ul></li>
+<li class="tsd-parameter">
+<h5>fromJSON<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-9.fromJSON-16.fromJSON-17">fromJSON<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TxMsgData</span><a href="#__type.__type-9.fromJSON-16.fromJSON-17" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>object: <span class="tsd-signature-type">any</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">TxMsgData</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L1179">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:1179</a></li></ul></aside></li></ul></li>
+<li class="tsd-parameter">
+<h5>from<wbr/>Partial<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-9.fromPartial-16.fromPartial-17">from<wbr/>Partial<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TxMsgData</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TxMsgData</span><a href="#__type.__type-9.fromPartial-16.fromPartial-17" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>object: <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TxMsgData</span><span class="tsd-signature-symbol">&gt;</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">TxMsgData</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L1204">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:1204</a></li></ul></aside></li></ul></li>
+<li class="tsd-parameter">
+<h5>toJSON<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-9.toJSON-16.toJSON-17">toJSON<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TxMsgData</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><a href="#__type.__type-9.toJSON-16.toJSON-17" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>message: <span class="tsd-signature-type">TxMsgData</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">unknown</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L1186">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:1186</a></li></ul></aside></li></ul></li></ul></li>
+<li class="tsd-parameter">
+<h5>Tx<wbr/>Response<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span><br/><span>    </span>decode<span class="tsd-signature-symbol">(</span>input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Reader</span>, length<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TxResponse</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>encode<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TxResponse</span>, writer<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>fromJSON<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TxResponse</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>fromPartial<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TxResponse</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TxResponse</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>toJSON<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TxResponse</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">; </span><br/><span class="tsd-signature-symbol">}</span></h5>
+<ul class="tsd-parameters">
+<li class="tsd-parameter">
+<h5>decode<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-10.decode-18.decode-19">decode<span class="tsd-signature-symbol">(</span>input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Reader</span>, length<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TxResponse</span><a href="#__type.__type-10.decode-18.decode-19" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>input: <span class="tsd-signature-type">Uint8Array</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Reader</span></h5></li>
+<li>
+<h5><code class="tsd-tag ts-flagOptional">Optional</code> length: <span class="tsd-signature-type">number</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">TxResponse</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L453">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:453</a></li></ul></aside></li></ul></li>
+<li class="tsd-parameter">
+<h5>encode<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-10.encode-18.encode-19">encode<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TxResponse</span>, writer<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Writer</span><a href="#__type.__type-10.encode-18.encode-19" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>message: <span class="tsd-signature-type">TxResponse</span></h5></li>
+<li>
+<h5>writer: <span class="tsd-signature-type">Writer</span><span class="tsd-signature-symbol"> = ...</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Writer</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L397">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:397</a></li></ul></aside></li></ul></li>
+<li class="tsd-parameter">
+<h5>fromJSON<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-10.fromJSON-18.fromJSON-19">fromJSON<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TxResponse</span><a href="#__type.__type-10.fromJSON-18.fromJSON-19" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>object: <span class="tsd-signature-type">any</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">TxResponse</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L523">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:523</a></li></ul></aside></li></ul></li>
+<li class="tsd-parameter">
+<h5>from<wbr/>Partial<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-10.fromPartial-18.fromPartial-19">from<wbr/>Partial<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TxResponse</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TxResponse</span><a href="#__type.__type-10.fromPartial-18.fromPartial-19" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>object: <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TxResponse</span><span class="tsd-signature-symbol">&gt;</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">TxResponse</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L571">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:571</a></li></ul></aside></li></ul></li>
+<li class="tsd-parameter">
+<h5>toJSON<span class="tsd-signature-symbol">:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.__type-10.toJSON-18.toJSON-19">toJSON<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TxResponse</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><a href="#__type.__type-10.toJSON-18.toJSON-19" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>message: <span class="tsd-signature-type">TxResponse</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">unknown</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts#L541">src/telescope_external/src/codegen/cosmos/base/abci/v1beta1/abci.ts:541</a></li></ul></aside></li></ul></li></ul></li></ul></div><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/ixofoundation/ixo-client-sdk/blob/64edfed/src/telescope_external/src/codegen/cosmos/bundle.ts#L164">src/telescope_external/src/codegen/cosmos/bundle.ts:164</a></li></ul></aside></div>
+<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+<div class="tsd-navigation settings">
+<details class="tsd-index-accordion"><summary class="tsd-accordion-summary">
+<h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4.93896 8.531L12 15.591L19.061 8.531L16.939 6.409L12 11.349L7.06098 6.409L4.93896 8.531Z" fill="var(--color-text)"></path></svg> Settings</h3></summary>
+<div class="tsd-accordion-details">
+<div class="tsd-filter-visibility">
+<h4 class="uppercase">Member Visibility</h4><form>
+<ul id="tsd-filter-options">
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li>
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-private" name="private"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Private</span></label></li>
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li>
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></form></div>
+<div class="tsd-theme-toggle">
+<h4 class="uppercase">Theme</h4><select id="theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div>
+<nav class="tsd-navigation primary">
+<details class="tsd-index-accordion" open><summary class="tsd-accordion-summary">
+<h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4.93896 8.531L12 15.591L19.061 8.531L16.939 6.409L12 11.349L7.06098 6.409L4.93896 8.531Z" fill="var(--color-text)"></path></svg> Modules</h3></summary>
+<div class="tsd-accordion-details">
+<ul>
+<li class="current"><a href="../modules.html">@ixo/client-<wbr/>sdk</a>
+<ul>
+<li class="tsd-kind-namespace"><a href="../modules/LegacyClient.html">Legacy<wbr/>Client</a></li>
+<li class="current tsd-kind-namespace"><a href="../modules/cosmos.html">cosmos</a>
+<ul>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="../modules/cosmos.app.html">app</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="../modules/cosmos.auth.html">auth</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="../modules/cosmos.authz.html">authz</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="../modules/cosmos.bank.html">bank</a></li>
+<li class="current tsd-kind-namespace tsd-parent-kind-namespace"><a href="../modules/cosmos.base.html">base</a>
+<ul>
+<li class="current tsd-kind-namespace tsd-parent-kind-namespace"><a href="../modules/cosmos.base.abci.html">abci</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="../modules/cosmos.base.kv.html">kv</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="../modules/cosmos.base.query.html">query</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="../modules/cosmos.base.reflection.html">reflection</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="../modules/cosmos.base.snapshots.html">snapshots</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="../modules/cosmos.base.store.html">store</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="../modules/cosmos.base.tendermint.html">tendermint</a></li></ul></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="../modules/cosmos.capability.html">capability</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="../modules/cosmos.crisis.html">crisis</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="../modules/cosmos.crypto.html">crypto</a>
+<ul>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="../modules/cosmos.crypto.hd.html">hd</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="../modules/cosmos.crypto.keyring.html">keyring</a></li></ul></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="../modules/cosmos.distribution.html">distribution</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="../modules/cosmos.evidence.html">evidence</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="../modules/cosmos.feegrant.html">feegrant</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="../modules/cosmos.genutil.html">genutil</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="../modules/cosmos.gov.html">gov</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="../modules/cosmos.group.html">group</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="../modules/cosmos.mint.html">mint</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="../modules/cosmos.msg.html">msg</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="../modules/cosmos.nft.html">nft</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="../modules/cosmos.orm.html">orm</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="../modules/cosmos.params.html">params</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="../modules/cosmos.slashing.html">slashing</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="../modules/cosmos.staking.html">staking</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="../modules/cosmos.tx.html">tx</a>
+<ul>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="../modules/cosmos.tx.signing.html">signing</a></li></ul></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="../modules/cosmos.upgrade.html">upgrade</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="../modules/cosmos.vesting.html">vesting</a></li></ul></li>
+<li class="tsd-kind-namespace"><a href="../modules/google.html">google</a></li>
+<li class="tsd-kind-namespace"><a href="../modules/helpers.html">helpers</a>
+<ul>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace tsd-is-external"><a href="../modules/helpers.Long.html">Long</a></li></ul></li>
+<li class="tsd-kind-namespace"><a href="../modules/impact.html">impact</a></li>
+<li class="tsd-kind-namespace"><a href="../modules/tendermint.html">tendermint</a>
+<ul>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="../modules/tendermint.libs.html">libs</a></li></ul></li></ul></li></ul></div></details></nav>
+<nav class="tsd-navigation secondary menu-sticky">
+<ul>
+<li class="current tsd-kind-variable tsd-parent-kind-namespace"><a href="cosmos.base.abci.v1beta1.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><rect fill="var(--color-icon-background)" stroke="var(--color-ts-variable)" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="6" id="icon-32-path"></rect><path d="M11.106 16L8.85 7.24H9.966L11.454 13.192C11.558 13.608 11.646 13.996 11.718 14.356C11.79 14.708 11.842 14.976 11.874 15.16C11.906 14.976 11.954 14.708 12.018 14.356C12.09 13.996 12.178 13.608 12.282 13.192L13.758 7.24H14.85L12.582 16H11.106Z" fill="var(--color-text)" id="icon-32-text"></path></svg>v1beta1</a></li></ul></nav></div></div>
+<div class="container tsd-generator">
+<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></div>
+<div class="overlay"></div><script src="../assets/main.js"></script></body></html>
