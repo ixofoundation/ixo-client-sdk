@@ -1,2 +1,5 @@
-/node_modules
-package-lock.json
+build/
+node_modules/
+.nyc_output/
+coverage/
+.DS_Store

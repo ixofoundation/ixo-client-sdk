@@ -4,30 +4,37 @@ A complete package of client software for developing client
 applications which connect to the [ixo](https://ixo.world/)
 software stack and build on the Internet of Impact.
 
+## Getting started
+
+1. `git clone https://github.com/ixofoundation/ixo-client-sdk.git my-project-name`
+2. `cd my-project-name`
+3. `npm install`
+4. `npm run setup`
+
+## Features and Usage
+
 ## Usage Example
 
 Before use locally a .env file must be provided, a example file in the directory.
 
 ```js
-const {makeWallet, makeClient} = require('@ixo/client-sdk')
+const { makeWallet, makeClient } = require("@ixo/client-sdk");
 
-const
-    wallet = await makeWallet(),
-    client = makeClient(wallet)
+const wallet = await makeWallet(),
+  client = makeClient(wallet);
 
-await client.register()
+await client.register();
 
-await client.sendTokens('<target address>', 10)
+await client.sendTokens("<target address>", 10);
 
-const someProject = await client.getProject('<a valid project DID>')
+const someProject = await client.getProject("<a valid project DID>");
 
-const someClaims = await client.listClaims(someProject)
-console.log('Here are the claims', someClaims)
+const someClaims = await client.listClaims(someProject);
+console.log("Here are the claims", someClaims);
 ```
 
 See [wallet API](#wallet-api) and [client API](#client-api) for
 details.
-
 
 ## Wallet API <a id='wallet-api' />
 
@@ -63,7 +70,6 @@ properties:
   to get a representation of the wallet's internal state as a
   plain object and use it in a context where a class instance is
   not supported. (e.g. Global application state of a client app)
-
 
 ## Client API <a id='client-api' />
 
@@ -187,25 +193,25 @@ Client methods:
 
 - `createProject(projectData, cellnodeURL)`: Create a new project <a id='createProject' />
 
-    - `projectData`: To be documented; for now please see
-      [here](https://github.com/ixofoundation/ixo-apimodule/blob/master/src/common/dummyData.ts#L3-L207)
-      for an example
+  - `projectData`: To be documented; for now please see
+    [here](https://github.com/ixofoundation/ixo-apimodule/blob/master/src/common/dummyData.ts#L3-L207)
+    for an example
 
-    - `cellnodeURL`: URL of the cell node where various project
-      data will be kept. Optional, defaults to the URL of ixo's
-      shared cell node
+  - `cellnodeURL`: URL of the cell node where various project
+    data will be kept. Optional, defaults to the URL of ixo's
+    shared cell node
 
 - `updateProject(projectDocUpdates, cellnodeURL)`: Update an existing project <a id='updateProject' />
 
-    - `projectDocUpdates`: Updates to be made to the project
-      document: A subset of the `projectData` argument of the
-      `createProject` method above that satisfies the rules
-      described in the following link:
-      https://github.com/ixofoundation/ixo-blockchain/pull/230#issue-902602327
+  - `projectDocUpdates`: Updates to be made to the project
+    document: A subset of the `projectData` argument of the
+    `createProject` method above that satisfies the rules
+    described in the following link:
+    https://github.com/ixofoundation/ixo-blockchain/pull/230#issue-902602327
 
-    - `cellnodeURL`: URL of the cell node where various project
-      data will be kept. Optional, defaults to the URL of ixo's
-      shared cell node
+  - `cellnodeURL`: URL of the cell node where various project
+    data will be kept. Optional, defaults to the URL of ixo's
+    shared cell node
 
 - `createEntityFile(target, dataUrl)`: Upload a file to entity's cell node <a id='createEntityFile' />
 
@@ -306,7 +312,6 @@ Client methods:
       creating the claims, returns the full HTTP request that will
       create the claims.
 
-
 - `evaluateClaim(projectRecordOrDid, claimId, status)` <a id='evaluateClaim' />
 
   - `claimId`: A claim id as returned from `createClaim`
@@ -316,102 +321,103 @@ Client methods:
     - `0` for pending
     - `1` for approved
     - `2` for rejected
+    - `3` for disputed
 
 - `staking`:
 
-    An object that groups the following staking related methods:
+  An object that groups the following staking related methods:
 
-    - `listValidators(urlParams)` <a id='staking.listValidators' />
+  - `listValidators(urlParams)` <a id='staking.listValidators' />
 
-        See
-        [here](https://testnet.ixo.world/swagger/#/Staking/get_staking_validators)
-        for a description of the url params of the related
-        endpoint, and its return value.
+    See
+    [here](https://testnet.ixo.world/swagger/#/Staking/get_staking_validators)
+    for a description of the url params of the related
+    endpoint, and its return value.
 
-    - `getValidator(validatorAddress)` <a id='staking.getValidator' />
+  - `getValidator(validatorAddress)` <a id='staking.getValidator' />
 
-        See
-        [here](https://testnet.ixo.world/swagger/#/Staking/get_staking_validators__validatorAddr_])
-        for the return value.
+    See
+    [here](https://testnet.ixo.world/swagger/#/Staking/get*staking_validators\_\_validatorAddr*])
+    for the return value.
 
-    - `myDelegations()` <a id='staking.myDelegations' />
+  - `myDelegations()` <a id='staking.myDelegations' />
 
-        See
-        [here](https://testnet.ixo.world/swagger/#/Staking/get_staking_delegators__delegatorAddr__delegations)
-        for the return value.
+    See
+    [here](https://testnet.ixo.world/swagger/#/Staking/get_staking_delegators**delegatorAddr**delegations)
+    for the return value.
 
-    - `pool()` <a id='staking.pool' />
+  - `pool()` <a id='staking.pool' />
 
-        See
-        [here](https://testnet.ixo.world/swagger/#/Staking/get_staking_pool)
-        for the return value.
+    See
+    [here](https://testnet.ixo.world/swagger/#/Staking/get_staking_pool)
+    for the return value.
 
-    - `validatorDistribution(validatorAddress)` <a id='staking.validatorDistribution' />
+  - `validatorDistribution(validatorAddress)` <a id='staking.validatorDistribution' />
 
-        See
-        [here](https://testnet.ixo.world/swagger/#/Distribution/get_distribution_validators__validatorAddr_)
-        for the return value.
+    See
+    [here](https://testnet.ixo.world/swagger/#/Distribution/get*distribution_validators\_\_validatorAddr*)
+    for the return value.
 
-    - `delegatorValidatorRewards(delegatorAddress, validatorAddress)` <a id='staking.delegatorValidatorRewards' />
+  - `delegatorValidatorRewards(delegatorAddress, validatorAddress)` <a id='staking.delegatorValidatorRewards' />
 
-        See
-        [here](https://testnet.ixo.world/swagger/#/Distribution/get_distribution_delegators__delegatorAddr__rewards__validatorAddr_)
-        for the return value.
+    See
+    [here](https://testnet.ixo.world/swagger/#/Distribution/get*distribution_delegators**delegatorAddr**rewards\_\_validatorAddr*)
+    for the return value.
 
-    - `delegation(delegatorAddr, validatorAddress)` <a id='staking.delegation' />
+  - `delegation(delegatorAddr, validatorAddress)` <a id='staking.delegation' />
 
-        See
-        [here](https://testnet.ixo.world/swagger/#/Staking/get_staking_delegators__delegatorAddr__delegations__validatorAddr_)
-        for the return value.
+    See
+    [here](https://testnet.ixo.world/swagger/#/Staking/get*staking_delegators**delegatorAddr**delegations\_\_validatorAddr*)
+    for the return value.
 
-    - `delegatorDelegations(delegatorAddress)` <a id='staking.delegatorDelegations' />
+  - `delegatorDelegations(delegatorAddress)` <a id='staking.delegatorDelegations' />
 
-        See
-        [here](https://testnet.ixo.world/swagger/#/Staking/get_staking_delegators__delegatorAddr__delegations)
-        for the return value.
+    See
+    [here](https://testnet.ixo.world/swagger/#/Staking/get_staking_delegators**delegatorAddr**delegations)
+    for the return value.
 
-    - `delegatorUnbondingDelegations(delegatorAddress)` <a id='staking.delegatorUnbondingDelegations' />
+  - `delegatorUnbondingDelegations(delegatorAddress)` <a id='staking.delegatorUnbondingDelegations' />
 
-        See
-        [here](https://testnet.ixo.world/swagger/#/Staking/get_staking_delegators__delegatorAddr__unbonding_delegations)
-        for the return value.
+    See
+    [here](https://testnet.ixo.world/swagger/#/Staking/get_staking_delegators**delegatorAddr**unbonding_delegations)
+    for the return value.
 
-    - `delegatorRewards(delegatorAddress)` <a id='staking.delegatorRewards' />
+  - `delegatorRewards(delegatorAddress)` <a id='staking.delegatorRewards' />
 
-        See
-        [here](https://testnet.ixo.world/swagger/#/Distribution/get_distribution_delegators__delegatorAddr__rewards)
-        for the return value.
+    See
+    [here](https://testnet.ixo.world/swagger/#/Distribution/get_distribution_delegators**delegatorAddr**rewards)
+    for the return value.
 
-    - `balances(accountType, denom)` <a id='balances' />
+  - `balances(accountType, denom)` <a id='balances' />
 
-      - `accountType`: Either `secp` or `agent`.
+    - `accountType`: Either `secp` or `agent`.
 
-      - `denom`: Optional coin name. If provided, only the balance
-        for the given coin will be returned.
+    - `denom`: Optional coin name. If provided, only the balance
+      for the given coin will be returned.
 
-        See
-        [here](https://testnet.ixo.world/swagger/#/Query/AllBalances)
-        or
-        [here](https://testnet.ixo.world/swagger/#/Query/Balance)
-        for the return value.
+      See
+      [here](https://testnet.ixo.world/swagger/#/Query/AllBalances)
+      or
+      [here](https://testnet.ixo.world/swagger/#/Query/Balance)
+      for the return value.
 
-    - `delegate(validatorAddress, amount)` <a id='staking.delegate' />
+  - `delegate(validatorAddress, amount)` <a id='staking.delegate' />
 
-    - `undelegate(validatorAddress, amount)` <a id='staking.undelegate' />
+  - `undelegate(validatorAddress, amount)` <a id='staking.undelegate' />
 
-    - `redelegate(validatorSourceAddress, validatorDestinationAddress)` <a id='staking.redelegate' />
+  - `redelegate(validatorSourceAddress, validatorDestinationAddress)` <a id='staking.redelegate' />
 
 - `bonds`:
 
-    An object that groups the following bond related methods:
+  An object that groups the following bond related methods:
 
-    - `byId(did)` <a id='bonds.byId' />
+  - `byId(did)` <a id='bonds.byId' />
 
-    - `list()` <a id='bonds.list' />
+  - `list()` <a id='bonds.list' />
 
-    - `buy({bondDid, bondToken, reserveToken, amount, maxPrice})` <a id='bonds.buy' />
+  - `buy({bondDid, bondToken, reserveToken, amount, maxPrice})` <a id='bonds.buy' />
 
-    - `sell({bondDid, bondToken, amount})` <a id='bonds.sell' />
+  - `sell({bondDid, bondToken, amount})` <a id='bonds.sell' />
 
 - `custom(walletType, msg)`: Send a custom message to the blockchain <a id='custom' />
 
@@ -422,15 +428,36 @@ Client methods:
     [here](https://github.com/ixofoundation/ixo-client-sdk/blob/74725d861ac7cf73e8983ce3dc9d91868cd4ce62/messages.md)
     for available options
 
-
 ## Debugging
 
 Put the `ixo-client-sdk` string into your `DEBUG` environment
 variable to log network requests and responses. See [the `debug`
 package](https://www.npmjs.com/package/debug) for more info.
 
-
-
-
-
 [offline-amino-signer]: https://github.com/cosmos/cosmjs/blob/98e91ae5fe699733497befef95204923c93a7373/packages/amino/src/signer.ts#L22-L38
+
+### Typescript
+
+Leverages [esbuild](https://github.com/evanw/esbuild) for blazing fast builds, but keeps `tsc` to generate `.d.ts` files.
+Generates two builds to support both ESM and CJS.
+
+Commands:
+
+- `build`: runs typechecking then generates CJS, ESM and `d.ts` files in the `build/` directory
+- `clean`: removes the `build/` directory
+- `type:dts`: only generates `d.ts`
+- `type:check`: only run typechecking
+- `type:build`: only generates CJS and ESM
+
+### Format & lint
+
+This library relies on the combination of [eslint](https://github.com/eslint/eslint) — through [typescript-eslint](https://github.com/typescript-eslint/typescript-eslint) for linting and [prettier](https://github.com/prettier/prettier) for formatting.
+It also uses [cspell](https://github.com/streetsidesoftware/cspell) to ensure spelling
+
+Commands:
+
+- `format`: runs prettier with automatic fixing
+- `format:check`: runs prettier without automatic fixing (used in CI)
+- `lint`: runs eslint with automatic fixing
+- `lint:check`: runs eslint without automatic fixing (used in CI)
+- `spell:check`: runs spellchecking

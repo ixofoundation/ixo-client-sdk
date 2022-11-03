@@ -1,0 +1,591 @@
+<!DOCTYPE html><html class="default" lang="en"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>@ixo/client-sdk</title><meta name="description" content="Documentation for @ixo/client-sdk"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script async src="assets/search.js" id="search-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os"</script><header class="tsd-page-toolbar">
+<div class="tsd-toolbar-contents container">
+<div class="table-cell" id="tsd-search" data-base=".">
+<div class="field"><label for="tsd-search-field" class="tsd-widget tsd-toolbar-icon search no-caption"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M15.7824 13.833L12.6666 10.7177C12.5259 10.5771 12.3353 10.499 12.1353 10.499H11.6259C12.4884 9.39596 13.001 8.00859 13.001 6.49937C13.001 2.90909 10.0914 0 6.50048 0C2.90959 0 0 2.90909 0 6.49937C0 10.0896 2.90959 12.9987 6.50048 12.9987C8.00996 12.9987 9.39756 12.4863 10.5008 11.6239V12.1332C10.5008 12.3332 10.5789 12.5238 10.7195 12.6644L13.8354 15.7797C14.1292 16.0734 14.6042 16.0734 14.8948 15.7797L15.7793 14.8954C16.0731 14.6017 16.0731 14.1267 15.7824 13.833ZM6.50048 10.499C4.29094 10.499 2.50018 8.71165 2.50018 6.49937C2.50018 4.29021 4.28781 2.49976 6.50048 2.49976C8.71001 2.49976 10.5008 4.28708 10.5008 6.49937C10.5008 8.70852 8.71314 10.499 6.50048 10.499Z" fill="var(--color-text)"></path></svg></label><input type="text" id="tsd-search-field" aria-label="Search"/></div>
+<div class="field">
+<div id="tsd-toolbar-links"></div></div>
+<ul class="results">
+<li class="state loading">Preparing search index...</li>
+<li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">@ixo/client-sdk</a></div>
+<div class="table-cell" id="tsd-widgets"><a href="#" class="tsd-widget tsd-toolbar-icon menu no-caption" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="3" width="14" height="2" fill="var(--color-text)"></rect><rect x="1" y="7" width="14" height="2" fill="var(--color-text)"></rect><rect x="1" y="11" width="14" height="2" fill="var(--color-text)"></rect></svg></a></div></div></header>
+<div class="container container-main">
+<div class="col-8 col-content">
+<div class="tsd-page-title">
+<h2>@ixo/client-sdk</h2></div>
+<div class="tsd-panel tsd-typography">
+<a href="#ixo-client-sdk" id="ixo-client-sdk" style="color: inherit; text-decoration: none;">
+  <h1>ixo-client SDK</h1>
+</a>
+<p>A complete package of client software for developing client
+applications which connect to the <a href="https://ixo.world/">ixo</a>
+software stack and build on the Internet of Impact.</p>
+
+<a href="#getting-started" id="getting-started" style="color: inherit; text-decoration: none;">
+  <h2>Getting started</h2>
+</a>
+<ol>
+<li><code>git clone https://github.com/ixofoundation/ixo-client-sdk.git my-project-name</code></li>
+<li><code>cd my-project-name</code></li>
+<li><code>npm install</code></li>
+<li><code>npm run setup</code></li>
+</ol>
+
+<a href="#features-and-usage" id="features-and-usage" style="color: inherit; text-decoration: none;">
+  <h2>Features and Usage</h2>
+</a>
+
+<a href="#usage-example" id="usage-example" style="color: inherit; text-decoration: none;">
+  <h2>Usage Example</h2>
+</a>
+<p>Before use locally a .env file must be provided, a example file in the directory.</p>
+<pre><code class="language-js"><span class="hl-0">const</span><span class="hl-1"> { </span><span class="hl-2">makeWallet</span><span class="hl-1">, </span><span class="hl-2">makeClient</span><span class="hl-1"> } = </span><span class="hl-3">require</span><span class="hl-1">(</span><span class="hl-4">&quot;@ixo/client-sdk&quot;</span><span class="hl-1">);</span><br/><br/><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-2">wallet</span><span class="hl-1"> = </span><span class="hl-5">await</span><span class="hl-1"> </span><span class="hl-3">makeWallet</span><span class="hl-1">(),</span><br/><span class="hl-1">  </span><span class="hl-2">client</span><span class="hl-1"> = </span><span class="hl-3">makeClient</span><span class="hl-1">(</span><span class="hl-6">wallet</span><span class="hl-1">);</span><br/><br/><span class="hl-5">await</span><span class="hl-1"> </span><span class="hl-6">client</span><span class="hl-1">.</span><span class="hl-3">register</span><span class="hl-1">();</span><br/><br/><span class="hl-5">await</span><span class="hl-1"> </span><span class="hl-6">client</span><span class="hl-1">.</span><span class="hl-3">sendTokens</span><span class="hl-1">(</span><span class="hl-4">&quot;&lt;target address&gt;&quot;</span><span class="hl-1">, </span><span class="hl-7">10</span><span class="hl-1">);</span><br/><br/><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-2">someProject</span><span class="hl-1"> = </span><span class="hl-5">await</span><span class="hl-1"> </span><span class="hl-6">client</span><span class="hl-1">.</span><span class="hl-3">getProject</span><span class="hl-1">(</span><span class="hl-4">&quot;&lt;a valid project DID&gt;&quot;</span><span class="hl-1">);</span><br/><br/><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-2">someClaims</span><span class="hl-1"> = </span><span class="hl-5">await</span><span class="hl-1"> </span><span class="hl-6">client</span><span class="hl-1">.</span><span class="hl-3">listClaims</span><span class="hl-1">(</span><span class="hl-6">someProject</span><span class="hl-1">);</span><br/><span class="hl-6">console</span><span class="hl-1">.</span><span class="hl-3">log</span><span class="hl-1">(</span><span class="hl-4">&quot;Here are the claims&quot;</span><span class="hl-1">, </span><span class="hl-6">someClaims</span><span class="hl-1">);</span>
+</code></pre>
+<p>See <a href="#wallet-api">wallet API</a> and <a href="#client-api">client API</a> for
+details.</p>
+
+<a href="#wallet-api-" id="wallet-api-" style="color: inherit; text-decoration: none;">
+  <h2>Wallet API <a id='wallet-api' /></h2>
+</a>
+<p><code>makeWallet(source, didPrefix = &#39;did:ixo:&#39;)</code>: Create a new wallet <a id='makeWallet' /></p>
+<ul>
+<li><p><code>source</code>: Either a mnemonic string or a plain object
+representing a wallet state (possibly obtained via <code>toJSON()</code>
+-see below for details). Optional.</p>
+<p>If empty, a brand new wallet is generated. If a mnemonic string,
+recovers a wallet based on the mnemonic. If a state object,
+revives the wallet using that state.</p>
+</li>
+<li><p><code>didPrefix</code>: A DID prefix. Optional, defaults to <code>did:ixo:</code>.</p>
+<p>If the <code>source</code> is a mnemonic which means that you are importing
+a wallet from elsewhere, you may need to provide the <code>didPrefix</code>
+as well to obtain the exact same wallet. If the DID prefix of
+the wallet is different from <code>did:ixo:</code> then it must be provided
+here.</p>
+</li>
+</ul>
+<p><code>makeWallet</code> returns a wallet object with the following
+properties:</p>
+<ul>
+<li><p><code>secp</code>: An instance of CosmJS&#39;
+<a href="https://github.com/cosmos/cosmjs/tree/main/packages/launchpad#create-a-wallet"><code>Secp256k1HdWallet</code></a></p>
+</li>
+<li><p><code>agent</code>: A custom wallet instance implementing <a href="https://github.com/cosmos/cosmjs/blob/98e91ae5fe699733497befef95204923c93a7373/packages/amino/src/signer.ts#L22-L38">OfflineAminoSigner</a></p>
+</li>
+<li><p><code>toJSON()</code>: Standard
+<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#tojson_behavior"><code>toJSON</code></a>
+method for <code>JSON.stringify</code> integration. One can also use this
+to get a representation of the wallet&#39;s internal state as a
+plain object and use it in a context where a class instance is
+not supported. (e.g. Global application state of a client app)</p>
+</li>
+</ul>
+
+<a href="#client-api-" id="client-api-" style="color: inherit; text-decoration: none;">
+  <h2>Client API <a id='client-api' /></h2>
+</a>
+<ul>
+<li><a href="#makeClient"><code>makeClient</code></a> to create a new client</li>
+</ul>
+<p>Client methods:</p>
+<ul>
+<li><a href="#register"><code>register</code></a></li>
+<li><a href="#getSecpAccount"><code>getSecpAccount</code></a></li>
+<li><a href="#getAgentAccount"><code>getAgentAccount</code></a></li>
+<li><a href="#balances"><code>balances</code></a></li>
+<li><a href="#sendTokens"><code>sendTokens</code></a></li>
+<li><a href="#getDidDoc"><code>getDidDoc</code></a></li>
+<li><a href="#listProjects"><code>listProjects</code></a></li>
+<li><a href="#listTemplates"><code>listTemplates</code></a></li>
+<li><a href="#listCells"><code>listCells</code></a></li>
+<li><a href="#getProject"><code>getProject</code></a></li>
+<li><a href="#getTemplate"><code>getTemplate</code></a></li>
+<li><a href="#getCell"><code>getCell</code></a></li>
+<li><a href="#createProject"><code>createProject</code></a></li>
+<li><a href="#updateProject"><code>updateProject</code></a></li>
+<li><a href="#createEntityFile"><code>createEntityFile</code></a></li>
+<li><a href="#getEntityFile"><code>getEntityFile</code></a></li>
+<li><a href="#updateProjectStatus"><code>updateProjectStatus</code></a></li>
+<li><a href="#getProjectFundAddress"><code>getProjectFundAddress</code></a></li>
+<li><a href="#listAgents"><code>listAgents</code></a></li>
+<li><a href="#createAgent"><code>createAgent</code></a></li>
+<li><a href="#updateAgent"><code>updateAgent</code></a></li>
+<li><a href="#listClaims"><code>listClaims</code></a></li>
+<li><a href="#createClaim"><code>createClaim</code></a></li>
+<li><a href="#evaluateClaim"><code>evaluateClaim</code></a></li>
+<li><a href="#staking.listValidators"><code>staking.listValidators</code></a></li>
+<li><a href="#staking.getValidator"><code>staking.getValidator</code></a></li>
+<li><a href="#staking.myDelegations"><code>staking.myDelegations</code></a></li>
+<li><a href="#staking.pool"><code>staking.pool</code></a></li>
+<li><a href="#staking.validatorDistribution"><code>staking.validatorDistribution</code></a></li>
+<li><a href="#staking.delegatorValidatorRewards"><code>staking.delegatorValidatorRewards</code></a></li>
+<li><a href="#staking.delegation"><code>staking.delegation</code></a></li>
+<li><a href="#staking.delegatorDelegations"><code>staking.delegatorDelegations</code></a></li>
+<li><a href="#staking.delegatorUnbondingDelegations"><code>staking.delegatorUnbondingDelegations</code></a></li>
+<li><a href="#staking.delegatorRewards"><code>staking.delegatorRewards</code></a></li>
+<li><a href="#staking.delegate"><code>staking.delegate</code></a></li>
+<li><a href="#staking.undelegate"><code>staking.undelegate</code></a></li>
+<li><a href="#staking.redelegate"><code>staking.redelegate</code></a></li>
+<li><a href="#bonds.byId"><code>bonds.byId</code></a></li>
+<li><a href="#bonds.list"><code>bonds.list</code></a></li>
+<li><a href="#bonds.buy"><code>bonds.buy</code></a></li>
+<li><a href="#bonds.sell"><code>bonds.sell</code></a></li>
+<li><a href="#custom"><code>custom</code></a></li>
+</ul>
+
+<a href="#create-a-new-client" id="create-a-new-client" style="color: inherit; text-decoration: none;">
+  <h3>Create a new client</h3>
+</a>
+<ul>
+<li><p><code>makeClient(signer, blockchainURL, blocksyncURL)</code>: Create a new ixo client <a id='makeClient' /></p>
+<ul>
+<li><p><code>signer</code>: Either a wallet object created by
+<a href="#makeWallet"><code>makeWallet</code></a> or a custom signer object with the
+following properties:</p>
+<ul>
+<li><p><code>secp</code>: Object implementing <a href="https://github.com/cosmos/cosmjs/blob/98e91ae5fe699733497befef95204923c93a7373/packages/amino/src/signer.ts#L22-L38">OfflineAminoSigner</a></p>
+</li>
+<li><p><code>agent</code>: Object implementing <a href="https://github.com/cosmos/cosmjs/blob/98e91ae5fe699733497befef95204923c93a7373/packages/amino/src/signer.ts#L22-L38">OfflineAminoSigner</a> with the following extra property:</p>
+<ul>
+<li><code>did</code></li>
+</ul>
+</li>
+</ul>
+<p>See <a href="#wallet-api">the wallet API</a> for more info on <code>secp</code> and
+<code>agent</code> keywords.</p>
+<p>Optional. If empty, client methods that require a signer won&#39;t
+work.</p>
+</li>
+<li><p><code>blockchainURL</code>: The URL of the target ixo chain. Optional,
+defaults to the current mainnet URL.</p>
+</li>
+<li><p><code>blocksyncURL</code>: The URL of the target ixo blocksync service.
+Optional, defaults to the current main blocksync service URL.</p>
+</li>
+</ul>
+</li>
+</ul>
+
+<a href="#client-methods" id="client-methods" style="color: inherit; text-decoration: none;">
+  <h3>Client methods</h3>
+</a>
+<ul>
+<li><p><code>register(pubKey)</code>: Register the current user <a id='register' /></p>
+<ul>
+<li><p><code>pubKey</code>: Only required if the client is configured to use
+a custom signer. No need to provide this if the client is
+initialized with a wallet created with
+<a href="#makeWallet"><code>makeWallet</code></a>, as the value can be obtained from
+it.</p>
+<p><strong>Note</strong>: Registering triggers a write operation on the
+blockchain which requires a gas fee in terms of ixo tokens to
+be paid. So the account you are trying to register has to have
+some ixo tokens. To credit accounts on the testnet you can use
+the <a href="https://t.me/joinchat/I4_MXBmVGJKAMmEVX3SVaA">faucet</a>.
+The specific address you will need to use is the address of
+the agent subwallet. Get it with <code>wallet.agent.getAccounts</code>.
+See <a href="#wallet-api">wallet API</a> for more info.</p>
+</li>
+</ul>
+</li>
+<li><p><code>getSecpAccount()</code>: Get account info for the SECP subwallet <a id='getSecpAccount' /></p>
+</li>
+<li><p><code>getAgentAccount()</code>: Get account info for the agent subwallet <a id='getAgentAccount' /></p>
+</li>
+<li><p><code>sendTokens(targetAddress, amount, denom)</code> <a id='sendTokens' /></p>
+<ul>
+<li><p><code>targetAddress</code>: A wallet address to send coins to</p>
+</li>
+<li><p><code>amount</code>: Any positive number</p>
+</li>
+<li><p><code>denom</code>: Coin type. Optional, defaults to <code>&quot;uixo&quot;</code>.</p>
+</li>
+</ul>
+</li>
+<li><p><code>getDidDoc(did)</code>: Return the full DID document for the given DID <a id='getDidDoc' /></p>
+</li>
+<li><p><code>listProjects()</code>: Lists all available projects <a id='listProjects' /></p>
+</li>
+<li><p><code>listTemplates()</code>: Lists all available templates <a id='listTemplates' /></p>
+</li>
+<li><p><code>listCells()</code>: Lists all available cells <a id='listCells' /></p>
+</li>
+<li><p><code>getProject(projectDid)</code>: Get complete project record for the given DID <a id='getProject' /></p>
+</li>
+<li><p><code>getTemplate(tplDid)</code>: Get complete template record for the given DID <a id='getTemplate' /></p>
+</li>
+<li><p><code>getCell(cellDid)</code>: Get complete cell record for the given DID <a id='getCell' /></p>
+</li>
+<li><p><code>createProject(projectData, cellnodeURL)</code>: Create a new project <a id='createProject' /></p>
+<ul>
+<li><p><code>projectData</code>: To be documented; for now please see
+<a href="https://github.com/ixofoundation/ixo-apimodule/blob/master/src/common/dummyData.ts#L3-L207">here</a>
+for an example</p>
+</li>
+<li><p><code>cellnodeURL</code>: URL of the cell node where various project
+data will be kept. Optional, defaults to the URL of ixo&#39;s
+shared cell node</p>
+</li>
+</ul>
+</li>
+<li><p><code>updateProject(projectDocUpdates, cellnodeURL)</code>: Update an existing project <a id='updateProject' /></p>
+<ul>
+<li><p><code>projectDocUpdates</code>: Updates to be made to the project
+document: A subset of the <code>projectData</code> argument of the
+<code>createProject</code> method above that satisfies the rules
+described in the following link:
+https://github.com/ixofoundation/ixo-blockchain/pull/230#issue-902602327</p>
+</li>
+<li><p><code>cellnodeURL</code>: URL of the cell node where various project
+data will be kept. Optional, defaults to the URL of ixo&#39;s
+shared cell node</p>
+</li>
+</ul>
+</li>
+<li><p><code>createEntityFile(target, dataUrl)</code>: Upload a file to entity&#39;s cell node <a id='createEntityFile' /></p>
+<ul>
+<li><p><code>target</code>: Either an entity record, an entity DID, or a cell
+node URL</p>
+</li>
+<li><p><code>dataUrl</code>: Any valid <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs">data URL</a></p>
+</li>
+</ul>
+</li>
+<li><p><code>getEntityFile(target, key)</code> <a id='getEntityFile' /></p>
+<ul>
+<li><p><code>target</code>: Either an entity record, an entity DID, or a cell
+node URL</p>
+</li>
+<li><p><code>key</code>: Key of the target file, as returned from
+<code>createProjectFile</code>.</p>
+</li>
+</ul>
+</li>
+<li><p><code>updateProjectStatus(target, status)</code> <a id='updateProjectStatus' /></p>
+<ul>
+<li><p><code>target</code>: Either a project record or a project DID</p>
+</li>
+<li><p><code>status</code>: <code>&quot;CREATED&quot;</code> | <code>&quot;PENDING&quot;</code> | <code>&quot;FUNDED&quot;</code> | <code>&quot;STARTED&quot;</code> | <code>&quot;STOPPED&quot;</code> | <code>&quot;PAIDOUT&quot;</code></p>
+</li>
+</ul>
+<p><strong>Note I</strong>: Status is a state machine in that you can only
+update it in the order seen above. So <code>&quot;CREATED&quot;</code> -&gt; <code>&quot;PENDING&quot;</code>
+is a valid transition while <code>&quot;CREATED&quot;</code> -&gt; <code>&quot;STARTED&quot;</code> is not.</p>
+<p><strong>Note II</strong>: Before setting a project&#39;s status to <code>FUNDED</code>, you
+have to send some tokens to the project&#39;s wallet first. If you
+don&#39;t do that before trying to set the status to <code>FUNDED</code>, you
+won&#39;t get an error but the status won&#39;t be changed either. This
+is because of a poor error handling logic in the ixo backend
+which is going to be fixed as soon as possible. For now just
+please keep this in mind. Use <code>getProjectFundAddress</code> below to
+get the wallet address to send tokens to.</p>
+<p>Use <code>getProjectFundAddress</code> below to get the wallet address to
+send tokens to.</p>
+</li>
+<li><p><code>getProjectFundAddress(projectDid)</code> <a id='getProjectFundAddress' /></p>
+</li>
+<li><p><code>listAgents(projectRecordOrDid)</code>: List agents belonging to a given project <a id='listAgents' /></p>
+</li>
+<li><p><code>createAgent(projectRecordOrDid, agentRecord)</code>: Create an agent for the given project <a id='createAgent' /></p>
+<ul>
+<li><p><code>agentRecord</code>: An object with the following properties:</p>
+<ul>
+<li><p><code>did</code>: The DID of an already registered user</p>
+</li>
+<li><p><code>email</code>: Agent email</p>
+</li>
+<li><p><code>name</code>: Agent name</p>
+</li>
+<li><p><code>role</code>: Any one of the following:</p>
+<ul>
+<li><code>&quot;PO&quot;</code> for owner</li>
+<li><code>&quot;EA&quot;</code> for evaluator</li>
+<li><code>&quot;SA&quot;</code> for service provider</li>
+<li><code>&quot;IA&quot;</code> for investor</li>
+</ul>
+</li>
+</ul>
+<p><strong>Note</strong>: The new agent will need to be approved before they
+can start their activity. See <code>updateAgent</code> below:</p>
+</li>
+</ul>
+</li>
+<li><p><code>updateAgent(projectRecordOrDid, agentDid, updates)</code> <a id='updateAgent' /></p>
+<ul>
+<li><p><code>updates</code>: An object with the following properties:</p>
+<ul>
+<li><p><code>status</code> (Required): Any one of the following:</p>
+<ul>
+<li><code>0</code> for pending</li>
+<li><code>1</code> for approved</li>
+<li><code>2</code> for revoked</li>
+<li><code>3</code> for invited</li>
+</ul>
+</li>
+<li><p><code>role</code> (Required): See the <code>role</code> property under <code>createAgent</code></p>
+</li>
+<li><p><code>version</code>: Optional</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><code>listClaims(projectRecordOrDid, projectTemplateId)</code> <a id='listClaims' /></p>
+<ul>
+<li><code>projectTemplateId</code>: Optional, provide a value to filter claims
+by template id</li>
+</ul>
+</li>
+<li><p><code>createClaim(projectRecordOrDid, templateRecordOrDid, claimItems, opts)</code> <a id='createClaim' /></p>
+<ul>
+<li><p><code>claimItems</code>: Array of objects that has the following schema:</p>
+<ul>
+<li><p><code>id</code>: Id of the claim item. Must match the value in the
+claim template.</p>
+</li>
+<li><p><code>attribute</code>: Attribute of the claim item. Must match the
+value in the claim template.</p>
+</li>
+<li><p><code>value</code>: Value of the claim item.</p>
+</li>
+</ul>
+</li>
+<li><p><code>opts</code>: An object with the following properties:</p>
+<ul>
+<li><code>dryRun</code>: Boolean, default <code>false</code>. If <code>true</code>, Instead of
+creating the claims, returns the full HTTP request that will
+create the claims.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><code>evaluateClaim(projectRecordOrDid, claimId, status)</code> <a id='evaluateClaim' /></p>
+<ul>
+<li><p><code>claimId</code>: A claim id as returned from <code>createClaim</code></p>
+</li>
+<li><p><code>status</code>: Any one of the following:</p>
+<ul>
+<li><code>0</code> for pending</li>
+<li><code>1</code> for approved</li>
+<li><code>2</code> for rejected</li>
+<li><code>3</code> for disputed</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><code>staking</code>:</p>
+<p>An object that groups the following staking related methods:</p>
+<ul>
+<li><p><code>listValidators(urlParams)</code> <a id='staking.listValidators' /></p>
+<p>See
+<a href="https://testnet.ixo.world/swagger/#/Staking/get_staking_validators">here</a>
+for a description of the url params of the related
+endpoint, and its return value.</p>
+</li>
+<li><p><code>getValidator(validatorAddress)</code> <a id='staking.getValidator' /></p>
+<p>See
+<a href="https://testnet.ixo.world/swagger/#/Staking/get*staking_validators__validatorAddr*%5D">here</a>
+for the return value.</p>
+</li>
+<li><p><code>myDelegations()</code> <a id='staking.myDelegations' /></p>
+<p>See
+<a href="https://testnet.ixo.world/swagger/#/Staking/get_staking_delegators**delegatorAddr**delegations">here</a>
+for the return value.</p>
+</li>
+<li><p><code>pool()</code> <a id='staking.pool' /></p>
+<p>See
+<a href="https://testnet.ixo.world/swagger/#/Staking/get_staking_pool">here</a>
+for the return value.</p>
+</li>
+<li><p><code>validatorDistribution(validatorAddress)</code> <a id='staking.validatorDistribution' /></p>
+<p>See
+<a href="https://testnet.ixo.world/swagger/#/Distribution/get*distribution_validators__validatorAddr*">here</a>
+for the return value.</p>
+</li>
+<li><p><code>delegatorValidatorRewards(delegatorAddress, validatorAddress)</code> <a id='staking.delegatorValidatorRewards' /></p>
+<p>See
+<a href="https://testnet.ixo.world/swagger/#/Distribution/get*distribution_delegators**delegatorAddr**rewards__validatorAddr*">here</a>
+for the return value.</p>
+</li>
+<li><p><code>delegation(delegatorAddr, validatorAddress)</code> <a id='staking.delegation' /></p>
+<p>See
+<a href="https://testnet.ixo.world/swagger/#/Staking/get*staking_delegators**delegatorAddr**delegations__validatorAddr*">here</a>
+for the return value.</p>
+</li>
+<li><p><code>delegatorDelegations(delegatorAddress)</code> <a id='staking.delegatorDelegations' /></p>
+<p>See
+<a href="https://testnet.ixo.world/swagger/#/Staking/get_staking_delegators**delegatorAddr**delegations">here</a>
+for the return value.</p>
+</li>
+<li><p><code>delegatorUnbondingDelegations(delegatorAddress)</code> <a id='staking.delegatorUnbondingDelegations' /></p>
+<p>See
+<a href="https://testnet.ixo.world/swagger/#/Staking/get_staking_delegators**delegatorAddr**unbonding_delegations">here</a>
+for the return value.</p>
+</li>
+<li><p><code>delegatorRewards(delegatorAddress)</code> <a id='staking.delegatorRewards' /></p>
+<p>See
+<a href="https://testnet.ixo.world/swagger/#/Distribution/get_distribution_delegators**delegatorAddr**rewards">here</a>
+for the return value.</p>
+</li>
+<li><p><code>balances(accountType, denom)</code> <a id='balances' /></p>
+<ul>
+<li><p><code>accountType</code>: Either <code>secp</code> or <code>agent</code>.</p>
+</li>
+<li><p><code>denom</code>: Optional coin name. If provided, only the balance
+for the given coin will be returned.</p>
+<p>See
+<a href="https://testnet.ixo.world/swagger/#/Query/AllBalances">here</a>
+or
+<a href="https://testnet.ixo.world/swagger/#/Query/Balance">here</a>
+for the return value.</p>
+</li>
+</ul>
+</li>
+<li><p><code>delegate(validatorAddress, amount)</code> <a id='staking.delegate' /></p>
+</li>
+<li><p><code>undelegate(validatorAddress, amount)</code> <a id='staking.undelegate' /></p>
+</li>
+<li><p><code>redelegate(validatorSourceAddress, validatorDestinationAddress)</code> <a id='staking.redelegate' /></p>
+</li>
+</ul>
+</li>
+<li><p><code>bonds</code>:</p>
+<p>An object that groups the following bond related methods:</p>
+<ul>
+<li><p><code>byId(did)</code> <a id='bonds.byId' /></p>
+</li>
+<li><p><code>list()</code> <a id='bonds.list' /></p>
+</li>
+<li><p><code>buy({bondDid, bondToken, reserveToken, amount, maxPrice})</code> <a id='bonds.buy' /></p>
+</li>
+<li><p><code>sell({bondDid, bondToken, amount})</code> <a id='bonds.sell' /></p>
+</li>
+</ul>
+</li>
+<li><p><code>custom(walletType, msg)</code>: Send a custom message to the blockchain <a id='custom' /></p>
+<ul>
+<li><p><code>walletType</code>: Either <code>&quot;secp&quot;</code> or <code>&quot;agent&quot;</code>. See <a href="#wallet-api">the wallet API</a>
+for more info</p>
+</li>
+<li><p><code>msg</code>: See
+<a href="https://github.com/ixofoundation/ixo-client-sdk/blob/74725d861ac7cf73e8983ce3dc9d91868cd4ce62/messages.md">here</a>
+for available options</p>
+</li>
+</ul>
+</li>
+</ul>
+
+<a href="#debugging" id="debugging" style="color: inherit; text-decoration: none;">
+  <h2>Debugging</h2>
+</a>
+<p>Put the <code>ixo-client-sdk</code> string into your <code>DEBUG</code> environment
+variable to log network requests and responses. See <a href="https://www.npmjs.com/package/debug">the <code>debug</code>
+package</a> for more info.</p>
+
+<a href="#typescript" id="typescript" style="color: inherit; text-decoration: none;">
+  <h3>Typescript</h3>
+</a>
+<p>Leverages <a href="https://github.com/evanw/esbuild">esbuild</a> for blazing fast builds, but keeps <code>tsc</code> to generate <code>.d.ts</code> files.
+Generates two builds to support both ESM and CJS.</p>
+<p>Commands:</p>
+<ul>
+<li><code>build</code>: runs typechecking then generates CJS, ESM and <code>d.ts</code> files in the <code>build/</code> directory</li>
+<li><code>clean</code>: removes the <code>build/</code> directory</li>
+<li><code>type:dts</code>: only generates <code>d.ts</code></li>
+<li><code>type:check</code>: only run typechecking</li>
+<li><code>type:build</code>: only generates CJS and ESM</li>
+</ul>
+
+<a href="#format-amp-lint" id="format-amp-lint" style="color: inherit; text-decoration: none;">
+  <h3>Format &amp; lint</h3>
+</a>
+<p>This library relies on the combination of <a href="https://github.com/eslint/eslint">eslint</a> — through <a href="https://github.com/typescript-eslint/typescript-eslint">typescript-eslint</a> for linting and <a href="https://github.com/prettier/prettier">prettier</a> for formatting.
+It also uses <a href="https://github.com/streetsidesoftware/cspell">cspell</a> to ensure spelling</p>
+<p>Commands:</p>
+<ul>
+<li><code>format</code>: runs prettier with automatic fixing</li>
+<li><code>format:check</code>: runs prettier without automatic fixing (used in CI)</li>
+<li><code>lint</code>: runs eslint with automatic fixing</li>
+<li><code>lint:check</code>: runs eslint without automatic fixing (used in CI)</li>
+<li><code>spell:check</code>: runs spellchecking</li>
+</ul>
+</div></div>
+<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+<div class="tsd-navigation settings">
+<details class="tsd-index-accordion"><summary class="tsd-accordion-summary">
+<h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4.93896 8.531L12 15.591L19.061 8.531L16.939 6.409L12 11.349L7.06098 6.409L4.93896 8.531Z" fill="var(--color-text)"></path></svg> Settings</h3></summary>
+<div class="tsd-accordion-details">
+<div class="tsd-filter-visibility">
+<h4 class="uppercase">Member Visibility</h4><form>
+<ul id="tsd-filter-options">
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li>
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-private" name="private"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Private</span></label></li>
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li>
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></form></div>
+<div class="tsd-theme-toggle">
+<h4 class="uppercase">Theme</h4><select id="theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div>
+<nav class="tsd-navigation primary">
+<details class="tsd-index-accordion" open><summary class="tsd-accordion-summary">
+<h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4.93896 8.531L12 15.591L19.061 8.531L16.939 6.409L12 11.349L7.06098 6.409L4.93896 8.531Z" fill="var(--color-text)"></path></svg> Modules</h3></summary>
+<div class="tsd-accordion-details">
+<ul>
+<li class="current selected"><a href="modules.html">@ixo/client-<wbr/>sdk</a>
+<ul>
+<li class="tsd-kind-namespace"><a href="modules/LegacyClient.html">Legacy<wbr/>Client</a></li>
+<li class="tsd-kind-namespace"><a href="modules/cosmos.html">cosmos</a>
+<ul>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="modules/cosmos.app.html">app</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="modules/cosmos.auth.html">auth</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="modules/cosmos.authz.html">authz</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="modules/cosmos.bank.html">bank</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="modules/cosmos.base.html">base</a>
+<ul>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="modules/cosmos.base.abci.html">abci</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="modules/cosmos.base.kv.html">kv</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="modules/cosmos.base.query.html">query</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="modules/cosmos.base.reflection.html">reflection</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="modules/cosmos.base.snapshots.html">snapshots</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="modules/cosmos.base.store.html">store</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="modules/cosmos.base.tendermint.html">tendermint</a></li></ul></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="modules/cosmos.capability.html">capability</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="modules/cosmos.crisis.html">crisis</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="modules/cosmos.crypto.html">crypto</a>
+<ul>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="modules/cosmos.crypto.hd.html">hd</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="modules/cosmos.crypto.keyring.html">keyring</a></li></ul></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="modules/cosmos.distribution.html">distribution</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="modules/cosmos.evidence.html">evidence</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="modules/cosmos.feegrant.html">feegrant</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="modules/cosmos.genutil.html">genutil</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="modules/cosmos.gov.html">gov</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="modules/cosmos.group.html">group</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="modules/cosmos.mint.html">mint</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="modules/cosmos.msg.html">msg</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="modules/cosmos.nft.html">nft</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="modules/cosmos.orm.html">orm</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="modules/cosmos.params.html">params</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="modules/cosmos.slashing.html">slashing</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="modules/cosmos.staking.html">staking</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="modules/cosmos.tx.html">tx</a>
+<ul>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="modules/cosmos.tx.signing.html">signing</a></li></ul></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="modules/cosmos.upgrade.html">upgrade</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="modules/cosmos.vesting.html">vesting</a></li></ul></li>
+<li class="tsd-kind-namespace"><a href="modules/google.html">google</a></li>
+<li class="tsd-kind-namespace"><a href="modules/helpers.html">helpers</a>
+<ul>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace tsd-is-external"><a href="modules/helpers.Long.html">Long</a></li></ul></li>
+<li class="tsd-kind-namespace"><a href="modules/impact.html">impact</a></li>
+<li class="tsd-kind-namespace"><a href="modules/tendermint.html">tendermint</a>
+<ul>
+<li class="tsd-kind-namespace tsd-parent-kind-namespace"><a href="modules/tendermint.libs.html">libs</a></li></ul></li></ul></li></ul></div></details></nav>
+<nav class="tsd-navigation secondary menu-sticky">
+<ul>
+<li class="tsd-kind-class"><a href="classes/SigningStargateClient.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><rect fill="var(--color-icon-background)" stroke="var(--color-ts-class)" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="6" id="icon-128-path"></rect><path d="M11.898 16.1201C11.098 16.1201 10.466 15.8961 10.002 15.4481C9.53803 15.0001 9.30603 14.3841 9.30603 13.6001V9.64012C9.30603 8.85612 9.53803 8.24012 10.002 7.79212C10.466 7.34412 11.098 7.12012 11.898 7.12012C12.682 7.12012 13.306 7.34812 13.77 7.80412C14.234 8.25212 14.466 8.86412 14.466 9.64012H13.386C13.386 9.14412 13.254 8.76412 12.99 8.50012C12.734 8.22812 12.37 8.09212 11.898 8.09212C11.426 8.09212 11.054 8.22412 10.782 8.48812C10.518 8.75212 10.386 9.13212 10.386 9.62812V13.6001C10.386 14.0961 10.518 14.4801 10.782 14.7521C11.054 15.0161 11.426 15.1481 11.898 15.1481C12.37 15.1481 12.734 15.0161 12.99 14.7521C13.254 14.4801 13.386 14.0961 13.386 13.6001H14.466C14.466 14.3761 14.234 14.9921 13.77 15.4481C13.306 15.8961 12.682 16.1201 11.898 16.1201Z" fill="var(--color-text)" id="icon-128-text"></path></svg>Signing<wbr/>Stargate<wbr/>Client</a></li>
+<li class="tsd-kind-variable"><a href="variables/cosmos_proto.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><rect fill="var(--color-icon-background)" stroke="var(--color-ts-variable)" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="6" id="icon-32-path"></rect><path d="M11.106 16L8.85 7.24H9.966L11.454 13.192C11.558 13.608 11.646 13.996 11.718 14.356C11.79 14.708 11.842 14.976 11.874 15.16C11.906 14.976 11.954 14.708 12.018 14.356C12.09 13.996 12.178 13.608 12.282 13.192L13.758 7.24H14.85L12.582 16H11.106Z" fill="var(--color-text)" id="icon-32-text"></path></svg>cosmos_<wbr/>proto</a></li>
+<li class="tsd-kind-variable"><a href="variables/gogoproto.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-32-path"></use><use href="#icon-32-text"></use></svg>gogoproto</a></li>
+<li class="tsd-kind-function"><a href="functions/createClient.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><rect fill="var(--color-icon-background)" stroke="var(--color-ts-function)" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="6" id="icon-64-path"></rect><path d="M9.39 16V7.24H14.55V8.224H10.446V11.128H14.238V12.112H10.47V16H9.39Z" fill="var(--color-text)" id="icon-64-text"></path></svg>create<wbr/>Client</a></li>
+<li class="tsd-kind-function"><a href="functions/createQueryClient.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>create<wbr/>Query<wbr/>Client</a></li>
+<li class="tsd-kind-function"><a href="functions/createRegistry.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>create<wbr/>Registry</a></li></ul></nav></div></div>
+<div class="container tsd-generator">
+<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></div>
+<div class="overlay"></div><script src="assets/main.js"></script></body></html>
