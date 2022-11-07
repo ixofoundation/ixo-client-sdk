@@ -8,7 +8,8 @@ This package has been superceded by https://github.com/ixofoundation/ixo-MultiCl
 
 
 
-========================================================================================================================================================
+===================================================================================================
+
 
 A complete package of client software for developing client
 applications which connect to the [ixo](https://ixo.world/)
