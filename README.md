@@ -1,9 +1,14 @@
 # ixo-client SDK
 [![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
 
-"[DEPRECATED]"
+[DEPRECATED]
 
 This package has been superceded by https://github.com/ixofoundation/ixo-MultiClient-SDK, please use the multi-client sdk going forward.
+
+
+
+
+========================================================================================================================================================
 
 A complete package of client software for developing client
 applications which connect to the [ixo](https://ixo.world/)
